@@ -28,3 +28,4 @@
 [2026-03-14 14:37] codex — Added idempotent Supabase service-role seed script (`supabase/seed/seed.ts`) with realistic company/drivers/vehicles/trips/alerts/safety/maintenance data and added `pnpm db:seed` script.
 [2026-03-14 14:42] codex — Updated `supabase/seed/seed.ts` to use deterministic primary-key IDs and `onConflict: "id"` for companies, drivers, and vehicles; removed non-PK conflict usage to match schema safely.
 [2026-03-14 15:13] codex — Fixed Vercel Edge middleware build issue by changing root middleware import to relative path (`./lib/supabase/middleware`) and revalidated lint/typecheck.
+[2026-03-14 15:24] codex — Resolved Vercel production outage: hardened Supabase middleware against env/runtime failures and added required production env vars (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY, NEXT_PUBLIC_APP_URL) to keeptruckin-motive.

@@ -64,3 +64,4 @@
 - Added deterministic, idempotent TypeScript seed workflow in `supabase/seed/seed.ts` (production-guarded, service-role inserts, realistic Atlas Freight Logistics dataset with linked drivers/vehicles/trips/alerts/safety/maintenance) and added `db:seed` script in `package.json`.
 - Fixed seed conflict strategy in `supabase/seed/seed.ts`: company/driver/vehicle upserts now target primary key `id` with stable seeded UUIDs instead of non-PK conflict columns.
 - Fixed Vercel deploy blocker: updated `middleware.ts` to use relative import for `updateSession` to satisfy Edge function bundling on Vercel.
+- Fixed production 500 (MIDDLEWARE_INVOCATION_FAILED): hardened `lib/supabase/middleware.ts` to fail-open when env/auth session access fails and configured required Vercel production environment variables for Supabase.
