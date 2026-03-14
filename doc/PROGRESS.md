@@ -41,3 +41,4 @@
 [2026-03-14 19:08] codex — Applied subtle dashboard UI polish: card hover micro-interactions, metric card entrance animation, and unified table row hover highlights across dashboard modules; typecheck/lint pass.
 [2026-03-14 18:54] codex — Applied targeted demo fixes: restored operational RLS write policies for owner/admin/dispatcher, corrected vehicle create field mapping (name/unit/vin), and confirmed vehicles table label fallback rendering.
 [2026-03-14 19:02] codex — Fixed vehicle creation failure by adding schema-compatibility fallback in /api/vehicles POST: retries insert without vehicles.name when DB lacks that column (code 42703).
+[2026-03-14 19:14] codex — Investigated live /api/vehicles 500s, deployed hotfix (commit f9f6d8b) to return real DB errors and keep vehicles.name compatibility fallback; production alias updated.
