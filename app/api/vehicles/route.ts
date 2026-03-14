@@ -40,8 +40,9 @@ export async function POST(request: Request) {
     .from("vehicles")
     .insert({
       company_id: parsed.data.companyId,
-      vin: parsed.data.vin,
+      name: parsed.data.vehicleName ?? null,
       unit_number: parsed.data.unitNumber,
+      vin: parsed.data.vin,
       license_plate: parsed.data.licensePlate ?? null,
       make: parsed.data.make ?? null,
       model: parsed.data.model ?? null,
@@ -56,3 +57,4 @@ export async function POST(request: Request) {
   if (error) return fail("Failed to create vehicle", 500, error.message);
   return ok(data, 201);
 }
+

@@ -35,7 +35,7 @@ export function VehiclesClient({ companyId, initialSearch = "" }: { companyId: s
     mutationFn: (payload: { vehicleName?: string; vin: string; unitNumber: string }) =>
       apiFetch<Vehicle>("/api/vehicles", {
         method: "POST",
-        body: JSON.stringify({ companyId, name: payload.vehicleName, vin: payload.vin, unitNumber: payload.unitNumber }),
+        body: JSON.stringify({ companyId, vehicleName: payload.vehicleName, unitNumber: payload.unitNumber, vin: payload.vin }),
       }),
     onSuccess: () => {
       setError(null);

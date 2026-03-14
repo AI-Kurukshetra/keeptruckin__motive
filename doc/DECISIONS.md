@@ -79,3 +79,5 @@ Reason: Allowing admins to update `company_members` rows can permit ownership-re
 
 ## [2026-03-14] Owner-only update control for organization-level RBAC state
 Reason: Restricting updates to `company_members` and `companies` to owners eliminates admin-level privilege escalation vectors for membership and ownership metadata.
+## [2026-03-14] Operational writes remain role-scoped to owner/admin/dispatcher with explicit UPDATE checks
+Reason: Demo users need reliable edit flows on operational entities, while `driver`/`viewer` remain read-only and ownership-critical tables (`companies`, `company_members`) stay owner-restricted.

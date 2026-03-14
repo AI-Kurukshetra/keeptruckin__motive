@@ -91,3 +91,7 @@
 - Added subtle load animation to dashboard metric cards (`animate-in fade-in slide-in-from-bottom-2 duration-300`).
 - Unified table row hover feedback across dashboard tables (`hover:bg-muted/50` + `transition-colors`) for drivers, vehicles, trips, alerts, ELD, inspections, safety, and maintenance.
 - Validation: `pnpm typecheck` and `pnpm lint` pass.
+- Added migration `supabase/migrations/20260314195500_restore_operational_update_permissions.sql` to enforce operational table write policies with explicit owner/admin/dispatcher checks (insert/update/delete) across `drivers`, `vehicles`, `trips`, `maintenance_records`, `inspections`, `safety_events`, and `eld_logs`.
+- Corrected vehicle creation mapping across UI/API so `Vehicle Name -> vehicles.name`, `Unit -> vehicles.unit_number`, and `VIN -> vehicles.vin`.
+- Confirmed vehicles module table renders `Vehicle | Unit | VIN | Status` and uses `vehicle.name ?? vehicle.unit_number` fallback labeling.
+- Validation: `pnpm typecheck` and `pnpm lint` pass.

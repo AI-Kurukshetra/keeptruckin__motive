@@ -20,7 +20,8 @@
 - [x] Add indexes and constraints for compliance/safety reporting performance (2026-03-14 09:48)
 - [x] Document schema and RLS policies in `/doc/SCHEMA.md` (2026-03-14 10:46)
 - [x] Generate/update Supabase TS types in `types/supabase.ts` (2026-03-14 10:46)
-- [x] Add idempotent Supabase seed script for realistic fleet demo data (2026-03-14 14:37)`r`n- [x] Seed role-based QA users and memberships for RBAC testing (2026-03-14 16:11)
+- [x] Add idempotent Supabase seed script for realistic fleet demo data (2026-03-14 14:37)
+- [x] Seed role-based QA users and memberships for RBAC testing (2026-03-14 16:11)
 - [x] Fix seed upsert conflict targets to primary-key ids for company/driver/vehicle records (2026-03-14 14:42)
 
 ## Phase 2 - Auth and Access Control
@@ -86,3 +87,10 @@
 - [x] UI consistency polish for page headers, badges, card hover states, and spacing hierarchy (2026-03-14 18:05)
 - [x] Remove `ssr: false` from dashboard Server Component `page.tsx` dynamic imports to avoid App Router build incompatibility (2026-03-14 18:35)
 - [x] Harden `company_members_update_owner_admin` RLS policy to owner-only updates via migration (2026-03-14 18:35)
+
+## Phase 7 - Demo Readiness Targeted Fixes
+- [x] Restore operational table write policies with explicit owner/admin/dispatcher update checks (2026-03-14 18:54)
+- [x] Fix vehicles create payload mapping (`Vehicle Name -> name`, `Unit -> unit_number`, `VIN -> vin`) (2026-03-14 18:54)
+- [x] Verify vehicles table rendering fallback (`name ?? unit_number`) with `Vehicle | Unit | VIN | Status` columns (2026-03-14 18:54)
+
+

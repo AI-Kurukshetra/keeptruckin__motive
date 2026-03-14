@@ -37,6 +37,7 @@ export const driverUpdateSchema = driverCreateSchema
 
 export const vehicleCreateSchema = z.object({
   companyId: uuidSchema,
+  vehicleName: z.string().optional(),
   vin: z.string().min(1),
   unitNumber: z.string().min(1),
   licensePlate: z.string().optional(),
@@ -179,3 +180,4 @@ export const alertUpdateSchema = z
     status: z.enum(["open", "acknowledged", "resolved"]),
   })
   .refine((data) => Object.keys(data).length > 0, "No fields provided for update");
+

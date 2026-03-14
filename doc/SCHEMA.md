@@ -88,3 +88,10 @@ Indexes were added for common query dimensions:
 - Operational filters (`status`, `due_at`, `log_date`)
 - Time-series browsing (`started_at`, `occurred_at`, `triggered_at`, `expires_at`)
 - Foreign-key lookup paths (`driver_id`, `vehicle_id`, `user_id`)
+
+## Update (2026-03-14 18:54)
+- Added migration `20260314195500_restore_operational_update_permissions.sql`.
+- Operational tables `drivers`, `vehicles`, `trips`, `eld_logs`, `inspections`, `maintenance_records`, and `safety_events` enforce role-scoped writes for `owner/admin/dispatcher` with explicit `USING` + `WITH CHECK` predicates for UPDATE.
+- Ownership-sensitive tables remain owner-restricted for update control:
+  - `companies` update: owner-only
+  - `company_members` update: owner-only
