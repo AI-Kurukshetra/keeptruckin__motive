@@ -55,6 +55,7 @@
 - [x] Modern SaaS dashboard UI refactor (sidebar, metric cards, shadcn tables, status badges, layout/spacing polish) (2026-03-14 12:31)
 - [x] Premium SaaS dashboard admin panel upgrade (Recharts charts, quick actions, recent activity timeline, refined responsive grid) (2026-03-14 12:38)
 - [x] Premium UX shell upgrade (Cmd/Ctrl+K command palette, global search, theme toggle, G shortcuts) (2026-03-14 12:43)
+- [x] Create premium SaaS landing page at / with isolated implementation (2026-03-14 17:08)
 - [x] Harden middleware against Edge runtime crashes with safe fallbacks (2026-03-14 16:44)
 - [x] Run full seeded Playwright QA and publish artifacts to /output (2026-03-14 16:44)
 
@@ -63,6 +64,7 @@
 - [x] E2E tests for auth and core fleet workflows (2026-03-14 11:26: specs added)
 - [x] Pre-commit checks (`pnpm lint`, `pnpm typecheck`, `pnpm test`) (`pnpm lint` + `pnpm typecheck` pass on 2026-03-14 12:07; Vitest execution skipped per accepted runtime blocker `spawn EPERM`)
 - [x] Final review and conventional commit (2026-03-14 12:07)
+
 
 
 

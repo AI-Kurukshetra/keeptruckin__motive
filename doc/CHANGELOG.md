@@ -70,3 +70,4 @@
 - Stabilized `middleware.ts` for Vercel Edge: added env-variable bypass, wrapped session update in try/catch fallback, and restored broad route matcher without crashing requests.
 - Added robust full-suite QA runner `output/playwright/full-qa-prod-demo.js` and generated required artifacts at `output/qa-report.json` and `output/qa-screenshots/`.
 - Deployed latest stability updates to Vercel production and refreshed full QA artifacts (`output/qa-report.json`, `output/qa-screenshots/`).
+- Added new premium marketing landing experience (`app/page.tsx`, `components/landing/landing-page.tsx`) with hero, product preview, features, AI intelligence cards, workflow diagram, stack section, demo credentials, and responsive footer.

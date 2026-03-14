@@ -33,3 +33,4 @@
 [2026-03-14 16:19] codex — Extended seed to create role-based auth users (owner/admin/dispatcher/driver/viewer), upsert company memberships, and link seeded driver auth_user_id for role testing.
 [2026-03-14 16:43] codex — Hardened middleware for Edge runtime with env guard + try/catch fallback via updateSession wrapper; executed full seeded Playwright QA and generated output/qa-report.json + output/qa-screenshots artifacts.
 [2026-03-14 16:47] codex — Redeployed to Vercel after middleware hardening and reran full post-deploy Playwright QA; final artifact refreshed at output/qa-report.json.
+[2026-03-14 17:09] codex — Implemented premium SaaS landing page at / using isolated files (app/page.tsx + components/landing/*), preserving auth/dashboard/API behavior; validated lint/typecheck/build.
