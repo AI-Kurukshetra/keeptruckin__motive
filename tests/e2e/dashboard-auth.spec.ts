@@ -14,7 +14,7 @@ test.describe("authenticated dashboard journey", () => {
     await page.getByRole("button", { name: "Sign In" }).click();
 
     await expect(page).toHaveURL(/\/dashboard/);
-    await expect(page.getByText("Fleet Dashboard")).toBeVisible();
+    await expect(page.getByTestId("metric-card-drivers")).toBeVisible();
 
     await page.goto("/drivers");
     await expect(page.getByRole("heading", { name: "Drivers" })).toBeVisible();
