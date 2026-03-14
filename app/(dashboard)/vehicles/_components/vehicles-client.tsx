@@ -19,7 +19,7 @@ import { VehicleStatusBadge } from "@/components/dashboard/status-badge";
 import { TableEmptyRow, TableLoadingRows } from "@/components/dashboard/table-states";
 import { EmptyState } from "@/components/dashboard/empty-state";
 
-type Vehicle = { id: string; vin: string; unit_number: string; status: string };
+type Vehicle = { id: string; name?: string | null; vin: string; unit_number: string; status: string };
 
 export function VehiclesClient({ companyId, initialSearch = "" }: { companyId: string; initialSearch?: string }) {
   const queryClient = useQueryClient();
@@ -32,10 +32,10 @@ export function VehiclesClient({ companyId, initialSearch = "" }: { companyId: s
   });
 
   const createMutation = useMutation({
-    mutationFn: (payload: { vin: string; unitNumber: string }) =>
+    mutationFn: (payload: { vehicleName?: string; vin: string; unitNumber: string }) =>
       apiFetch<Vehicle>("/api/vehicles", {
         method: "POST",
-        body: JSON.stringify({ companyId, ...payload }),
+        body: JSON.stringify({ companyId, name: payload.vehicleName, vin: payload.vin, unitNumber: payload.unitNumber }),
       }),
     onSuccess: () => {
       setError(null);
@@ -53,7 +53,9 @@ export function VehiclesClient({ companyId, initialSearch = "" }: { companyId: s
     }
 
     return records.filter((vehicle) => {
+      const vehicleLabel = (vehicle.name ?? vehicle.unit_number).toLowerCase();
       return (
+        vehicleLabel.includes(query) ||
         vehicle.vin.toLowerCase().includes(query) ||
         vehicle.unit_number.toLowerCase().includes(query) ||
         vehicle.status.toLowerCase().includes(query)
@@ -69,17 +71,19 @@ export function VehiclesClient({ companyId, initialSearch = "" }: { companyId: s
         <CardContent className="pt-6">
           <form
             ref={formRef}
-            className="grid gap-3 md:grid-cols-3"
+            className="grid gap-3 md:grid-cols-4"
             onSubmit={(event) => {
               event.preventDefault();
               const formData = new FormData(event.currentTarget);
               createMutation.mutate({
+                vehicleName: String(formData.get("vehicleName") ?? "") || undefined,
                 vin: String(formData.get("vin") ?? ""),
                 unitNumber: String(formData.get("unitNumber") ?? ""),
               });
               event.currentTarget.reset();
             }}
           >
+            <Input name="vehicleName" placeholder="Vehicle Name (optional)" data-testid="vehicle-name" />
             <Input name="vin" placeholder="VIN" required data-testid="vehicle-vin" />
             <Input name="unitNumber" placeholder="Unit number" required data-testid="vehicle-unit-number" />
             <Button type="submit" disabled={createMutation.isPending} data-testid="add-vehicle-button">Add Vehicle</Button>
@@ -103,22 +107,24 @@ export function VehiclesClient({ companyId, initialSearch = "" }: { companyId: s
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>Vehicle</TableHead>
                   <TableHead>Unit</TableHead>
                   <TableHead>VIN</TableHead>
                   <TableHead>Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {vehiclesQuery.isLoading ? <TableLoadingRows columns={3} /> : null}
+                {vehiclesQuery.isLoading ? <TableLoadingRows columns={4} /> : null}
                 {!vehiclesQuery.isLoading && vehicles.length === 0 ? (
                   <TableEmptyRow
-                    columns={3}
+                    columns={4}
                     message={query ? "No vehicles match your search." : "No vehicles available."}
                   />
                 ) : null}
                 {vehicles.map((vehicle) => (
                   <TableRow key={vehicle.id} className="transition-colors hover:bg-muted/50">
-                    <TableCell className="font-medium">{vehicle.unit_number}</TableCell>
+                    <TableCell className="font-medium">{vehicle.name ?? vehicle.unit_number}</TableCell>
+                    <TableCell>{vehicle.unit_number}</TableCell>
                     <TableCell>{vehicle.vin}</TableCell>
                     <TableCell>
                       <VehicleStatusBadge status={vehicle.status} />
@@ -133,4 +139,3 @@ export function VehiclesClient({ companyId, initialSearch = "" }: { companyId: s
     </div>
   );
 }
-
