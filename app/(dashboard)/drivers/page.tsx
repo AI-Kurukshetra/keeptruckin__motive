@@ -1,0 +1,37 @@
+import type { Metadata } from "next";
+import { getPrimaryMembership } from "@/lib/supabase/company";
+import { NoCompanyNotice } from "@/components/dashboard/no-company-notice";
+import { PageHeader } from "@/components/dashboard/page-header";
+import { DriversClient } from "./_components/drivers-client";
+
+export const metadata: Metadata = {
+  title: "Drivers",
+  description: "Manage driver records.",
+};
+
+type SearchParams = Record<string, string | string[] | undefined>;
+
+function getParamValue(value: string | string[] | undefined): string {
+  if (Array.isArray(value)) {
+    return value[0] ?? "";
+  }
+
+  return value ?? "";
+}
+
+export default async function DriversPage({
+  searchParams,
+}: {
+  searchParams?: Promise<SearchParams>;
+}) {
+  const membership = await getPrimaryMembership();
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+  const initialSearch = getParamValue(resolvedSearchParams?.search);
+
+  return (
+    <div className="space-y-6">
+      <PageHeader title="Drivers" description="Create and review fleet driver records." />
+      {membership ? <DriversClient companyId={membership.companyId} initialSearch={initialSearch} /> : <NoCompanyNotice />}
+    </div>
+  );
+}

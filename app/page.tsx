@@ -1,12 +1,15 @@
 import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 
-export default function HomePage() {
-  // TODO: implement auth-aware redirect with server session check
-  const isAuthenticated = false;
+export default async function HomePage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (isAuthenticated) {
+  if (user) {
     redirect("/dashboard");
   }
 
-  return <div className="p-8">{"// TODO: implement landing page"}</div>;
+  redirect("/login");
 }
