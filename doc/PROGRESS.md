@@ -45,3 +45,4 @@
 [2026-03-14 19:43] codex — Recovery pass completed: added missing CRUD actions/modals for trips/maintenance/inspections/ELD/safety, added /api/safety/[id], and standardized DB error passthrough + vehicle label fallback usage without schema/RBAC changes.
 
 [2026-03-14 22:11] codex — Productionized marketing homepage UI: removed demo access content, switched CTAs to Get Started/Login, replaced Tech Stack with Enterprise Platform bullets, updated hero metrics copy, and improved responsive card styling.
+[2026-03-14 22:23] codex — Rebuilt public landing page with premium SaaS design system (dark gradient hero, glass surfaces, animated reveal, alternating showcase blocks, AI metric cards, enterprise platform/security narrative, responsive footer) without backend/auth changes.

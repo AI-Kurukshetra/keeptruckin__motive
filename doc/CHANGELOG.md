@@ -105,3 +105,4 @@
 - Validation: pnpm typecheck and pnpm lint pass.
 
 - Productionized marketing homepage in components/landing/landing-page.tsx: removed Demo Access section/credentials, replaced all Start Demo CTAs with Get Started, changed hero CTAs to Get Started + Login, removed Technology Stack section, added Enterprise Platform section with required bullets, updated hero metric cards, and applied consistent gradient/rounded/shadow/transition styling with mobile-first stacking.
+- Redesigned components/landing/landing-page.tsx into a 9-section modern SaaS narrative layout with framer-motion reveal/metric animations, dark gradient hero + product mock, trust logos, capabilities grid, alternating showcases, AI insights, platform/security block, final CTA, and structured footer; preserved existing backend/API/auth behavior.\n- Added framer-motion dependency to package.json for homepage animations (installed via pnpm add framer-motion --store-dir D:\\.pnpm-store\\v10).

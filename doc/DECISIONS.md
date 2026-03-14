@@ -89,3 +89,4 @@ Reason: Mixed environments may lack `vehicles.name`; API now safely falls back o
 
 ## [2026-03-14] Marketing homepage CTA strategy removes demo-entry framing
 Reason: Production positioning requires conversion-oriented navigation (/register + /login) and removal of exposed demo credentials while keeping backend/auth flows unchanged.
+## [2026-03-14] Public marketing homepage moved to client-rendered motion composition\nReason: Using framer-motion for scroll reveal and interactive SaaS presentation requires a client boundary, while backend/auth/API remain unchanged and isolated from marketing UI.
