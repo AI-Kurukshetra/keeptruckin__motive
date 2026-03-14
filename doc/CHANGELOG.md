@@ -69,3 +69,4 @@
 - Enhanced `supabase/seed/seed.ts` to provision role-based QA users and `company_members` mappings for Atlas Freight Logistics, enabling immediate multi-role login testing.
 - Stabilized `middleware.ts` for Vercel Edge: added env-variable bypass, wrapped session update in try/catch fallback, and restored broad route matcher without crashing requests.
 - Added robust full-suite QA runner `output/playwright/full-qa-prod-demo.js` and generated required artifacts at `output/qa-report.json` and `output/qa-screenshots/`.
+- Deployed latest stability updates to Vercel production and refreshed full QA artifacts (`output/qa-report.json`, `output/qa-screenshots/`).
