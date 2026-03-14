@@ -58,6 +58,8 @@ type ActivityItem = {
 };
 
 const chartPalette = ["#2563eb", "#0ea5e9", "#14b8a6", "#22c55e", "#f59e0b", "#ef4444"];
+const chartAnimationDuration = 1200;
+const chartAnimationEasing = "ease-out";
 
 function MetricCard({
   label,
@@ -73,7 +75,7 @@ function MetricCard({
   testId: string;
 }) {
   return (
-    <Card data-testid={testId} className="animate-in fade-in slide-in-from-bottom-2 duration-300 transition-all duration-200 hover:shadow-lg hover:scale-[1.01]">
+    <Card data-testid={testId} className="transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
         <div>
           <CardDescription>{label}</CardDescription>
@@ -101,7 +103,7 @@ function PieChartCard({ title, description, data }: { title: string; description
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
-              <Pie data={data} dataKey="value" nameKey="name" innerRadius={60} outerRadius={90} paddingAngle={3}>
+              <Pie data={data} dataKey="value" nameKey="name" innerRadius={60} outerRadius={90} paddingAngle={3} animationDuration={chartAnimationDuration} animationEasing={chartAnimationEasing} isAnimationActive>
                 {data.map((entry, index) => (
                   <Cell key={`${entry.name}-${index}`} fill={chartPalette[index % chartPalette.length]} />
                 ))}
@@ -147,7 +149,7 @@ function BarChartCard({ title, description, data }: { title: string; description
               <XAxis dataKey="name" tickFormatter={(value: string) => value.replaceAll("_", " ")} fontSize={12} />
               <YAxis allowDecimals={false} fontSize={12} />
               <Tooltip formatter={(value) => [value, "Count"]} />
-              <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+              <Bar dataKey="value" radius={[6, 6, 0, 0]} animationDuration={chartAnimationDuration} animationEasing={chartAnimationEasing} isAnimationActive>
                 {data.map((entry, index) => (
                   <Cell key={`${entry.name}-${index}`} fill={chartPalette[index % chartPalette.length]} />
                 ))}
@@ -220,8 +222,13 @@ export function DashboardOverviewClient({ companyId }: { companyId: string }) {
       20
     );
 
-    return Math.max(0, Math.round(safetyScore - unresolvedAlertPenalty - maintenancePenalty));
+    const calculatedScore = Math.round(safetyScore - unresolvedAlertPenalty - maintenancePenalty);
+    return Math.min(100, Math.max(0, calculatedScore));
   }, [maintenanceQuery.data, openAlerts, safetyScoreQuery.data?.safetyScore]);
+
+  const healthStatus = fleetHealthScore >= 90 ? "Healthy" : fleetHealthScore >= 70 ? "Warning" : "Critical";
+  const healthColorClass = fleetHealthScore >= 90 ? "text-green-500" : fleetHealthScore >= 70 ? "text-yellow-500" : "text-red-500";
+  const healthBadgeClass = fleetHealthScore >= 90 ? "border-green-500/30 bg-green-500/10 text-green-500" : fleetHealthScore >= 70 ? "border-yellow-500/30 bg-yellow-500/10 text-yellow-500" : "border-red-500/30 bg-red-500/10 text-red-500";
 
   const safetyEventDistribution = useMemo(
     () => getCountDistribution((safetyEventsQuery.data ?? []).map((event) => event.event_type)),
@@ -325,14 +332,13 @@ export function DashboardOverviewClient({ companyId }: { companyId: string }) {
                 </CardTitle>
                 <CardDescription>Composite of safety score, alerts, and maintenance risk.</CardDescription>
               </div>
-              <Badge variant={fleetHealthScore >= 75 ? "default" : fleetHealthScore >= 50 ? "secondary" : "destructive"}>
-                {fleetHealthScore >= 75 ? "Healthy" : fleetHealthScore >= 50 ? "Watch" : "Critical"}
+              <Badge variant="outline" className={cn("border", healthBadgeClass)}>
+                {healthStatus}
               </Badge>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-baseline gap-2">
-                <p className="text-4xl font-semibold">{fleetHealthScore}</p>
-                <p className="text-xs text-muted-foreground">Out of 100</p>
+                <p className={cn("text-4xl font-semibold", healthColorClass)}>{fleetHealthScore} / 100</p>
               </div>
               <div className="h-2 rounded-full bg-muted">
                 <div className="h-2 rounded-full bg-primary" style={{ width: `${Math.max(6, fleetHealthScore)}%` }} />
@@ -369,19 +375,19 @@ export function DashboardOverviewClient({ companyId }: { companyId: string }) {
               <CardDescription>Jump to common tasks.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              <Link href="/drivers" className={cn(buttonVariants({ variant: "secondary" }), "w-full justify-start")}>
+              <Link href="/drivers" className={cn(buttonVariants({ variant: "secondary" }), "w-full justify-start transition duration-200 hover:bg-blue-600 hover:text-white")}>
                 <UserPlus className="mr-2 size-4" />
                 Add Driver
               </Link>
-              <Link href="/vehicles" className={cn(buttonVariants({ variant: "secondary" }), "w-full justify-start")}>
+              <Link href="/vehicles" className={cn(buttonVariants({ variant: "secondary" }), "w-full justify-start transition duration-200 hover:bg-blue-600 hover:text-white")}>
                 <Car className="mr-2 size-4" />
                 Add Vehicle
               </Link>
-              <Link href="/trips" className={cn(buttonVariants({ variant: "secondary" }), "w-full justify-start")}>
+              <Link href="/trips" className={cn(buttonVariants({ variant: "secondary" }), "w-full justify-start transition duration-200 hover:bg-blue-600 hover:text-white")}>
                 <Route className="mr-2 size-4" />
                 Create Trip
               </Link>
-              <Link href="/alerts" className={cn(buttonVariants({ variant: "outline" }), "w-full justify-start")}>
+              <Link href="/alerts" className={cn(buttonVariants({ variant: "outline" }), "w-full justify-start transition duration-200 hover:bg-blue-600 hover:text-white")}>
                 <Bell className="mr-2 size-4" />
                 View Alerts
               </Link>
@@ -397,7 +403,7 @@ export function DashboardOverviewClient({ companyId }: { companyId: string }) {
               <CardDescription>Latest fleet system events.</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="border-l-2 border-blue-500 pl-3 space-y-4">
                 {recentActivity.length > 0 ? (
                   recentActivity.map((item, index) => (
                     <div key={`${item.type}-${item.timestamp}-${index}`} className="space-y-2">
@@ -411,7 +417,7 @@ export function DashboardOverviewClient({ companyId }: { companyId: string }) {
                           <p className="text-xs text-muted-foreground">{formatActivityTime(item.timestamp)}</p>
                         </div>
                       </div>
-                      {index < recentActivity.length - 1 ? <Separator /> : null}
+                      {index < recentActivity.length - 1 ? <Separator className="bg-border/60" /> : null}
                     </div>
                   ))
                 ) : (
@@ -425,6 +431,9 @@ export function DashboardOverviewClient({ companyId }: { companyId: string }) {
     </div>
   );
 }
+
+
+
 
 
 

@@ -217,7 +217,7 @@ export function TripsClient({ companyId, initialSearch = "" }: { companyId: stri
                   />
                 ) : null}
                 {trips.map((trip) => (
-                  <TableRow key={trip.id} className="transition-colors hover:bg-muted/50">
+                  <TableRow key={trip.id} className="transition-colors hover:bg-muted/40">
                     <TableCell className="font-medium">{trip.origin ?? "-"}</TableCell>
                     <TableCell>{trip.destination ?? "-"}</TableCell>
                     <TableCell>
@@ -225,10 +225,10 @@ export function TripsClient({ companyId, initialSearch = "" }: { companyId: stri
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Button variant="outline" size="sm" onClick={() => setEditingTrip(trip)}>
+                        <Button variant="outline" size="sm" className="hover:bg-gray-100" onClick={() => setEditingTrip(trip)}>
                           <Pencil className="size-3.5" /> Edit
                         </Button>
-                        <Button variant="destructive" size="sm" onClick={() => setDeletingTrip(trip)}>
+                        <Button variant="destructive" size="sm" className="hover:bg-red-600 hover:text-white" onClick={() => setDeletingTrip(trip)}>
                           <Trash2 className="size-3.5" /> Delete
                         </Button>
                       </div>
@@ -324,3 +324,4 @@ export function TripsClient({ companyId, initialSearch = "" }: { companyId: stri
     </div>
   );
 }
+

@@ -163,16 +163,16 @@ export function DriversClient({ companyId, initialSearch = "" }: { companyId: st
                   />
                 ) : null}
                 {drivers.map((driver) => (
-                  <TableRow key={driver.id} className="cursor-pointer transition-colors hover:bg-muted/50">
+                  <TableRow key={driver.id} className="cursor-pointer transition-colors hover:bg-muted/40">
                     <TableCell className="font-medium">{driver.first_name} {driver.last_name}</TableCell>
                     <TableCell>{driver.license_number}</TableCell>
                     <TableCell className="capitalize">{driver.status}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Button variant="outline" size="sm" onClick={() => setEditingDriver(driver)}>
+                        <Button variant="outline" size="sm" className="hover:bg-gray-100" onClick={() => setEditingDriver(driver)}>
                           <Pencil className="size-3.5" /> Edit
                         </Button>
-                        <Button variant="destructive" size="sm" onClick={() => setDeletingDriver(driver)}>
+                        <Button variant="destructive" size="sm" className="hover:bg-red-600 hover:text-white" onClick={() => setDeletingDriver(driver)}>
                           <Trash2 className="size-3.5" /> Delete
                         </Button>
                       </div>
@@ -248,3 +248,4 @@ export function DriversClient({ companyId, initialSearch = "" }: { companyId: st
     </div>
   );
 }
+

@@ -186,16 +186,16 @@ export function EldClient({ companyId }: { companyId: string }) {
                   <TableEmptyRow columns={4} message="No ELD logs yet. Add an HOS log above." />
                 ) : null}
                 {logs.map((log) => (
-                  <TableRow key={log.id} className="transition-colors hover:bg-muted/50">
+                  <TableRow key={log.id} className="transition-colors hover:bg-muted/40">
                     <TableCell>{log.log_date}</TableCell>
                     <TableCell>{log.duty_status}</TableCell>
                     <TableCell>{new Date(log.start_time).toLocaleString()}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Button variant="outline" size="sm" onClick={() => setEditingLog(log)}>
+                        <Button variant="outline" size="sm" className="hover:bg-gray-100" onClick={() => setEditingLog(log)}>
                           <Pencil className="size-3.5" /> Edit
                         </Button>
-                        <Button variant="destructive" size="sm" onClick={() => setDeletingLog(log)}>
+                        <Button variant="destructive" size="sm" className="hover:bg-red-600 hover:text-white" onClick={() => setDeletingLog(log)}>
                           <Trash2 className="size-3.5" /> Delete
                         </Button>
                       </div>
@@ -285,3 +285,4 @@ export function EldClient({ companyId }: { companyId: string }) {
     </div>
   );
 }
+

@@ -165,7 +165,7 @@ export function VehiclesClient({ companyId, initialSearch = "" }: { companyId: s
                   />
                 ) : null}
                 {vehicles.map((vehicle) => (
-                  <TableRow key={vehicle.id} className="cursor-pointer transition-colors hover:bg-muted/50">
+                  <TableRow key={vehicle.id} className="cursor-pointer transition-colors hover:bg-muted/40">
                     <TableCell className="font-medium">{vehicle.name ?? vehicle.unit_number}</TableCell>
                     <TableCell>{vehicle.unit_number}</TableCell>
                     <TableCell>{vehicle.vin}</TableCell>
@@ -174,10 +174,10 @@ export function VehiclesClient({ companyId, initialSearch = "" }: { companyId: s
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Button variant="outline" size="sm" onClick={() => setEditingVehicle(vehicle)}>
+                        <Button variant="outline" size="sm" className="hover:bg-gray-100" onClick={() => setEditingVehicle(vehicle)}>
                           <Pencil className="size-3.5" /> Edit
                         </Button>
-                        <Button variant="destructive" size="sm" onClick={() => setDeletingVehicle(vehicle)}>
+                        <Button variant="destructive" size="sm" className="hover:bg-red-600 hover:text-white" onClick={() => setDeletingVehicle(vehicle)}>
                           <Trash2 className="size-3.5" /> Delete
                         </Button>
                       </div>
@@ -255,3 +255,4 @@ export function VehiclesClient({ companyId, initialSearch = "" }: { companyId: s
     </div>
   );
 }
+

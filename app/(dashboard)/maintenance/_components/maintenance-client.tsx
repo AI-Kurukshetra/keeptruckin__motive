@@ -162,17 +162,17 @@ export function MaintenanceClient({ companyId }: { companyId: string }) {
                   <TableEmptyRow columns={5} message="No maintenance records yet. Schedule your first maintenance item." />
                 ) : null}
                 {maintenance.map((record) => (
-                  <TableRow key={record.id} className="transition-colors hover:bg-muted/50">
+                  <TableRow key={record.id} className="transition-colors hover:bg-muted/40">
                     <TableCell>{vehicleLabelById.get(record.vehicle_id) ?? "-"}</TableCell>
                     <TableCell>{record.maintenance_type}</TableCell>
                     <TableCell className="capitalize">{record.status}</TableCell>
                     <TableCell>{record.due_at ?? "-"}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Button variant="outline" size="sm" onClick={() => setEditingRecord(record)}>
+                        <Button variant="outline" size="sm" className="hover:bg-gray-100" onClick={() => setEditingRecord(record)}>
                           <Pencil className="size-3.5" /> Edit
                         </Button>
-                        <Button variant="destructive" size="sm" onClick={() => setDeletingRecord(record)}>
+                        <Button variant="destructive" size="sm" className="hover:bg-red-600 hover:text-white" onClick={() => setDeletingRecord(record)}>
                           <Trash2 className="size-3.5" /> Delete
                         </Button>
                       </div>
@@ -251,3 +251,4 @@ export function MaintenanceClient({ companyId }: { companyId: string }) {
     </div>
   );
 }
+

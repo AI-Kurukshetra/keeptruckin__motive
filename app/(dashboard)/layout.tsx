@@ -19,11 +19,11 @@ export const metadata: Metadata = {
 };
 
 const navItems: readonly SidebarNavItem[] = [
-  { href: "/dashboard", label: "Overview", icon: "gauge" },
+  { href: "/dashboard", label: "Overview", icon: "layout" },
   { href: "/drivers", label: "Drivers", icon: "users" },
   { href: "/vehicles", label: "Vehicles", icon: "truck" },
   { href: "/trips", label: "Trips", icon: "route" },
-  { href: "/eld", label: "ELD", icon: "chart" },
+  { href: "/eld", label: "ELD", icon: "activity" },
   { href: "/inspections", label: "Inspections", icon: "clipboard" },
   { href: "/maintenance", label: "Maintenance", icon: "wrench" },
   { href: "/safety", label: "Safety", icon: "shield" },
@@ -88,4 +88,5 @@ export default async function DashboardLayout({ children }: { children: React.Re
     </div>
   );
 }
+
 

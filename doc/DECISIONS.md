@@ -96,3 +96,5 @@ Reason: Storytelling sections convert better when previews mirror real workflows
 Reason: SVG keeps sharp rendering on high-DPI modern browsers while ICO ensures broad legacy/tab compatibility across environments.
 ## [2026-03-14] Landing page polish constrained to visual layer only
 Reason: Requested enhancement improves perceived quality via depth/motion/styling tokens while preserving established marketing narrative, copy, CTA behavior, and all backend/auth surfaces.
+## [2026-03-14] Chart easing fallback uses supported Recharts token
+Reason: Requested easeOutQuart is not accepted by current Recharts TS types; using ease-out preserves smooth animation while keeping type safety and avoiding custom animation wrappers.

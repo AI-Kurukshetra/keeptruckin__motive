@@ -202,16 +202,16 @@ export function InspectionsClient({ companyId }: { companyId: string }) {
                   <TableEmptyRow columns={4} message="No inspections yet. Add a pre/post trip inspection above." />
                 ) : null}
                 {inspections.map((inspection) => (
-                  <TableRow key={inspection.id} className="transition-colors hover:bg-muted/50">
+                  <TableRow key={inspection.id} className="transition-colors hover:bg-muted/40">
                     <TableCell>{inspection.inspection_type}</TableCell>
                     <TableCell className="capitalize">{inspection.status}</TableCell>
                     <TableCell>{new Date(inspection.inspected_at).toLocaleString()}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Button variant="outline" size="sm" onClick={() => setEditingInspection(inspection)}>
+                        <Button variant="outline" size="sm" className="hover:bg-gray-100" onClick={() => setEditingInspection(inspection)}>
                           <Pencil className="size-3.5" /> Edit
                         </Button>
-                        <Button variant="destructive" size="sm" onClick={() => setDeletingInspection(inspection)}>
+                        <Button variant="destructive" size="sm" className="hover:bg-red-600 hover:text-white" onClick={() => setDeletingInspection(inspection)}>
                           <Trash2 className="size-3.5" /> Delete
                         </Button>
                       </div>
@@ -289,3 +289,4 @@ export function InspectionsClient({ companyId }: { companyId: string }) {
     </div>
   );
 }
+

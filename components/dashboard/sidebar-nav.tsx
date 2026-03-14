@@ -6,11 +6,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Bell,
-  ChartLine,
+  Activity,
   ClipboardCheck,
-  Gauge,
+  LayoutDashboard,
   Route as RouteIcon,
-  ShieldAlert,
+  Shield,
   Truck,
   Users,
   Wrench,
@@ -19,11 +19,11 @@ import {
 import { cn } from "@/lib/utils";
 
 export type SidebarIconKey =
-  | "gauge"
+  | "layout"
   | "users"
   | "truck"
   | "route"
-  | "chart"
+  | "activity"
   | "clipboard"
   | "wrench"
   | "shield"
@@ -36,14 +36,14 @@ export type SidebarNavItem = {
 };
 
 const iconMap: Record<SidebarIconKey, LucideIcon> = {
-  gauge: Gauge,
+  layout: LayoutDashboard,
   users: Users,
   truck: Truck,
   route: RouteIcon,
-  chart: ChartLine,
+  activity: Activity,
   clipboard: ClipboardCheck,
   wrench: Wrench,
-  shield: ShieldAlert,
+  shield: Shield,
   bell: Bell,
 };
 
@@ -75,7 +75,7 @@ export const SidebarNav = memo(function SidebarNav({
             key={item.href}
             href={item.href}
             className={cn(
-              "group inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition",
+              "group inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition hover:bg-muted",
               compact ? "min-w-fit" : "w-full",
               active
                 ? "bg-primary text-primary-foreground shadow-sm"
@@ -84,7 +84,7 @@ export const SidebarNav = memo(function SidebarNav({
           >
             <Icon
               className={cn(
-                "size-4",
+                "size-[18px] opacity-80",
                 active ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground"
               )}
             />
@@ -95,3 +95,5 @@ export const SidebarNav = memo(function SidebarNav({
     </nav>
   );
 });
+
+

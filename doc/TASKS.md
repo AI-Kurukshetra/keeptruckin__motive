@@ -102,3 +102,4 @@
 - [x] Upgrade product showcase preview cards with realistic dashboard UI states, gradients, badges, and motion (2026-03-14 22:31)
 - [x] Create branded Atlas favicon assets (SVG + ICO) and wire root metadata icons for browser tab rendering (2026-03-14 22:36)
 - [x] Apply premium visual polish to marketing homepage (glow depth, card styling, subtle motion, section dividers) without content/structure changes (2026-03-14 22:40)
+- [x] Final safe dashboard polish + frontend logic fix pass (health clamp/status colors, sidebar icon mapping, hover polish, timeline styling, register gradient, chart animation, action buttons, table row hover, vehicle label fallback checks) (2026-03-14 23:04)

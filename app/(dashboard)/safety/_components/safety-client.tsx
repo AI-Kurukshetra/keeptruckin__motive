@@ -255,16 +255,16 @@ export function SafetyClient({ companyId }: { companyId: string }) {
                 {eventsQuery.isLoading ? <TableLoadingRows columns={4} /> : null}
                 {!eventsQuery.isLoading && events.length === 0 ? <TableEmptyRow columns={4} message="No safety events yet." /> : null}
                 {events.map((event) => (
-                  <TableRow key={event.id} className="transition-colors hover:bg-muted/50">
+                  <TableRow key={event.id} className="transition-colors hover:bg-muted/40">
                     <TableCell className="capitalize">{event.event_type.replaceAll("_", " ")}</TableCell>
                     <TableCell>{event.severity}</TableCell>
                     <TableCell>{new Date(event.occurred_at).toLocaleString()}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Button variant="outline" size="sm" onClick={() => setEditingEvent(event)}>
+                        <Button variant="outline" size="sm" className="hover:bg-gray-100" onClick={() => setEditingEvent(event)}>
                           <Pencil className="size-3.5" /> Edit
                         </Button>
-                        <Button variant="destructive" size="sm" onClick={() => setDeletingEvent(event)}>
+                        <Button variant="destructive" size="sm" className="hover:bg-red-600 hover:text-white" onClick={() => setDeletingEvent(event)}>
                           <Trash2 className="size-3.5" /> Delete
                         </Button>
                       </div>
@@ -366,3 +366,4 @@ export function SafetyClient({ companyId }: { companyId: string }) {
     </div>
   );
 }
+
