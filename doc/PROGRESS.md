@@ -27,3 +27,4 @@
 [2026-03-14 14:28] codex — Added stable Playwright data-testid selectors across auth/dashboard UI (forms, metric cards, command trigger/items, CTA buttons, alerts table, theme toggle, global search) and updated full QA runner to use getByTestId selectors, then reran full suite.
 [2026-03-14 14:37] codex — Added idempotent Supabase service-role seed script (`supabase/seed/seed.ts`) with realistic company/drivers/vehicles/trips/alerts/safety/maintenance data and added `pnpm db:seed` script.
 [2026-03-14 14:42] codex — Updated `supabase/seed/seed.ts` to use deterministic primary-key IDs and `onConflict: "id"` for companies, drivers, and vehicles; removed non-PK conflict usage to match schema safely.
+[2026-03-14 15:13] codex — Fixed Vercel Edge middleware build issue by changing root middleware import to relative path (`./lib/supabase/middleware`) and revalidated lint/typecheck.
