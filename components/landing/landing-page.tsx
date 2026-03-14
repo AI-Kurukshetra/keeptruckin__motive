@@ -73,6 +73,7 @@ const showcases = [
       "Surface risky behavior patterns, prioritize interventions, and improve coaching outcomes with a unified safety timeline.",
     bullets: ["Behavior trend snapshots", "Event severity prioritization", "Driver-level risk scoring"],
     stat: "-28% incident rate",
+    previewType: "driver-safety",
   },
   {
     title: "Vehicle Operations Monitoring",
@@ -80,12 +81,14 @@ const showcases = [
       "Track each vehicle's health and activity with status-aware insights that keep operations predictable and efficient.",
     bullets: ["Live unit readiness", "Service interval alerts", "Usage and uptime trends"],
     stat: "92% fleet availability",
+    previewType: "vehicle-monitoring",
   },
   {
     title: "Trip Performance Analytics",
     description: "Analyze route efficiency and completion outcomes with clear, actionable trip intelligence.",
     bullets: ["Planned vs actual variance", "Delay root-cause summaries", "Utilization benchmarking"],
     stat: "+19% route efficiency",
+    previewType: "trip-analytics",
   },
   {
     title: "Fleet Maintenance Automation",
@@ -93,6 +96,7 @@ const showcases = [
       "Automate reminders and maintenance planning with workflows designed for high-volume operational teams.",
     bullets: ["Predictive maintenance queue", "Priority-based scheduling", "Maintenance completion audits"],
     stat: "40% fewer overdue tasks",
+    previewType: "maintenance",
   },
 ] as const;
 
@@ -186,24 +190,110 @@ function AnimatedMetric({ label, value, suffix, delay = 0 }: { label: string; va
   );
 }
 
-function ProductMock({ title }: { title: string }) {
+function ProductMock({
+  title,
+  type,
+}: {
+  title: string;
+  type: "driver-safety" | "vehicle-monitoring" | "trip-analytics" | "maintenance";
+}) {
+  const rowsByType = {
+    "driver-safety": [
+      { label: "A. Morgan", value: "Risk 82", status: "High" },
+      { label: "N. Shah", value: "Risk 61", status: "Watch" },
+      { label: "T. Park", value: "Risk 29", status: "Low" },
+    ],
+    "vehicle-monitoring": [
+      { label: "Unit 412", value: "Uptime 99.2%", status: "Online" },
+      { label: "Unit 287", value: "Uptime 96.8%", status: "Service Due" },
+      { label: "Unit 144", value: "Uptime 98.4%", status: "Online" },
+    ],
+    "trip-analytics": [
+      { label: "Route ATL-42", value: "89% on-time", status: "Healthy" },
+      { label: "Route DAL-17", value: "74% on-time", status: "At Risk" },
+      { label: "Route CHI-09", value: "92% on-time", status: "Healthy" },
+    ],
+    maintenance: [
+      { label: "Brake Service", value: "Due in 2 days", status: "Urgent" },
+      { label: "Oil Change", value: "Due in 5 days", status: "Scheduled" },
+      { label: "Tire Rotation", value: "Completed", status: "Done" },
+    ],
+  } as const;
+
+  const metricsByType = {
+    "driver-safety": [
+      { label: "Risk Score", value: "82" },
+      { label: "Driver Alerts", value: "14" },
+    ],
+    "vehicle-monitoring": [
+      { label: "Online Units", value: "128" },
+      { label: "Avg Uptime", value: "98.1%" },
+    ],
+    "trip-analytics": [
+      { label: "Efficiency", value: "91%" },
+      { label: "Active Trips", value: "124" },
+    ],
+    maintenance: [
+      { label: "Scheduled", value: "32" },
+      { label: "Overdue", value: "4" },
+    ],
+  } as const;
+
+  const progressByType = {
+    "driver-safety": "72%",
+    "vehicle-monitoring": "88%",
+    "trip-analytics": "91%",
+    maintenance: "64%",
+  } as const;
+
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-gradient-to-b from-white to-slate-50 p-4 shadow-sm">
-      <div className="flex items-center justify-between border-b border-slate-200/80 pb-3">
-        <p className="text-sm font-medium text-slate-700">{title}</p>
-        <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">Live</span>
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -4 }}
+      viewport={{ once: true, amount: 0.35 }}
+      transition={{ duration: 0.35, ease: "easeOut" }}
+      className="overflow-hidden rounded-xl border border-blue-500/20 bg-gradient-to-b from-slate-800 to-slate-900 p-4 shadow-lg"
+    >
+      <div className="flex items-center justify-between border-b border-white/10 pb-3">
+        <p className="text-xs font-medium uppercase tracking-wider text-slate-300">{title}</p>
+        <span className="rounded-full bg-blue-500/20 px-2 py-1 text-xs font-medium text-blue-200">Live</span>
       </div>
-      <div className="mt-4 space-y-3">
-        <div className="h-2 w-3/4 rounded bg-slate-200" />
-        <div className="h-2 w-full rounded bg-slate-100" />
-        <div className="grid grid-cols-3 gap-2 pt-2">
-          <div className="h-16 rounded-lg bg-slate-100" />
-          <div className="h-16 rounded-lg bg-slate-100" />
-          <div className="h-16 rounded-lg bg-slate-100" />
+
+      <div className="mt-4 grid grid-cols-2 gap-2">
+        {metricsByType[type].map((metric) => (
+          <div key={metric.label} className="rounded-lg border border-white/10 bg-white/5 p-2.5">
+            <p className="text-[11px] text-slate-400">{metric.label}</p>
+            <p className="mt-1 text-sm font-semibold text-slate-100">{metric.value}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-3 rounded-lg border border-white/10 bg-slate-950/70 p-3">
+        <div className="flex items-center justify-between text-[11px] text-slate-400">
+          <span>Performance Trend</span>
+          <span>{progressByType[type]}</span>
         </div>
-        <div className="h-24 rounded-xl bg-gradient-to-r from-sky-100 to-indigo-100" />
+        <div className="mt-2 h-16 rounded-md bg-gradient-to-r from-blue-500/20 via-cyan-400/20 to-emerald-400/15" />
+        <div className="mt-2 h-1.5 rounded-full bg-slate-700">
+          <div className="h-1.5 rounded-full bg-gradient-to-r from-blue-400 to-cyan-300" style={{ width: progressByType[type] }} />
+        </div>
       </div>
-    </div>
+
+      <div className="mt-3 space-y-2">
+        {rowsByType[type].map((row) => (
+          <div key={row.label} className="flex items-center justify-between rounded-lg border border-white/10 bg-white/5 px-3 py-2">
+            <div>
+              <p className="text-xs font-medium text-slate-200">{row.label}</p>
+              <p className="text-[11px] text-slate-400">{row.value}</p>
+            </div>
+            <span className="rounded-full border border-blue-300/30 bg-blue-500/15 px-2 py-0.5 text-[10px] font-medium text-blue-100">
+              {row.status}
+            </span>
+          </div>
+        ))}
+      </div>
+    </motion.div>
   );
 }
 
@@ -373,7 +463,7 @@ export function LandingPage() {
                   <div className="mt-6 inline-flex rounded-full bg-sky-500/15 px-4 py-2 text-sm font-medium text-sky-200">{item.stat}</div>
                 </Reveal>
                 <Reveal>
-                  <ProductMock title={item.title} />
+                  <ProductMock title={item.title} type={item.previewType} />
                 </Reveal>
               </div>
             );
