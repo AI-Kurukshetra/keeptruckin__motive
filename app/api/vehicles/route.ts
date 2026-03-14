@@ -1,7 +1,16 @@
+import type { PostgrestError } from "@supabase/supabase-js";
 import { fail, ok } from "@/lib/api/responses";
 import { requireAuth, hasCompanyAccess } from "@/lib/api/auth";
 import { parseJsonBody, searchParamsToObject } from "@/lib/api/request";
 import { companyQuerySchema, vehicleCreateSchema } from "@/lib/validations/api";
+
+function failWithDbError(error: PostgrestError) {
+  return fail(error.message ?? "Database error", 500, {
+    code: error.code ?? null,
+    details: error.details ?? null,
+    hint: error.hint ?? null,
+  });
+}
 
 export async function GET(request: Request) {
   const { supabase, user } = await requireAuth();
@@ -22,7 +31,7 @@ export async function GET(request: Request) {
     .order("created_at", { ascending: false })
     .limit(queryParsed.data.limit ?? 50);
 
-  if (error) return fail("Failed to fetch vehicles", 500, error.message);
+  if (error) return failWithDbError(error);
   return ok(data);
 }
 
@@ -59,10 +68,10 @@ export async function POST(request: Request) {
   // Compatibility fallback: some environments may not yet have vehicles.name column.
   if (firstAttempt.error?.code === "42703") {
     const fallbackAttempt = await supabase.from("vehicles").insert(baseInsert).select("*").single();
-    if (fallbackAttempt.error) return fail("Failed to create vehicle", 500, fallbackAttempt.error.message);
+    if (fallbackAttempt.error) return failWithDbError(fallbackAttempt.error);
     return ok(fallbackAttempt.data, 201);
   }
 
-  if (firstAttempt.error) return fail("Failed to create vehicle", 500, firstAttempt.error.message);
+  if (firstAttempt.error) return failWithDbError(firstAttempt.error);
   return ok(firstAttempt.data, 201);
 }
