@@ -107,7 +107,7 @@ export function SafetyClient({ companyId }: { companyId: string }) {
             {eventsQuery.isLoading ? <TableLoadingRows columns={3} /> : null}
             {!eventsQuery.isLoading && (eventsQuery.data ?? []).length === 0 ? <TableEmptyRow columns={3} message="No safety events yet." /> : null}
             {(eventsQuery.data ?? []).map((event) => (
-              <tr key={event.id} className="border-b last:border-0">
+              <tr key={event.id} className="border-b last:border-0 transition-colors hover:bg-muted/50">
                 <td className="p-2 capitalize">{event.event_type.replaceAll("_", " ")}</td>
                 <td className="p-2">{event.severity}</td>
                 <td className="p-2">{new Date(event.occurred_at).toLocaleString()}</td>
@@ -119,3 +119,4 @@ export function SafetyClient({ companyId }: { companyId: string }) {
     </div>
   );
 }
+

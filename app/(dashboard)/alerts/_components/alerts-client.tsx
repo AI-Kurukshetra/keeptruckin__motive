@@ -165,7 +165,7 @@ export function AlertsClient({ companyId }: { companyId: string }) {
                   <TableEmptyRow columns={6} message="No alerts match the current filters." />
                 ) : null}
                 {filteredAlerts.map((alert) => (
-                  <TableRow key={alert.id} className="transition-colors hover:bg-muted/30">
+                  <TableRow key={alert.id} className="transition-colors hover:bg-muted/50">
                     <TableCell className="max-w-[260px] truncate font-medium">{alert.title}</TableCell>
                     <TableCell>{alert.alert_type}</TableCell>
                     <TableCell><AlertSeverityBadge severity={alert.severity} /></TableCell>
@@ -203,3 +203,4 @@ export function AlertsClient({ companyId }: { companyId: string }) {
     </div>
   );
 }
+

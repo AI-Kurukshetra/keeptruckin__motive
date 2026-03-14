@@ -129,7 +129,7 @@ export function TripsClient({ companyId, initialSearch = "" }: { companyId: stri
                   />
                 ) : null}
                 {trips.map((trip) => (
-                  <TableRow key={trip.id} className="transition-colors hover:bg-muted/30">
+                  <TableRow key={trip.id} className="transition-colors hover:bg-muted/50">
                     <TableCell className="font-medium">{trip.origin ?? "-"}</TableCell>
                     <TableCell>{trip.destination ?? "-"}</TableCell>
                     <TableCell>
@@ -145,3 +145,4 @@ export function TripsClient({ companyId, initialSearch = "" }: { companyId: stri
     </div>
   );
 }
+

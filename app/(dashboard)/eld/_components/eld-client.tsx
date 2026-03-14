@@ -74,7 +74,7 @@ export function EldClient({ companyId }: { companyId: string }) {
               <TableEmptyRow columns={3} message="No ELD logs yet. Add an HOS log above." />
             ) : null}
             {logs.map((log) => (
-              <tr key={log.id} className="border-b last:border-0">
+              <tr key={log.id} className="border-b last:border-0 transition-colors hover:bg-muted/50">
                 <td className="p-2">{log.log_date}</td>
                 <td className="p-2">{log.duty_status}</td>
                 <td className="p-2">{new Date(log.start_time).toLocaleString()}</td>
@@ -86,3 +86,4 @@ export function EldClient({ companyId }: { companyId: string }) {
     </div>
   );
 }
+

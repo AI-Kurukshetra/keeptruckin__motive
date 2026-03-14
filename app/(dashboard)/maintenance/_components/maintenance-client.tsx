@@ -86,7 +86,7 @@ export function MaintenanceClient({ companyId }: { companyId: string }) {
               <TableEmptyRow columns={4} message="No maintenance records yet. Schedule your first maintenance item." />
             ) : null}
             {maintenance.map((record) => (
-              <tr key={record.id} className="border-b last:border-0">
+              <tr key={record.id} className="border-b last:border-0 transition-colors hover:bg-muted/50">
                 <td className="p-2">{vehicleLabelById.get(record.vehicle_id) ?? "-"}</td>
                 <td className="p-2">{record.maintenance_type}</td>
                 <td className="p-2 capitalize">{record.status}</td>
@@ -99,3 +99,4 @@ export function MaintenanceClient({ companyId }: { companyId: string }) {
     </div>
   );
 }
+

@@ -73,7 +73,7 @@ function MetricCard({
   testId: string;
 }) {
   return (
-    <Card data-testid={testId}>
+    <Card data-testid={testId} className="animate-in fade-in slide-in-from-bottom-2 duration-300 transition-all duration-200 hover:shadow-lg hover:scale-[1.01]">
       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
         <div>
           <CardDescription>{label}</CardDescription>
@@ -92,7 +92,7 @@ function MetricCard({
 
 function PieChartCard({ title, description, data }: { title: string; description: string; data: ChartDatum[] }) {
   return (
-    <Card>
+    <Card className="transition-all duration-200 hover:shadow-lg hover:scale-[1.01]">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
@@ -134,7 +134,7 @@ function PieChartCard({ title, description, data }: { title: string; description
 
 function BarChartCard({ title, description, data }: { title: string; description: string; data: ChartDatum[] }) {
   return (
-    <Card>
+    <Card className="transition-all duration-200 hover:shadow-lg hover:scale-[1.01]">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
@@ -316,7 +316,7 @@ export function DashboardOverviewClient({ companyId }: { companyId: string }) {
 
       <div className="grid gap-4 xl:grid-cols-12">
         <div className="space-y-4 xl:col-span-9">
-          <Card>
+          <Card className="transition-all duration-200 hover:shadow-lg hover:scale-[1.01]">
             <CardHeader className="flex flex-row items-start justify-between space-y-0">
               <div>
                 <CardTitle className="flex items-center gap-2">
@@ -360,7 +360,7 @@ export function DashboardOverviewClient({ companyId }: { companyId: string }) {
         </div>
 
         <div className="space-y-4 xl:col-span-3">
-          <Card>
+          <Card className="transition-all duration-200 hover:shadow-lg hover:scale-[1.01]">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Plus className="size-4 text-primary" />
@@ -388,7 +388,7 @@ export function DashboardOverviewClient({ companyId }: { companyId: string }) {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="transition-all duration-200 hover:shadow-lg hover:scale-[1.01]">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <ClipboardCheck className="size-4 text-primary" />
@@ -425,6 +425,7 @@ export function DashboardOverviewClient({ companyId }: { companyId: string }) {
     </div>
   );
 }
+
 
 
 

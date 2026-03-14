@@ -87,3 +87,7 @@
 - Updated dashboard invite role selector in `app/(dashboard)/dashboard/page.tsx` to show role options by inviter role (owner: admin/dispatcher/driver/viewer; admin: dispatcher/driver/viewer).
 - Improved maintenance table UX in `app/(dashboard)/maintenance/_components/maintenance-client.tsx` to show `Vehicle | Type | Status | Due` with vehicle labels from loaded vehicles.
 - Validation: `pnpm typecheck` and `pnpm lint` pass; `pnpm build` blocked by environment `spawn EPERM`.
+- UI polish pass: added subtle card hover micro-interactions (`hover:shadow-lg`, `hover:scale-[1.01]`, `transition-all duration-200`) across dashboard overview cards.
+- Added subtle load animation to dashboard metric cards (`animate-in fade-in slide-in-from-bottom-2 duration-300`).
+- Unified table row hover feedback across dashboard tables (`hover:bg-muted/50` + `transition-colors`) for drivers, vehicles, trips, alerts, ELD, inspections, safety, and maintenance.
+- Validation: `pnpm typecheck` and `pnpm lint` pass.

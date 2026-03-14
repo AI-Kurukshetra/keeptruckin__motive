@@ -125,7 +125,7 @@ export function DriversClient({ companyId, initialSearch = "" }: { companyId: st
                   />
                 ) : null}
                 {drivers.map((driver) => (
-                  <TableRow key={driver.id} className="transition-colors hover:bg-muted/30">
+                  <TableRow key={driver.id} className="transition-colors hover:bg-muted/50">
                     <TableCell className="font-medium">{driver.first_name} {driver.last_name}</TableCell>
                     <TableCell>{driver.license_number}</TableCell>
                     <TableCell className="capitalize">{driver.status}</TableCell>
@@ -139,3 +139,4 @@ export function DriversClient({ companyId, initialSearch = "" }: { companyId: st
     </div>
   );
 }
+

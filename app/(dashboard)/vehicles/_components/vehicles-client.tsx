@@ -117,7 +117,7 @@ export function VehiclesClient({ companyId, initialSearch = "" }: { companyId: s
                   />
                 ) : null}
                 {vehicles.map((vehicle) => (
-                  <TableRow key={vehicle.id} className="transition-colors hover:bg-muted/30">
+                  <TableRow key={vehicle.id} className="transition-colors hover:bg-muted/50">
                     <TableCell className="font-medium">{vehicle.unit_number}</TableCell>
                     <TableCell>{vehicle.vin}</TableCell>
                     <TableCell>
@@ -133,3 +133,4 @@ export function VehiclesClient({ companyId, initialSearch = "" }: { companyId: s
     </div>
   );
 }
+

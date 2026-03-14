@@ -38,3 +38,4 @@
 [2026-03-14 18:35] codex — Applied targeted production fix: removed ssr:false from dashboard page dynamic imports and added owner-only membership update RLS migration for RBAC hardening; typecheck/lint pass.
 [2026-03-14 18:45] codex — Fixed Vercel build error by removing ssr:false from app/(dashboard)/layout.tsx dynamic import (Server Component constraint); typecheck/lint pass.
 [2026-03-14 19:00] codex — Applied owner-only RBAC update policies, restricted admin invite role creation, and added vehicle column rendering in maintenance table; typecheck/lint pass.
+[2026-03-14 19:08] codex — Applied subtle dashboard UI polish: card hover micro-interactions, metric card entrance animation, and unified table row hover highlights across dashboard modules; typecheck/lint pass.

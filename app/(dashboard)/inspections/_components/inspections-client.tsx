@@ -82,7 +82,7 @@ export function InspectionsClient({ companyId }: { companyId: string }) {
               <TableEmptyRow columns={3} message="No inspections yet. Add a pre/post trip inspection above." />
             ) : null}
             {inspections.map((inspection) => (
-              <tr key={inspection.id} className="border-b last:border-0">
+              <tr key={inspection.id} className="border-b last:border-0 transition-colors hover:bg-muted/50">
                 <td className="p-2">{inspection.inspection_type}</td>
                 <td className="p-2">{inspection.status}</td>
                 <td className="p-2">{new Date(inspection.inspected_at).toLocaleString()}</td>
@@ -94,3 +94,4 @@ export function InspectionsClient({ companyId }: { companyId: string }) {
     </div>
   );
 }
+
