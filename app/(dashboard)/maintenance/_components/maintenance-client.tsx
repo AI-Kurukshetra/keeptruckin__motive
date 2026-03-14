@@ -1,13 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api/fetcher";
 import { Button } from "@/components/ui/button";
 import { TableEmptyRow, TableLoadingRows } from "@/components/dashboard/table-states";
 
-type Maintenance = { id: string; maintenance_type: string; status: string; due_at: string | null };
-type Vehicle = { id: string; unit_number: string };
+type Maintenance = {
+  id: string;
+  vehicle_id: string;
+  maintenance_type: string;
+  status: string;
+  due_at: string | null;
+};
+
+type Vehicle = { id: string; unit_number: string; license_plate: string | null };
 
 export function MaintenanceClient({ companyId }: { companyId: string }) {
   const queryClient = useQueryClient();
@@ -27,6 +34,13 @@ export function MaintenanceClient({ companyId }: { companyId: string }) {
   });
 
   const maintenance = maintenanceQuery.data ?? [];
+  const vehicleLabelById = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const vehicle of vehiclesQuery.data ?? []) {
+      map.set(vehicle.id, vehicle.license_plate || vehicle.unit_number);
+    }
+    return map;
+  }, [vehiclesQuery.data]);
 
   return (
     <div className="space-y-4">
@@ -59,15 +73,21 @@ export function MaintenanceClient({ companyId }: { companyId: string }) {
       <div className="rounded-lg border">
         <table className="w-full text-sm">
           <thead className="border-b text-left text-muted-foreground">
-            <tr><th className="p-2">Type</th><th className="p-2">Status</th><th className="p-2">Due</th></tr>
+            <tr>
+              <th className="p-2">Vehicle</th>
+              <th className="p-2">Type</th>
+              <th className="p-2">Status</th>
+              <th className="p-2">Due</th>
+            </tr>
           </thead>
           <tbody>
-            {maintenanceQuery.isLoading ? <TableLoadingRows columns={3} /> : null}
+            {maintenanceQuery.isLoading ? <TableLoadingRows columns={4} /> : null}
             {!maintenanceQuery.isLoading && maintenance.length === 0 ? (
-              <TableEmptyRow columns={3} message="No maintenance records yet. Schedule your first maintenance item." />
+              <TableEmptyRow columns={4} message="No maintenance records yet. Schedule your first maintenance item." />
             ) : null}
             {maintenance.map((record) => (
               <tr key={record.id} className="border-b last:border-0">
+                <td className="p-2">{vehicleLabelById.get(record.vehicle_id) ?? "-"}</td>
                 <td className="p-2">{record.maintenance_type}</td>
                 <td className="p-2 capitalize">{record.status}</td>
                 <td className="p-2">{record.due_at ?? "-"}</td>

@@ -1,0 +1,90 @@
+{
+  "auth": [
+    {
+      "name": "login page reachable",
+      "status": "FAIL",
+      "details": "Failed to parse URL from https://keeptruckin-motive.vercel.app/login"
+    },
+    {
+      "name": "register page reachable",
+      "status": "FAIL",
+      "details": "Failed to parse URL from https://keeptruckin-motive.vercel.app/register"
+    }
+  ],
+  "rbac": [
+    {
+      "name": "owner login via Supabase",
+      "status": "FAIL",
+      "details": "Invalid supabaseUrl: Provided URL is malformed."
+    },
+    {
+      "name": "admin login via Supabase",
+      "status": "FAIL",
+      "details": "Invalid supabaseUrl: Provided URL is malformed."
+    },
+    {
+      "name": "dispatcher login via Supabase",
+      "status": "FAIL",
+      "details": "Invalid supabaseUrl: Provided URL is malformed."
+    },
+    {
+      "name": "driver login via Supabase",
+      "status": "FAIL",
+      "details": "Invalid supabaseUrl: Provided URL is malformed."
+    },
+    {
+      "name": "viewer login via Supabase",
+      "status": "FAIL",
+      "details": "Invalid supabaseUrl: Provided URL is malformed."
+    },
+    {
+      "name": "owner can invite users",
+      "status": "FAIL",
+      "details": "Invalid supabaseUrl: Provided URL is malformed."
+    },
+    {
+      "name": "admin cannot update company_members roles",
+      "status": "FAIL",
+      "details": "Invalid supabaseUrl: Provided URL is malformed."
+    },
+    {
+      "name": "admin cannot change company ownership",
+      "status": "FAIL",
+      "details": "Invalid supabaseUrl: Provided URL is malformed."
+    },
+    {
+      "name": "driver cannot perform write",
+      "status": "FAIL",
+      "details": "Invalid supabaseUrl: Provided URL is malformed."
+    },
+    {
+      "name": "viewer cannot perform write",
+      "status": "FAIL",
+      "details": "Invalid supabaseUrl: Provided URL is malformed."
+    }
+  ],
+  "workflows": [
+    {
+      "name": "owner creates driver",
+      "status": "FAIL",
+      "details": "Invalid supabaseUrl: Provided URL is malformed."
+    },
+    {
+      "name": "owner creates vehicle",
+      "status": "FAIL",
+      "details": "Invalid supabaseUrl: Provided URL is malformed."
+    },
+    {
+      "name": "owner creates trip",
+      "status": "FAIL",
+      "details": "Invalid supabaseUrl: Provided URL is malformed."
+    }
+  ],
+  "middleware": [
+    {
+      "name": "protected route redirect unauthenticated",
+      "status": "FAIL",
+      "details": "Failed to parse URL from https://keeptruckin-motive.vercel.app/dashboard"
+    }
+  ]
+}

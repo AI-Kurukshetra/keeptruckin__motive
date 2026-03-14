@@ -82,3 +82,8 @@
 - Verification run: `pnpm typecheck` and `pnpm lint` pass; `pnpm build` remains blocked by environment-level `spawn EPERM`.
 - Fixed Vercel compile error in `app/(dashboard)/layout.tsx` by removing unsupported `ssr: false` from `next/dynamic` inside a Server Component.
 - Verified fix with `pnpm typecheck` and `pnpm lint` (both passing).
+- Added migration `supabase/migrations/20260314190000_harden_owner_only_update_policies.sql` to enforce owner-only UPDATE policies on `company_members` and `companies`.
+- Updated `inviteMemberAction` in `app/actions/onboarding.ts` to reject admin inviting admin (owner/admin still allowed to invite non-admin roles).
+- Updated dashboard invite role selector in `app/(dashboard)/dashboard/page.tsx` to show role options by inviter role (owner: admin/dispatcher/driver/viewer; admin: dispatcher/driver/viewer).
+- Improved maintenance table UX in `app/(dashboard)/maintenance/_components/maintenance-client.tsx` to show `Vehicle | Type | Status | Due` with vehicle labels from loaded vehicles.
+- Validation: `pnpm typecheck` and `pnpm lint` pass; `pnpm build` blocked by environment `spawn EPERM`.

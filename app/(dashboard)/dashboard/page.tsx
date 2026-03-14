@@ -10,7 +10,8 @@ import { DashboardPageSkeleton } from "@/components/dashboard/page-skeleton";
 
 const DashboardOverviewClient = dynamic(
   () => import("./_components/overview-client").then((module) => module.DashboardOverviewClient),
-  { loading: () => <DashboardPageSkeleton />,
+  {
+    loading: () => <DashboardPageSkeleton />,
   }
 );
 
@@ -89,6 +90,10 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     ? primaryMembership.role === "owner" || primaryMembership.role === "admin"
     : false;
 
+  const inviteRoleOptions = primaryMembership?.role === "owner"
+    ? ["admin", "dispatcher", "driver", "viewer"]
+    : ["dispatcher", "driver", "viewer"];
+
   return (
     <div className="space-y-6">
       <div>
@@ -149,10 +154,11 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                     className="flex h-8 w-full rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm outline-none"
                     defaultValue="driver"
                   >
-                    <option value="admin">Admin</option>
-                    <option value="dispatcher">Dispatcher</option>
-                    <option value="driver">Driver</option>
-                    <option value="viewer">Viewer</option>
+                    {inviteRoleOptions.map((roleOption) => (
+                      <option key={roleOption} value={roleOption}>
+                        {roleOption.charAt(0).toUpperCase() + roleOption.slice(1)}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <Button type="submit">Create Invitation</Button>
@@ -168,4 +174,3 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     </div>
   );
 }
-

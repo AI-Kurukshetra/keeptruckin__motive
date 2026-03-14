@@ -76,3 +76,6 @@ Reason: Fleet operations screens are read-heavy but tolerant of minute-level sta
 
 ## [2026-03-14] Membership role updates restricted to owners only
 Reason: Allowing admins to update `company_members` rows can permit ownership-related privilege escalation paths; owner-only update policy enforces stricter org-control boundaries.
+
+## [2026-03-14] Owner-only update control for organization-level RBAC state
+Reason: Restricting updates to `company_members` and `companies` to owners eliminates admin-level privilege escalation vectors for membership and ownership metadata.

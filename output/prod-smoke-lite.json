@@ -1,0 +1,87 @@
+{
+  "authentication": [
+    {
+      "name": "login page",
+      "status": "PASS",
+      "details": "200"
+    }
+  ],
+  "rbac": [
+    {
+      "name": "owner login",
+      "status": "PASS",
+      "details": "ok"
+    },
+    {
+      "name": "owner can invite",
+      "status": "PASS",
+      "details": "unexpected:null value in column \"invited_by\" of relation \"company_invitations\" violates not-null constraint"
+    },
+    {
+      "name": "admin login",
+      "status": "PASS",
+      "details": "ok"
+    },
+    {
+      "name": "admin cannot update company_members roles",
+      "status": "FAIL",
+      "details": "update succeeded"
+    },
+    {
+      "name": "admin cannot change company ownership",
+      "status": "FAIL",
+      "details": "update succeeded"
+    },
+    {
+      "name": "dispatcher login",
+      "status": "PASS",
+      "details": "ok"
+    },
+    {
+      "name": "driver login",
+      "status": "PASS",
+      "details": "ok"
+    },
+    {
+      "name": "driver cannot write",
+      "status": "PASS",
+      "details": "new row violates row-level security policy for table \"drivers\""
+    },
+    {
+      "name": "viewer login",
+      "status": "PASS",
+      "details": "ok"
+    },
+    {
+      "name": "viewer cannot write",
+      "status": "PASS",
+      "details": "new row violates row-level security policy for table \"drivers\""
+    }
+  ],
+  "api": [
+    {
+      "name": "create driver",
+      "status": "PASS",
+      "details": "{\"id\":\"cc6d2b4c-1f4b-4e3b-9179-9e8464a2dcff\",\"license_number\":\"SMK-1773492193052\"}"
+    }
+  ],
+  "playwright": [
+    {
+      "name": "tests/e2e",
+      "status": "FAIL",
+      "details": ""
+    },
+    {
+      "name": "pnpm test",
+      "status": "FAIL",
+      "details": ""
+    }
+  ],
+  "deployment": [
+    {
+      "name": "protected redirect",
+      "status": "PASS",
+      "details": "307 /login?error=unauthorized"
+    }
+  ]
+}

@@ -84,6 +84,10 @@ export async function inviteMemberAction(formData: FormData) {
     redirect("/dashboard?error=invite_not_allowed");
   }
 
+  if (membership.role === "admin" && parsed.data.role === "admin") {
+    redirect("/dashboard?error=invite_not_allowed");
+  }
+
   const { error } = await supabase.from("company_invitations").insert({
     company_id: parsed.data.companyId,
     email: parsed.data.email.toLowerCase(),
