@@ -92,3 +92,7 @@ Reason: Production positioning requires conversion-oriented navigation (/registe
 ## [2026-03-14] Public marketing homepage moved to client-rendered motion composition\nReason: Using framer-motion for scroll reveal and interactive SaaS presentation requires a client boundary, while backend/auth/API remain unchanged and isolated from marketing UI.
 ## [2026-03-14] Product showcase mocks are scenario-specific instead of generic placeholders
 Reason: Storytelling sections convert better when previews mirror real workflows (risk score, uptime, route efficiency, service schedule), while remaining frontend-only and API-agnostic.
+## [2026-03-14] Favicon strategy uses SVG primary with ICO fallback
+Reason: SVG keeps sharp rendering on high-DPI modern browsers while ICO ensures broad legacy/tab compatibility across environments.
+## [2026-03-14] Landing page polish constrained to visual layer only
+Reason: Requested enhancement improves perceived quality via depth/motion/styling tokens while preserving established marketing narrative, copy, CTA behavior, and all backend/auth surfaces.

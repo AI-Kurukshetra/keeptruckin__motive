@@ -100,3 +100,5 @@
 - [x] Remove demo artifacts, simplify CTAs, replace stack section with Enterprise Platform, refresh hero metrics, and apply responsive visual polish on landing page (2026-03-14 22:11)
 - [x] Redesign public homepage into modern SaaS storytelling flow with motion (hero, trust, capabilities, showcases, AI insights, platform/security, CTA, footer) (2026-03-14 22:23)
 - [x] Upgrade product showcase preview cards with realistic dashboard UI states, gradients, badges, and motion (2026-03-14 22:31)
+- [x] Create branded Atlas favicon assets (SVG + ICO) and wire root metadata icons for browser tab rendering (2026-03-14 22:36)
+- [x] Apply premium visual polish to marketing homepage (glow depth, card styling, subtle motion, section dividers) without content/structure changes (2026-03-14 22:40)

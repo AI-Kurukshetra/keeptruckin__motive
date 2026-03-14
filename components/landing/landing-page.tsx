@@ -156,10 +156,10 @@ function Reveal({ children, className, id }: { children: ReactNode; className?: 
     <motion.div
       id={id}
       className={className}
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.25 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
     >
       {children}
     </motion.div>
@@ -169,21 +169,21 @@ function Reveal({ children, className, id }: { children: ReactNode; className?: 
 function AnimatedMetric({ label, value, suffix, delay = 0 }: { label: string; value: number; suffix: string; delay?: number }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.35 }}
-      transition={{ duration: 0.5, delay }}
-      className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-sm backdrop-blur"
+      transition={{ duration: 0.6, delay }}
+      className="rounded-2xl border border-blue-500/20 bg-gradient-to-br from-slate-800 to-slate-900 p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
     >
       <motion.p
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: delay + 0.1 }}
-        className="text-3xl font-semibold tracking-tight text-white md:text-4xl"
+        className="text-3xl font-bold tracking-tight text-white md:text-4xl"
       >
         {value}
-        <span className="ml-1 text-base text-slate-300">{suffix}</span>
+        <span className="ml-1 text-base font-medium text-slate-300">{suffix}</span>
       </motion.p>
       <p className="mt-2 text-sm text-slate-300">{label}</p>
     </motion.div>
@@ -248,12 +248,12 @@ function ProductMock({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 14 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4 }}
       viewport={{ once: true, amount: 0.35 }}
-      transition={{ duration: 0.35, ease: "easeOut" }}
-      className="overflow-hidden rounded-xl border border-blue-500/20 bg-gradient-to-b from-slate-800 to-slate-900 p-4 shadow-lg"
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="overflow-hidden rounded-2xl border border-blue-500/20 bg-gradient-to-b from-slate-800 to-slate-900 p-4 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
     >
       <div className="flex items-center justify-between border-b border-white/10 pb-3">
         <p className="text-xs font-medium uppercase tracking-wider text-slate-300">{title}</p>
@@ -329,9 +329,11 @@ export function LandingPage() {
       </header>
 
       <main>
-        <section className="relative overflow-hidden border-b border-white/10">
+        <section className="relative overflow-hidden border-b border-white/5 bg-gradient-to-b from-white/[0.03] to-transparent">
+          <div className="pointer-events-none absolute -left-24 top-8 h-72 w-72 rounded-full bg-blue-500/20 opacity-20 blur-[120px]" />
+          <div className="pointer-events-none absolute -right-16 top-4 h-80 w-80 rounded-full bg-cyan-400/20 opacity-20 blur-[120px]" />
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(56,189,248,0.32),transparent_45%),radial-gradient(circle_at_80%_0%,rgba(14,165,233,0.28),transparent_42%)]" />
-          <div className="mx-auto grid w-full max-w-7xl gap-12 px-4 py-20 md:px-6 md:py-28 lg:grid-cols-2 lg:items-center">
+          <div className="relative z-10 mx-auto grid w-full max-w-7xl gap-12 px-4 py-20 md:px-6 md:py-28 lg:grid-cols-2 lg:items-center">
             <Reveal>
               <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">
                 <Sparkles className="size-3.5 text-sky-300" />
@@ -353,32 +355,33 @@ export function LandingPage() {
               <motion.div
                 initial={{ opacity: 0, scale: 0.96 }}
                 whileInView={{ opacity: 1, scale: 1 }}
+                animate={{ y: [0, -8, 0] }}
                 viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="rounded-2xl border border-white/15 bg-white/5 p-4 shadow-2xl shadow-sky-500/10 backdrop-blur"
+                transition={{ opacity: { duration: 0.6, ease: "easeOut" }, scale: { duration: 0.6, ease: "easeOut" }, y: { duration: 6, repeat: Infinity, ease: "easeInOut" } }}
+                className="rounded-2xl border border-white/10 bg-gradient-to-b from-slate-800 to-slate-900 p-4 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
               >
-                <div className="rounded-xl border border-white/10 bg-slate-900 p-4">
+                <div className="rounded-2xl border border-white/10 bg-gradient-to-b from-slate-800 to-slate-900 p-4 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
                   <div className="mb-4 grid grid-cols-3 gap-3">
-                    <Card className="border-white/10 bg-white/5 text-slate-100">
+                    <Card className="rounded-2xl border border-white/10 bg-gradient-to-b from-slate-800 to-slate-900 text-slate-100 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
                       <CardHeader className="pb-1">
                         <CardTitle className="text-xs">Active Trips</CardTitle>
                       </CardHeader>
                       <CardContent className="text-lg font-semibold">124</CardContent>
                     </Card>
-                    <Card className="border-white/10 bg-white/5 text-slate-100">
+                    <Card className="rounded-2xl border border-white/10 bg-gradient-to-b from-slate-800 to-slate-900 text-slate-100 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
                       <CardHeader className="pb-1">
                         <CardTitle className="text-xs">Fleet Health</CardTitle>
                       </CardHeader>
                       <CardContent className="text-lg font-semibold">97/100</CardContent>
                     </Card>
-                    <Card className="border-white/10 bg-white/5 text-slate-100">
+                    <Card className="rounded-2xl border border-white/10 bg-gradient-to-b from-slate-800 to-slate-900 text-slate-100 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
                       <CardHeader className="pb-1">
                         <CardTitle className="text-xs">Open Alerts</CardTitle>
                       </CardHeader>
                       <CardContent className="text-lg font-semibold">18</CardContent>
                     </Card>
                   </div>
-                  <div className="h-48 rounded-xl bg-gradient-to-r from-sky-500/20 via-indigo-500/20 to-cyan-500/20 p-4">
+                  <div className="h-48 rounded-2xl border border-white/10 bg-gradient-to-b from-slate-800 to-slate-900 p-4 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
                     <div className="h-full rounded-lg border border-white/10 bg-slate-950/70 p-4">
                       <p className="text-xs text-slate-400">Operational Overview</p>
                       <div className="mt-4 grid grid-cols-4 gap-2">
@@ -395,12 +398,12 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section className="border-b border-white/10 bg-slate-900/60">
+        <section className="border-b border-white/5 bg-gradient-to-b from-white/[0.02] to-transparent">
           <div className="mx-auto w-full max-w-7xl px-4 py-10 md:px-6">
             <p className="text-center text-sm text-slate-300">Trusted by modern logistics teams</p>
             <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
               {trustedLogos.map((logo) => (
-                <div key={logo} className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center text-sm text-slate-300">
+                <div key={logo} className="rounded-2xl border border-white/10 bg-gradient-to-b from-slate-800 to-slate-900 px-4 py-3 text-center text-sm text-slate-300 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
                   {logo}
                 </div>
               ))}
@@ -408,7 +411,7 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section id="features" className="mx-auto w-full max-w-7xl px-4 py-20 md:px-6">
+        <section id="features" className="mx-auto w-full max-w-7xl border-t border-white/5 bg-gradient-to-b from-white/[0.02] to-transparent px-4 py-20 md:px-6">
           <Reveal className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-semibold tracking-tight text-white md:text-4xl">Product Capabilities</h2>
             <p className="mt-3 text-slate-300">Operational depth across fleet intelligence, safety, and compliance.</p>
@@ -419,15 +422,15 @@ export function LandingPage() {
               return (
                 <motion.div
                   key={capability.title}
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.45, delay: index * 0.05 }}
+                  transition={{ duration: 0.6, delay: index * 0.05 }}
                 >
-                  <Card className="h-full rounded-2xl border-white/10 bg-white/5 shadow-sm backdrop-blur transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-sky-500/10">
+                  <Card className="h-full rounded-2xl border border-white/10 bg-gradient-to-b from-slate-800 to-slate-900 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 text-base text-white">
-                        <span className="rounded-lg bg-sky-400/15 p-2 text-sky-300">
+                        <span className="rounded-lg bg-blue-500/10 p-2 text-sky-300">
                           <Icon className="size-4" />
                         </span>
                         {capability.title}
@@ -443,35 +446,48 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section id="product" className="mx-auto w-full max-w-7xl space-y-16 px-4 pb-20 md:px-6">
-          {showcases.map((item, index) => {
-            const reversed = index % 2 === 1;
-            return (
-              <div key={item.title} className={cn("grid gap-8 lg:grid-cols-2 lg:items-center", reversed && "lg:[&>*:first-child]:order-2")}>
-                <Reveal>
-                  <p className="text-sm text-sky-300">Product Showcase {index + 1}</p>
-                  <h3 className="mt-2 text-3xl font-semibold tracking-tight text-white">{item.title}</h3>
-                  <p className="mt-4 text-slate-300">{item.description}</p>
-                  <ul className="mt-6 space-y-3 text-sm text-slate-300">
-                    {item.bullets.map((bullet) => (
-                      <li key={bullet} className="flex items-center gap-2">
-                        <CheckCircle2 className="size-4 text-emerald-300" />
-                        {bullet}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="mt-6 inline-flex rounded-full bg-sky-500/15 px-4 py-2 text-sm font-medium text-sky-200">{item.stat}</div>
-                </Reveal>
-                <Reveal>
-                  <ProductMock title={item.title} type={item.previewType} />
-                </Reveal>
-              </div>
-            );
-          })}
+        <section id="product" className="relative mx-auto w-full max-w-7xl border-t border-white/5 bg-gradient-to-b from-white/[0.02] to-transparent px-4 pb-20 pt-20 md:px-6">
+          <div className="pointer-events-none absolute left-1/4 top-20 h-80 w-80 rounded-full bg-blue-500/20 opacity-20 blur-[120px]" />
+          <div className="pointer-events-none absolute right-0 top-1/2 h-72 w-72 rounded-full bg-cyan-400/20 opacity-20 blur-[120px]" />
+          <div className="relative z-10 space-y-16">
+            {showcases.map((item, index) => {
+              const reversed = index % 2 === 1;
+              return (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.25 }}
+                  transition={{ duration: 0.6 }}
+                  className={cn("grid gap-8 lg:grid-cols-2 lg:items-center", reversed && "lg:[&>*:first-child]:order-2")}
+                >
+                  <Reveal>
+                    <p className="text-sm text-sky-300">Product Showcase {index + 1}</p>
+                    <h3 className="mt-2 text-3xl font-semibold tracking-tight text-white">{item.title}</h3>
+                    <p className="mt-4 text-slate-300">{item.description}</p>
+                    <ul className="mt-6 space-y-3 text-sm text-slate-300">
+                      {item.bullets.map((bullet) => (
+                        <li key={bullet} className="flex items-center gap-2">
+                          <CheckCircle2 className="size-4 text-emerald-300" />
+                          {bullet}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="mt-6 inline-flex rounded-full bg-sky-500/15 px-4 py-2 text-sm font-medium text-sky-200">{item.stat}</div>
+                  </Reveal>
+                  <Reveal>
+                    <ProductMock title={item.title} type={item.previewType} />
+                  </Reveal>
+                </motion.div>
+              );
+            })}
+          </div>
         </section>
 
-        <section className="border-y border-white/10 bg-slate-900/70 py-20">
-          <div className="mx-auto w-full max-w-7xl px-4 md:px-6">
+        <section className="relative border-y border-white/5 bg-gradient-to-b from-white/[0.03] to-transparent py-20">
+          <div className="pointer-events-none absolute left-8 top-8 h-72 w-72 rounded-full bg-blue-500/20 opacity-20 blur-[120px]" />
+          <div className="pointer-events-none absolute right-8 bottom-8 h-72 w-72 rounded-full bg-cyan-400/20 opacity-20 blur-[120px]" />
+          <div className="relative z-10 mx-auto w-full max-w-7xl px-4 md:px-6">
             <Reveal className="max-w-2xl">
               <h2 className="text-3xl font-semibold tracking-tight text-white md:text-4xl">AI Intelligence Layer</h2>
               <p className="mt-3 text-slate-300">Actionable insights powered by real-time fleet and operational telemetry.</p>
@@ -484,7 +500,7 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section id="platform" className="mx-auto w-full max-w-7xl px-4 py-20 md:px-6">
+        <section id="platform" className="mx-auto w-full max-w-7xl border-t border-white/5 bg-gradient-to-b from-white/[0.02] to-transparent px-4 py-20 md:px-6">
           <div className="grid gap-8 lg:grid-cols-2">
             <Reveal>
               <h2 className="text-3xl font-semibold tracking-tight text-white md:text-4xl">Enterprise Platform</h2>
@@ -498,29 +514,29 @@ export function LandingPage() {
                 ))}
               </ul>
             </Reveal>
-            <Reveal id="security" className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-sm backdrop-blur">
+            <Reveal id="security" className="rounded-2xl border border-white/10 bg-gradient-to-b from-slate-800 to-slate-900 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
               <h3 className="text-xl font-semibold text-white">Security by Design</h3>
               <p className="mt-3 text-slate-300">Operational security with auditable access, tenant isolation, and compliance-ready workflows.</p>
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                <Card className="rounded-xl border-white/10 bg-slate-900/70">
+                <Card className="rounded-2xl border border-white/10 bg-gradient-to-b from-slate-800 to-slate-900 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
                   <CardContent className="flex items-center gap-2 p-4 text-sm text-slate-200">
                     <Lock className="size-4 text-sky-300" />
                     Granular access policies
                   </CardContent>
                 </Card>
-                <Card className="rounded-xl border-white/10 bg-slate-900/70">
+                <Card className="rounded-2xl border border-white/10 bg-gradient-to-b from-slate-800 to-slate-900 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
                   <CardContent className="flex items-center gap-2 p-4 text-sm text-slate-200">
                     <Database className="size-4 text-sky-300" />
                     Multi-tenant data isolation
                   </CardContent>
                 </Card>
-                <Card className="rounded-xl border-white/10 bg-slate-900/70">
+                <Card className="rounded-2xl border border-white/10 bg-gradient-to-b from-slate-800 to-slate-900 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
                   <CardContent className="flex items-center gap-2 p-4 text-sm text-slate-200">
                     <Gauge className="size-4 text-sky-300" />
                     Real-time risk monitoring
                   </CardContent>
                 </Card>
-                <Card className="rounded-xl border-white/10 bg-slate-900/70">
+                <Card className="rounded-2xl border border-white/10 bg-gradient-to-b from-slate-800 to-slate-900 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
                   <CardContent className="flex items-center gap-2 p-4 text-sm text-slate-200">
                     <Building2 className="size-4 text-sky-300" />
                     Enterprise-ready deployment
@@ -531,7 +547,7 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section className="mx-auto w-full max-w-7xl px-4 pb-20 md:px-6">
+        <section className="mx-auto w-full max-w-7xl border-t border-white/5 bg-gradient-to-b from-white/[0.02] to-transparent px-4 pb-20 pt-8 md:px-6">
           <Reveal className="rounded-3xl border border-white/10 bg-gradient-to-r from-sky-600/25 via-indigo-600/20 to-cyan-600/25 p-8 text-center shadow-xl md:p-12">
             <h2 className="text-3xl font-semibold tracking-tight text-white md:text-4xl">Start Managing Your Fleet Smarter</h2>
             <p className="mx-auto mt-4 max-w-2xl text-slate-200">Move from reactive operations to AI-assisted decision making across your entire fleet.</p>
