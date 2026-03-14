@@ -36,3 +36,4 @@
 [2026-03-14 17:09] codex — Implemented premium SaaS landing page at / using isolated files (app/page.tsx + components/landing/*), preserving auth/dashboard/API behavior; validated lint/typecheck/build.
 [2026-03-14 18:05] codex — Completed Phase 3 performance + UI polish: dynamic imports for heavy dashboard modules, React Query default tuning, improved skeleton/empty states, and consistency refinements across drivers/vehicles/trips/alerts.
 [2026-03-14 18:35] codex — Applied targeted production fix: removed ssr:false from dashboard page dynamic imports and added owner-only membership update RLS migration for RBAC hardening; typecheck/lint pass.
+[2026-03-14 18:45] codex — Fixed Vercel build error by removing ssr:false from app/(dashboard)/layout.tsx dynamic import (Server Component constraint); typecheck/lint pass.

@@ -9,7 +9,6 @@ import { SidebarNav, type SidebarNavItem } from "@/components/dashboard/sidebar-
 const DashboardToolbar = dynamic(
   () => import("@/components/dashboard/dashboard-toolbar").then((module) => module.DashboardToolbar),
   {
-    ssr: false,
     loading: () => <div className="h-9 flex-1 rounded-md bg-muted/70" />,
   }
 );
@@ -89,3 +88,4 @@ export default async function DashboardLayout({ children }: { children: React.Re
     </div>
   );
 }
+

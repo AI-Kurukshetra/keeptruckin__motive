@@ -80,3 +80,5 @@
 - Fixed Next App Router build compatibility in dashboard page Server Components by removing `ssr: false` from `next/dynamic` options in `app/(dashboard)/**/page.tsx`.
 - Added migration `supabase/migrations/20260314183500_harden_company_members_update_owner_only.sql` to harden `company_members_update_owner_admin` policy so only company owners can update membership rows.
 - Verification run: `pnpm typecheck` and `pnpm lint` pass; `pnpm build` remains blocked by environment-level `spawn EPERM`.
+- Fixed Vercel compile error in `app/(dashboard)/layout.tsx` by removing unsupported `ssr: false` from `next/dynamic` inside a Server Component.
+- Verified fix with `pnpm typecheck` and `pnpm lint` (both passing).
