@@ -94,3 +94,4 @@
 - [x] Verify vehicles table rendering fallback (`name ?? unit_number`) with `Vehicle | Unit | VIN | Status` columns (2026-03-14 18:54)
 
 
+- [x] Recovery patch: complete edit/delete CRUD UI for trips, maintenance, inspections, ELD, and safety with API support + DB error surfacing (2026-03-14 19:43)

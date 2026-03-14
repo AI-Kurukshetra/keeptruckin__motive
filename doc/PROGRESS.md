@@ -42,3 +42,4 @@
 [2026-03-14 18:54] codex — Applied targeted demo fixes: restored operational RLS write policies for owner/admin/dispatcher, corrected vehicle create field mapping (name/unit/vin), and confirmed vehicles table label fallback rendering.
 [2026-03-14 19:02] codex — Fixed vehicle creation failure by adding schema-compatibility fallback in /api/vehicles POST: retries insert without vehicles.name when DB lacks that column (code 42703).
 [2026-03-14 19:14] codex — Investigated live /api/vehicles 500s, deployed hotfix (commit f9f6d8b) to return real DB errors and keep vehicles.name compatibility fallback; production alias updated.
+[2026-03-14 19:43] codex — Recovery pass completed: added missing CRUD actions/modals for trips/maintenance/inspections/ELD/safety, added /api/safety/[id], and standardized DB error passthrough + vehicle label fallback usage without schema/RBAC changes.

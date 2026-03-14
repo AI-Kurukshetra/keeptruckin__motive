@@ -2,7 +2,7 @@ import { z } from "zod";
 import { fail, ok } from "@/lib/api/responses";
 import { requireAuth, hasCompanyAccess } from "@/lib/api/auth";
 import { parseJsonBody, searchParamsToObject } from "@/lib/api/request";
-import { companyQuerySchema, inspectionUpdateSchema } from "@/lib/validations/api";
+import { companyQuerySchema, safetyUpdateSchema } from "@/lib/validations/api";
 import type { Json } from "@/types/supabase";
 
 const paramsSchema = z.object({ id: z.string().uuid() });
@@ -16,7 +16,7 @@ export async function PATCH(
 
   const routeParams = await params;
   const parsedParams = paramsSchema.safeParse(routeParams);
-  if (!parsedParams.success) return fail("Invalid inspection id", 400, parsedParams.error.flatten());
+  if (!parsedParams.success) return fail("Invalid safety event id", 400, parsedParams.error.flatten());
 
   const queryParsed = companyQuerySchema.safeParse(
     searchParamsToObject(new URL(request.url).searchParams)
@@ -26,19 +26,23 @@ export async function PATCH(
   const allowed = await hasCompanyAccess(supabase, user.id, queryParsed.data.companyId, { write: true });
   if (!allowed) return fail("Forbidden", 403);
 
-  const parsed = await parseJsonBody(request, inspectionUpdateSchema);
+  const parsed = await parseJsonBody(request, safetyUpdateSchema);
   if (!parsed.success) return fail("Invalid payload", 400, parsed.error.flatten());
 
-  const defects = parsed.data.defects ? (parsed.data.defects as Json) : undefined;
+  const metadata = parsed.data.metadata ? (parsed.data.metadata as Json) : undefined;
 
   const { data, error } = await supabase
-    .from("inspections")
+    .from("safety_events")
     .update({
-      status: parsed.data.status,
-      defects,
-      notes: parsed.data.notes,
-      resolved_at: parsed.data.resolvedAt,
-      resolved_by: parsed.data.status === "resolved" ? user.id : undefined,
+      driver_id: parsed.data.driverId,
+      vehicle_id: parsed.data.vehicleId,
+      event_type: parsed.data.eventType,
+      severity: parsed.data.severity,
+      score_impact: parsed.data.scoreImpact,
+      occurred_at: parsed.data.occurredAt,
+      location_lat: parsed.data.locationLat,
+      location_lng: parsed.data.locationLng,
+      metadata,
     })
     .eq("id", parsedParams.data.id)
     .eq("company_id", queryParsed.data.companyId)
@@ -58,7 +62,7 @@ export async function DELETE(
 
   const routeParams = await params;
   const parsedParams = paramsSchema.safeParse(routeParams);
-  if (!parsedParams.success) return fail("Invalid inspection id", 400, parsedParams.error.flatten());
+  if (!parsedParams.success) return fail("Invalid safety event id", 400, parsedParams.error.flatten());
 
   const queryParsed = companyQuerySchema.safeParse(
     searchParamsToObject(new URL(request.url).searchParams)
@@ -69,7 +73,7 @@ export async function DELETE(
   if (!allowed) return fail("Forbidden", 403);
 
   const { error } = await supabase
-    .from("inspections")
+    .from("safety_events")
     .delete()
     .eq("id", parsedParams.data.id)
     .eq("company_id", queryParsed.data.companyId);

@@ -1,3 +1,4 @@
+import type { PostgrestError } from "@supabase/supabase-js";
 import { z } from "zod";
 import { fail, ok } from "@/lib/api/responses";
 import { requireAuth, hasCompanyAccess } from "@/lib/api/auth";
@@ -5,6 +6,14 @@ import { parseJsonBody, searchParamsToObject } from "@/lib/api/request";
 import { companyQuerySchema, vehicleUpdateSchema } from "@/lib/validations/api";
 
 const paramsSchema = z.object({ id: z.string().uuid() });
+
+function failWithDbError(error: PostgrestError, status = 500) {
+  return fail(error.message ?? "Database error", status, {
+    code: error.code ?? null,
+    details: error.details ?? null,
+    hint: error.hint ?? null,
+  });
+}
 
 export async function GET(
   request: Request,
@@ -32,7 +41,7 @@ export async function GET(
     .eq("company_id", queryParsed.data.companyId)
     .single();
 
-  if (error) return fail("Vehicle not found", 404, error.message);
+  if (error) return failWithDbError(error, 404);
   return ok(data);
 }
 
@@ -58,7 +67,7 @@ export async function PATCH(
   const parsed = await parseJsonBody(request, vehicleUpdateSchema);
   if (!parsed.success) return fail("Invalid payload", 400, parsed.error.flatten());
 
-  const payload = {
+  const basePayload = {
     vin: parsed.data.vin,
     unit_number: parsed.data.unitNumber,
     license_plate: parsed.data.licensePlate,
@@ -70,16 +79,34 @@ export async function PATCH(
     status: parsed.data.status,
   };
 
-  const { data, error } = await supabase
+  const payloadWithName = {
+    ...basePayload,
+    name: parsed.data.vehicleName,
+  };
+
+  const firstAttempt = await supabase
     .from("vehicles")
-    .update(payload)
+    .update(payloadWithName)
     .eq("id", parsedParams.data.id)
     .eq("company_id", queryParsed.data.companyId)
     .select("*")
     .single();
 
-  if (error) return fail("Failed to update vehicle", 500, error.message);
-  return ok(data);
+  if (firstAttempt.error?.code === "42703") {
+    const fallbackAttempt = await supabase
+      .from("vehicles")
+      .update(basePayload)
+      .eq("id", parsedParams.data.id)
+      .eq("company_id", queryParsed.data.companyId)
+      .select("*")
+      .single();
+
+    if (fallbackAttempt.error) return failWithDbError(fallbackAttempt.error);
+    return ok(fallbackAttempt.data);
+  }
+
+  if (firstAttempt.error) return failWithDbError(firstAttempt.error);
+  return ok(firstAttempt.data);
 }
 
 export async function DELETE(
@@ -107,6 +134,6 @@ export async function DELETE(
     .eq("id", parsedParams.data.id)
     .eq("company_id", queryParsed.data.companyId);
 
-  if (error) return fail("Failed to delete vehicle", 500, error.message);
+  if (error) return failWithDbError(error);
   return ok({ id: parsedParams.data.id, deleted: true });
 }

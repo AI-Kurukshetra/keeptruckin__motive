@@ -22,7 +22,7 @@ export async function GET(request: Request) {
     .order("start_time", { ascending: false })
     .limit(queryParsed.data.limit ?? 100);
 
-  if (error) return fail("Failed to fetch ELD logs", 500, error.message);
+  if (error) return fail(error.message, 500, error);
   return ok(data);
 }
 
@@ -56,6 +56,7 @@ export async function POST(request: Request) {
     .select("*")
     .single();
 
-  if (error) return fail("Failed to create ELD log", 500, error.message);
+  if (error) return fail(error.message, 500, error);
   return ok(data, 201);
 }
+

@@ -95,6 +95,18 @@ export const eldCreateSchema = z.object({
   source: z.enum(["mobile_app", "eld_device", "api_import", "manual"]).optional(),
 });
 
+
+export const eldUpdateSchema = z
+  .object({
+    driverId: uuidSchema.optional(),
+    vehicleId: uuidSchema.optional().nullable(),
+    logDate: isoDateSchema.optional(),
+    dutyStatus: z.enum(["off_duty", "sleeper_berth", "on_duty", "driving"]).optional(),
+    startTime: isoDatetimeSchema.optional(),
+    endTime: isoDatetimeSchema.optional().nullable(),
+    remarks: z.string().optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, "No fields provided for update");
 export const inspectionCreateSchema = z.object({
   companyId: uuidSchema,
   driverId: uuidSchema,
@@ -163,6 +175,30 @@ export const safetyCreateSchema = z.object({
   locationLng: z.coerce.number().min(-180).max(180).optional().nullable(),
   metadata: z.record(z.string(), z.unknown()).optional(),
 });
+export const safetyUpdateSchema = z
+  .object({
+    driverId: uuidSchema.optional().nullable(),
+    vehicleId: uuidSchema.optional().nullable(),
+    eventType: z
+      .enum([
+        "speeding",
+        "harsh_braking",
+        "rapid_acceleration",
+        "hard_cornering",
+        "idling",
+        "collision_risk",
+        "phone_usage",
+        "other",
+      ])
+      .optional(),
+    severity: z.coerce.number().int().min(1).max(5).optional(),
+    scoreImpact: z.coerce.number().int().optional(),
+    occurredAt: isoDatetimeSchema.optional(),
+    locationLat: z.coerce.number().min(-90).max(90).optional().nullable(),
+    locationLng: z.coerce.number().min(-180).max(180).optional().nullable(),
+    metadata: z.record(z.string(), z.unknown()).optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, "No fields provided for update");
 
 export const alertCreateSchema = z.object({
   companyId: uuidSchema,
@@ -180,4 +216,6 @@ export const alertUpdateSchema = z
     status: z.enum(["open", "acknowledged", "resolved"]),
   })
   .refine((data) => Object.keys(data).length > 0, "No fields provided for update");
+
+
 

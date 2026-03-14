@@ -81,3 +81,8 @@ Reason: Allowing admins to update `company_members` rows can permit ownership-re
 Reason: Restricting updates to `company_members` and `companies` to owners eliminates admin-level privilege escalation vectors for membership and ownership metadata.
 ## [2026-03-14] Operational writes remain role-scoped to owner/admin/dispatcher with explicit UPDATE checks
 Reason: Demo users need reliable edit flows on operational entities, while `driver`/`viewer` remain read-only and ownership-critical tables (`companies`, `company_members`) stay owner-restricted.
+
+## [2026-03-14] Vehicles name compatibility handled at API/UI level without schema migration
+Reason: Mixed environments may lack `vehicles.name`; API now safely falls back on undefined-column behavior and UI consistently renders `vehicle.name ?? vehicle.unit_number` to avoid breaking deployments while preserving data model stability.
+
+

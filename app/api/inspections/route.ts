@@ -23,7 +23,7 @@ export async function GET(request: Request) {
     .order("inspected_at", { ascending: false })
     .limit(queryParsed.data.limit ?? 100);
 
-  if (error) return fail("Failed to fetch inspections", 500, error.message);
+  if (error) return fail(error.message, 500, error);
   return ok(data);
 }
 
@@ -55,6 +55,7 @@ export async function POST(request: Request) {
     .select("*")
     .single();
 
-  if (error) return fail("Failed to create inspection", 500, error.message);
+  if (error) return fail(error.message, 500, error);
   return ok(data, 201);
 }
+

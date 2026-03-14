@@ -79,7 +79,7 @@ export async function PATCH(
     .select("*")
     .single();
 
-  if (error) return fail("Failed to update trip", 500, error.message);
+  if (error) return fail(error.message, 500, error);
   return ok(data);
 }
 
@@ -108,6 +108,7 @@ export async function DELETE(
     .eq("id", parsedParams.data.id)
     .eq("company_id", queryParsed.data.companyId);
 
-  if (error) return fail("Failed to delete trip", 500, error.message);
+  if (error) return fail(error.message, 500, error);
   return ok({ id: parsedParams.data.id, deleted: true });
 }
+

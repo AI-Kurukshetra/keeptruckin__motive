@@ -2,8 +2,7 @@ import { z } from "zod";
 import { fail, ok } from "@/lib/api/responses";
 import { requireAuth, hasCompanyAccess } from "@/lib/api/auth";
 import { parseJsonBody, searchParamsToObject } from "@/lib/api/request";
-import { companyQuerySchema, inspectionUpdateSchema } from "@/lib/validations/api";
-import type { Json } from "@/types/supabase";
+import { companyQuerySchema, eldUpdateSchema } from "@/lib/validations/api";
 
 const paramsSchema = z.object({ id: z.string().uuid() });
 
@@ -16,7 +15,7 @@ export async function PATCH(
 
   const routeParams = await params;
   const parsedParams = paramsSchema.safeParse(routeParams);
-  if (!parsedParams.success) return fail("Invalid inspection id", 400, parsedParams.error.flatten());
+  if (!parsedParams.success) return fail("Invalid ELD log id", 400, parsedParams.error.flatten());
 
   const queryParsed = companyQuerySchema.safeParse(
     searchParamsToObject(new URL(request.url).searchParams)
@@ -26,19 +25,19 @@ export async function PATCH(
   const allowed = await hasCompanyAccess(supabase, user.id, queryParsed.data.companyId, { write: true });
   if (!allowed) return fail("Forbidden", 403);
 
-  const parsed = await parseJsonBody(request, inspectionUpdateSchema);
+  const parsed = await parseJsonBody(request, eldUpdateSchema);
   if (!parsed.success) return fail("Invalid payload", 400, parsed.error.flatten());
 
-  const defects = parsed.data.defects ? (parsed.data.defects as Json) : undefined;
-
   const { data, error } = await supabase
-    .from("inspections")
+    .from("eld_logs")
     .update({
-      status: parsed.data.status,
-      defects,
-      notes: parsed.data.notes,
-      resolved_at: parsed.data.resolvedAt,
-      resolved_by: parsed.data.status === "resolved" ? user.id : undefined,
+      driver_id: parsed.data.driverId,
+      vehicle_id: parsed.data.vehicleId,
+      log_date: parsed.data.logDate,
+      duty_status: parsed.data.dutyStatus,
+      start_time: parsed.data.startTime,
+      end_time: parsed.data.endTime,
+      remarks: parsed.data.remarks,
     })
     .eq("id", parsedParams.data.id)
     .eq("company_id", queryParsed.data.companyId)
@@ -58,7 +57,7 @@ export async function DELETE(
 
   const routeParams = await params;
   const parsedParams = paramsSchema.safeParse(routeParams);
-  if (!parsedParams.success) return fail("Invalid inspection id", 400, parsedParams.error.flatten());
+  if (!parsedParams.success) return fail("Invalid ELD log id", 400, parsedParams.error.flatten());
 
   const queryParsed = companyQuerySchema.safeParse(
     searchParamsToObject(new URL(request.url).searchParams)
@@ -69,7 +68,7 @@ export async function DELETE(
   if (!allowed) return fail("Forbidden", 403);
 
   const { error } = await supabase
-    .from("inspections")
+    .from("eld_logs")
     .delete()
     .eq("id", parsedParams.data.id)
     .eq("company_id", queryParsed.data.companyId);

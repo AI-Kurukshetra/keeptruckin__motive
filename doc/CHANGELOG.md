@@ -97,3 +97,9 @@
 - Validation: `pnpm typecheck` and `pnpm lint` pass.
 - Fixed vehicle create API compatibility: app/api/vehicles/route.ts now retries insert without \'name\' when Postgres returns undefined-column (42703), preventing create failures on environments without vehicles.name.
 - Hotfix deployed to production: improved /api/vehicles error handling to surface real Postgres error messages and retain schema fallback for environments missing vehicles.name (commit f9f6d8b).
+- Recovery patch: implemented full Actions (Edit/Delete) workflows with modal edit + confirmation delete in trips, maintenance, inspections, ELD logs, and safety events dashboard modules.
+- Added missing safety event item route app/api/safety/[id]/route.ts for PATCH/DELETE with existing company access guard + RLS-safe filtering by company_id.
+- Expanded API validation with safetyUpdateSchema in lib/validations/api.ts for typed partial safety event updates.
+- Updated safety collection route error responses to return concrete database error messages instead of generic text.
+- Applied vehicles.name display fallback (name ?? unit_number) in vehicle selectors/labels across operational UIs to support schema-variant environments without migration changes.
+- Validation: pnpm typecheck and pnpm lint pass.
