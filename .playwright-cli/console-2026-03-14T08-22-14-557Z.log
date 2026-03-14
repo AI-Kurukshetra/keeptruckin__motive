@@ -1,0 +1,374 @@
+[  569355ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: ..., label: ..., icon: {$$typeof: ..., render: ...}}
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[  569355ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: ..., label: "Drivers", icon: {$$typeof: ..., render: ...}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[  569356ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: ..., label: ..., icon: {$$typeof: ..., render: ...}}
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[  569356ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: "/trips", label: "Trips", icon: {$$typeof: ..., render: ...}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[  569356ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: "/eld", label: "ELD", icon: {$$typeof: ..., render: ...}}
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[  569356ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: ..., label: ..., icon: {$$typeof: ..., render: ...}}
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[  569381ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: ..., label: ..., icon: {$$typeof: ..., render: ...}}
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[  569381ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: "/safety", label: "Safety", icon: {$$typeof: ..., render: ...}}
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[  569381ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: "/alerts", label: "Alerts", icon: {$$typeof: ..., render: ...}}
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[  569452ms] [ERROR] %o
+
+%s Error: Functions cannot be passed directly to Client Components unless you explicitly expose it by marking it with "use server". Or maybe you meant to call this function rather than return it.
+  {$$typeof: ..., render: function Gauge}
+                          ^^^^^^^^^^^^^^
+    at stringify (<anonymous>:1:18)
+    at resolveErrorDev (http://localhost:3000/_next/static/chunks/d3a02_next_dist_compiled_62a547a7._.js:4306:48)
+    at processFullStringRow (http://localhost:3000/_next/static/chunks/d3a02_next_dist_compiled_62a547a7._.js:4554:29)
+    at processFullBinaryRow (http://localhost:3000/_next/static/chunks/d3a02_next_dist_compiled_62a547a7._.js:4513:9)
+    at processBinaryChunk (http://localhost:3000/_next/static/chunks/d3a02_next_dist_compiled_62a547a7._.js:4622:98)
+    at progress (http://localhost:3000/_next/static/chunks/d3a02_next_dist_compiled_62a547a7._.js:4790:25) The above error occurred in the <Unknown> component. It was handled by the <ErrorBoundaryHandler> error boundary. @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_client_5c279d02._.js:1247
+[ 1321191ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: ..., label: ..., icon: {$$typeof: ..., render: ...}}
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1321193ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: ..., label: "Drivers", icon: {$$typeof: ..., render: ...}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1321193ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: ..., label: ..., icon: {$$typeof: ..., render: ...}}
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1321193ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: "/trips", label: "Trips", icon: {$$typeof: ..., render: ...}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1321196ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: "/eld", label: "ELD", icon: {$$typeof: ..., render: ...}}
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1321196ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: ..., label: ..., icon: {$$typeof: ..., render: ...}}
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1321197ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: ..., label: ..., icon: {$$typeof: ..., render: ...}}
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1321197ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: "/safety", label: "Safety", icon: {$$typeof: ..., render: ...}}
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1321199ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: "/alerts", label: "Alerts", icon: {$$typeof: ..., render: ...}}
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1323508ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: ..., label: ..., icon: {$$typeof: ..., render: ...}}
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1323508ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: ..., label: "Drivers", icon: {$$typeof: ..., render: ...}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1323509ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: ..., label: ..., icon: {$$typeof: ..., render: ...}}
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1323509ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: "/trips", label: "Trips", icon: {$$typeof: ..., render: ...}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1323509ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: "/eld", label: "ELD", icon: {$$typeof: ..., render: ...}}
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1323509ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: ..., label: ..., icon: {$$typeof: ..., render: ...}}
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1323510ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: ..., label: ..., icon: {$$typeof: ..., render: ...}}
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1323510ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: "/safety", label: "Safety", icon: {$$typeof: ..., render: ...}}
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1323510ms] [ERROR] %c%s%c Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.%s background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   
+  {href: "/alerts", label: "Alerts", icon: {$$typeof: ..., render: ...}}
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1325194ms] [ERROR] %o
+
+%s Error: Functions cannot be passed directly to Client Components unless you explicitly expose it by marking it with "use server". Or maybe you meant to call this function rather than return it.
+  {$$typeof: ..., render: function Bell}
+                          ^^^^^^^^^^^^^
+    at stringify (<anonymous>:1:18)
+    at resolveErrorDev (http://localhost:3000/_next/static/chunks/d3a02_next_dist_compiled_62a547a7._.js:4306:48)
+    at processFullStringRow (http://localhost:3000/_next/static/chunks/d3a02_next_dist_compiled_62a547a7._.js:4554:29)
+    at processFullBinaryRow (http://localhost:3000/_next/static/chunks/d3a02_next_dist_compiled_62a547a7._.js:4513:9)
+    at processBinaryChunk (http://localhost:3000/_next/static/chunks/d3a02_next_dist_compiled_62a547a7._.js:4622:98)
+    at progress (http://localhost:3000/_next/static/chunks/d3a02_next_dist_compiled_62a547a7._.js:4790:25) The above error occurred in the <SidebarNav> component. It was handled by the <ErrorBoundaryHandler> error boundary. @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_client_5c279d02._.js:1247
+[ 1337170ms] Error: Switched to client rendering because the server rendering errored:
+
+Functions cannot be passed directly to Client Components unless you explicitly expose it by marking it with "use server". Or maybe you meant to call this function rather than return it.
+  {$$typeof: ..., render: function Gauge}
+                          ^^^^^^^^^^^^^^
+    at stringify (<anonymous>:1:18)
+    at resolveErrorDev (D:\MahaKurukshetra\node_modules\.pnpm\next@15.5.12_@babel+core@7._79a87f057df56d53af5e40cec2ba658e\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:2:371669)
+    at processFullStringRow (D:\MahaKurukshetra\node_modules\.pnpm\next@15.5.12_@babel+core@7._79a87f057df56d53af5e40cec2ba658e\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:2:381515)
+    at D:\MahaKurukshetra\node_modules\.pnpm\next@15.5.12_@babel+core@7._79a87f057df56d53af5e40cec2ba658e\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:2:386763
+    at processBinaryChunk (D:\MahaKurukshetra\node_modules\.pnpm\next@15.5.12_@babel+core@7._79a87f057df56d53af5e40cec2ba658e\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:2:386835)
+    at progress (D:\MahaKurukshetra\node_modules\.pnpm\next@15.5.12_@babel+core@7._79a87f057df56d53af5e40cec2ba658e\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:2:388363)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+[ 1698518ms] [ERROR] ./app/(dashboard)/dashboard/_components/overview-client.tsx:62:22
+Parsing ecmascript source code failed
+  60 | const chartPalette = ["#2563eb", "#0ea5e9", "#14b8a6", "#22c55e", "#f59e0b", "#ef4444"];
+  61 |
+> 62 | function MetricCard({`n  label,`n  value,`n  hint,`n  icon: Icon,`n  testId,`n}: {`n  label: string;`n  value: string | number;`n  hint: string;`n  icon: React.ComponentType<{ className?: string }>;`n  testId: string;`n}) {`n  return (`n    <Card data-testid={testId}>
+     |                      ^^^^^^^^^^^
+  63 |       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+  64 |         <div>
+  65 |           <CardDescription>{label}</CardDescription>
+
+Unexpected token `n  label,`. Expected identifier, string literal, numeric literal or [ for the computed key
+
+Import trace:
+  Server Component:
+    ./app/(dashboard)/dashboard/_components/overview-client.tsx
+    ./app/(dashboard)/dashboard/page.tsx @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1789520ms] [ERROR] ./app/(dashboard)/dashboard/_components/overview-client.tsx:62:22
+Parsing ecmascript source code failed
+  60 | const chartPalette = ["#2563eb", "#0ea5e9", "#14b8a6", "#22c55e", "#f59e0b", "#ef4444"];
+  61 |
+> 62 | function MetricCard({`n  label,`n  value,`n  hint,`n  icon: Icon,`n  testId,`n}: {`n  label: string;`n  value: string | number;`n  hint: string;`n  icon: React.ComponentType<{ className?: string }>;`n  testId: string;`n}) {`n  return (`n    <Card data-testid={testId}>
+     |                      ^^^^^^^^^^^
+  63 |       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+  64 |         <div>
+  65 |           <CardDescription>{label}</CardDescription>
+
+Unexpected token `n  label,`. Expected identifier, string literal, numeric literal or [ for the computed key
+
+Import trace:
+  Server Component:
+    ./app/(dashboard)/dashboard/_components/overview-client.tsx
+    ./app/(dashboard)/dashboard/page.tsx @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1799333ms] [ERROR] ./app/(dashboard)/dashboard/_components/overview-client.tsx:62:22
+Parsing ecmascript source code failed
+  60 | const chartPalette = ["#2563eb", "#0ea5e9", "#14b8a6", "#22c55e", "#f59e0b", "#ef4444"];
+  61 |
+> 62 | function MetricCard({`n  label,`n  value,`n  hint,`n  icon: Icon,`n  testId,`n}: {`n  label: string;`n  value: string | number;`n  hint: string;`n  icon: React.ComponentType<{ className?: string }>;`n  testId: string;`n}) {`n  return (`n    <Card data-testid={testId}>
+     |                      ^^^^^^^^^^^
+  63 |       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+  64 |         <div>
+  65 |           <CardDescription>{label}</CardDescription>
+
+Unexpected token `n  label,`. Expected identifier, string literal, numeric literal or [ for the computed key
+
+Import trace:
+  Server Component:
+    ./app/(dashboard)/dashboard/_components/overview-client.tsx
+    ./app/(dashboard)/dashboard/page.tsx @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1814531ms] [ERROR] ./app/(dashboard)/dashboard/_components/overview-client.tsx:62:22
+Parsing ecmascript source code failed
+  60 | const chartPalette = ["#2563eb", "#0ea5e9", "#14b8a6", "#22c55e", "#f59e0b", "#ef4444"];
+  61 |
+> 62 | function MetricCard({`n  label,`n  value,`n  hint,`n  icon: Icon,`n  testId,`n}: {`n  label: string;`n  value: string | number;`n  hint: string;`n  icon: React.ComponentType<{ className?: string }>;`n  testId: string;`n}) {`n  return (`n    <Card data-testid={testId}>
+     |                      ^^^^^^^^^^^
+  63 |       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+  64 |         <div>
+  65 |           <CardDescription>{label}</CardDescription>
+
+Unexpected token `n  label,`. Expected identifier, string literal, numeric literal or [ for the computed key
+
+Import trace:
+  Server Component:
+    ./app/(dashboard)/dashboard/_components/overview-client.tsx
+    ./app/(dashboard)/dashboard/page.tsx @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1821976ms] [ERROR] ./app/(dashboard)/dashboard/_components/overview-client.tsx:62:22
+Parsing ecmascript source code failed
+  60 | const chartPalette = ["#2563eb", "#0ea5e9", "#14b8a6", "#22c55e", "#f59e0b", "#ef4444"];
+  61 |
+> 62 | function MetricCard({`n  label,`n  value,`n  hint,`n  icon: Icon,`n  testId,`n}: {`n  label: string;`n  value: string | number;`n  hint: string;`n  icon: React.ComponentType<{ className?: string }>;`n  testId: string;`n}) {`n  return (`n    <Card data-testid={testId}>
+     |                      ^^^^^^^^^^^
+  63 |       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+  64 |         <div>
+  65 |           <CardDescription>{label}</CardDescription>
+
+Unexpected token `n  label,`. Expected identifier, string literal, numeric literal or [ for the computed key
+
+Import trace:
+  Server Component:
+    ./app/(dashboard)/dashboard/_components/overview-client.tsx
+    ./app/(dashboard)/dashboard/page.tsx @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1821976ms] [ERROR] ./components/theme-toggle.tsx:30:32
+Parsing ecmascript source code failed
+  28 |       size="sm"
+  29 |       className="w-9 px-0"
+> 30 |       aria-label="Toggle theme"`n      data-testid="dark-mode-toggle"`n      onClick={() => setTheme(isDark ? "light" : "dark")}
+     |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  31 |     >
+  32 |       {isDark ? <Sun className="size-4" /> : <Moon className="size-4" />}
+  33 |     </Button>
+
+Unexpected token `n      data-testid="dark-mode-toggle"`. Expected jsx identifier
+
+Import traces:
+  Client Component Browser:
+    ./components/theme-toggle.tsx [Client Component Browser]
+    ./components/dashboard/dashboard-toolbar.tsx [Client Component Browser]
+    ./components/dashboard/dashboard-toolbar.tsx [Server Component]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/theme-toggle.tsx [Client Component SSR]
+    ./components/dashboard/dashboard-toolbar.tsx [Client Component SSR]
+    ./components/dashboard/dashboard-toolbar.tsx [Server Component]
+    ./app/(dashboard)/layout.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1832615ms] [ERROR] ./app/(dashboard)/dashboard/_components/overview-client.tsx:62:22
+Parsing ecmascript source code failed
+  60 | const chartPalette = ["#2563eb", "#0ea5e9", "#14b8a6", "#22c55e", "#f59e0b", "#ef4444"];
+  61 |
+> 62 | function MetricCard({`n  label,`n  value,`n  hint,`n  icon: Icon,`n  testId,`n}: {`n  label: string;`n  value: string | number;`n  hint: string;`n  icon: React.ComponentType<{ className?: string }>;`n  testId: string;`n}) {`n  return (`n    <Card data-testid={testId}>
+     |                      ^^^^^^^^^^^
+  63 |       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+  64 |         <div>
+  65 |           <CardDescription>{label}</CardDescription>
+
+Unexpected token `n  label,`. Expected identifier, string literal, numeric literal or [ for the computed key
+
+Import trace:
+  Server Component:
+    ./app/(dashboard)/dashboard/_components/overview-client.tsx
+    ./app/(dashboard)/dashboard/page.tsx @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1843060ms] [ERROR] ./app/(dashboard)/dashboard/_components/overview-client.tsx:62:22
+Parsing ecmascript source code failed
+  60 | const chartPalette = ["#2563eb", "#0ea5e9", "#14b8a6", "#22c55e", "#f59e0b", "#ef4444"];
+  61 |
+> 62 | function MetricCard({`n  label,`n  value,`n  hint,`n  icon: Icon,`n  testId,`n}: {`n  label: string;`n  value: string | number;`n  hint: string;`n  icon: React.ComponentType<{ className?: string }>;`n  testId: string;`n}) {`n  return (`n    <Card data-testid={testId}>
+     |                      ^^^^^^^^^^^
+  63 |       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+  64 |         <div>
+  65 |           <CardDescription>{label}</CardDescription>
+
+Unexpected token `n  label,`. Expected identifier, string literal, numeric literal or [ for the computed key
+
+Import trace:
+  Server Component:
+    ./app/(dashboard)/dashboard/_components/overview-client.tsx
+    ./app/(dashboard)/dashboard/page.tsx @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1843442ms] [ERROR] ./app/(dashboard)/dashboard/_components/overview-client.tsx:62:22
+Parsing ecmascript source code failed
+  60 | const chartPalette = ["#2563eb", "#0ea5e9", "#14b8a6", "#22c55e", "#f59e0b", "#ef4444"];
+  61 |
+> 62 | function MetricCard({`n  label,`n  value,`n  hint,`n  icon: Icon,`n  testId,`n}: {`n  label: string;`n  value: string | number;`n  hint: string;`n  icon: React.ComponentType<{ className?: string }>;`n  testId: string;`n}) {`n  return (`n    <Card data-testid={testId}>
+     |                      ^^^^^^^^^^^
+  63 |       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+  64 |         <div>
+  65 |           <CardDescription>{label}</CardDescription>
+
+Unexpected token `n  label,`. Expected identifier, string literal, numeric literal or [ for the computed key
+
+Import trace:
+  Server Component:
+    ./app/(dashboard)/dashboard/_components/overview-client.tsx
+    ./app/(dashboard)/dashboard/page.tsx @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1849816ms] [ERROR] ./app/(dashboard)/dashboard/_components/overview-client.tsx:62:22
+Parsing ecmascript source code failed
+  60 | const chartPalette = ["#2563eb", "#0ea5e9", "#14b8a6", "#22c55e", "#f59e0b", "#ef4444"];
+  61 |
+> 62 | function MetricCard({`n  label,`n  value,`n  hint,`n  icon: Icon,`n  testId,`n}: {`n  label: string;`n  value: string | number;`n  hint: string;`n  icon: React.ComponentType<{ className?: string }>;`n  testId: string;`n}) {`n  return (`n    <Card data-testid={testId}>
+     |                      ^^^^^^^^^^^
+  63 |       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+  64 |         <div>
+  65 |           <CardDescription>{label}</CardDescription>
+
+Unexpected token `n  label,`. Expected identifier, string literal, numeric literal or [ for the computed key
+
+Import trace:
+  Server Component:
+    ./app/(dashboard)/dashboard/_components/overview-client.tsx
+    ./app/(dashboard)/dashboard/page.tsx @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1865420ms] [ERROR] ./app/(dashboard)/dashboard/_components/overview-client.tsx:62:22
+Parsing ecmascript source code failed
+  60 | const chartPalette = ["#2563eb", "#0ea5e9", "#14b8a6", "#22c55e", "#f59e0b", "#ef4444"];
+  61 |
+> 62 | function MetricCard({`n  label,`n  value,`n  hint,`n  icon: Icon,`n  testId,`n}: {`n  label: string;`n  value: string | number;`n  hint: string;`n  icon: React.ComponentType<{ className?: string }>;`n  testId: string;`n}) {`n  return (`n    <Card data-testid={testId}>
+     |                      ^^^^^^^^^^^
+  63 |       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+  64 |         <div>
+  65 |           <CardDescription>{label}</CardDescription>
+
+Unexpected token `n  label,`. Expected identifier, string literal, numeric literal or [ for the computed key
+
+Import trace:
+  Server Component:
+    ./app/(dashboard)/dashboard/_components/overview-client.tsx
+    ./app/(dashboard)/dashboard/page.tsx @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1880411ms] [ERROR] ./app/(dashboard)/dashboard/_components/overview-client.tsx:62:22
+Parsing ecmascript source code failed
+  60 | const chartPalette = ["#2563eb", "#0ea5e9", "#14b8a6", "#22c55e", "#f59e0b", "#ef4444"];
+  61 |
+> 62 | function MetricCard({`n  label,`n  value,`n  hint,`n  icon: Icon,`n  testId,`n}: {`n  label: string;`n  value: string | number;`n  hint: string;`n  icon: React.ComponentType<{ className?: string }>;`n  testId: string;`n}) {`n  return (`n    <Card data-testid={testId}>
+     |                      ^^^^^^^^^^^
+  63 |       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+  64 |         <div>
+  65 |           <CardDescription>{label}</CardDescription>
+
+Unexpected token `n  label,`. Expected identifier, string literal, numeric literal or [ for the computed key
+
+Import trace:
+  Server Component:
+    ./app/(dashboard)/dashboard/_components/overview-client.tsx
+    ./app/(dashboard)/dashboard/page.tsx @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1880774ms] [ERROR] ./app/(dashboard)/dashboard/_components/overview-client.tsx:62:22
+Parsing ecmascript source code failed
+  60 | const chartPalette = ["#2563eb", "#0ea5e9", "#14b8a6", "#22c55e", "#f59e0b", "#ef4444"];
+  61 |
+> 62 | function MetricCard({`n  label,`n  value,`n  hint,`n  icon: Icon,`n  testId,`n}: {`n  label: string;`n  value: string | number;`n  hint: string;`n  icon: React.ComponentType<{ className?: string }>;`n  testId: string;`n}) {`n  return (`n    <Card data-testid={testId}>
+     |                      ^^^^^^^^^^^
+  63 |       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+  64 |         <div>
+  65 |           <CardDescription>{label}</CardDescription>
+
+Unexpected token `n  label,`. Expected identifier, string literal, numeric literal or [ for the computed key
+
+Import trace:
+  Server Component:
+    ./app/(dashboard)/dashboard/_components/overview-client.tsx
+    ./app/(dashboard)/dashboard/page.tsx @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1889865ms] [ERROR] ./app/(dashboard)/dashboard/_components/overview-client.tsx:62:22
+Parsing ecmascript source code failed
+  60 | const chartPalette = ["#2563eb", "#0ea5e9", "#14b8a6", "#22c55e", "#f59e0b", "#ef4444"];
+  61 |
+> 62 | function MetricCard({`n  label,`n  value,`n  hint,`n  icon: Icon,`n  testId,`n}: {`n  label: string;`n  value: string | number;`n  hint: string;`n  icon: React.ComponentType<{ className?: string }>;`n  testId: string;`n}) {`n  return (`n    <Card data-testid={testId}>
+     |                      ^^^^^^^^^^^
+  63 |       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+  64 |         <div>
+  65 |           <CardDescription>{label}</CardDescription>
+
+Unexpected token `n  label,`. Expected identifier, string literal, numeric literal or [ for the computed key
+
+Import trace:
+  Server Component:
+    ./app/(dashboard)/dashboard/_components/overview-client.tsx
+    ./app/(dashboard)/dashboard/page.tsx @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 1911449ms] [ERROR] ./app/(dashboard)/dashboard/_components/overview-client.tsx:62:22
+Parsing ecmascript source code failed
+  60 | const chartPalette = ["#2563eb", "#0ea5e9", "#14b8a6", "#22c55e", "#f59e0b", "#ef4444"];
+  61 |
+> 62 | function MetricCard({`n  label,`n  value,`n  hint,`n  icon: Icon,`n  testId,`n}: {`n  label: string;`n  value: string | number;`n  hint: string;`n  icon: React.ComponentType<{ className?: string }>;`n  testId: string;`n}) {`n  return (`n    <Card data-testid={testId}>
+     |                      ^^^^^^^^^^^
+  63 |       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+  64 |         <div>
+  65 |           <CardDescription>{label}</CardDescription>
+
+Unexpected token `n  label,`. Expected identifier, string literal, numeric literal or [ for the computed key
+
+Import trace:
+  Server Component:
+    ./app/(dashboard)/dashboard/_components/overview-client.tsx
+    ./app/(dashboard)/dashboard/page.tsx @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359
+[ 2592697ms] [ERROR] ./package.json:18:41
+Error parsing package.json file
+  16 |         "db:types": "supabase gen types typescript --local > types/supabase.ts",
+  17 |         "db:migrate": "supabase db push",
+> 18 |         "db:reset": "supabase db reset",`n        "db:seed": "tsx supabase/seed/seed.ts"
+     |                                         ^
+  19 |     },
+  20 |     "dependencies": {
+  21 |         "@base-ui/react": "^1.3.0",
+
+package.json is not parseable: invalid JSON: key must be a string at line 18 column 41 @ http://localhost:3000/_next/static/chunks/d3a02_next_dist_aeb303bf._.js:2359

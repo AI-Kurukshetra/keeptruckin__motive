@@ -1,0 +1,82 @@
+{
+  "startedAt": "2026-03-14T09:21:06.055Z",
+  "baseUrl": "http://localhost:3000",
+  "steps": [
+    {
+      "name": "1. Register step skipped (existing QA user)",
+      "status": "passed",
+      "details": "using existing QA user qae2e610055@example.com"
+    },
+    {
+      "name": "2. Authenticate with existing QA user",
+      "status": "failed",
+      "details": "unable to authenticate (http://localhost:3000/login)"
+    },
+    {
+      "name": "3. Dashboard metrics/charts/activity render",
+      "status": "failed",
+      "details": "not authenticated"
+    },
+    {
+      "name": "4. Command palette navigation works",
+      "status": "failed",
+      "details": "not authenticated"
+    },
+    {
+      "name": "5. Drivers page renders seeded data and form",
+      "status": "failed",
+      "details": "not authenticated"
+    },
+    {
+      "name": "6. Vehicles page renders seeded data and form",
+      "status": "failed",
+      "details": "not authenticated"
+    },
+    {
+      "name": "7. Trips page dropdowns/tables/forms render with seeded data",
+      "status": "failed",
+      "details": "not authenticated"
+    },
+    {
+      "name": "8. Alerts table and badges render",
+      "status": "failed",
+      "details": "not authenticated"
+    },
+    {
+      "name": "9. Dark mode toggle works",
+      "status": "failed",
+      "details": "not authenticated"
+    },
+    {
+      "name": "10. Global search filters seeded records",
+      "status": "failed",
+      "details": "not authenticated"
+    }
+  ],
+  "consoleErrors": [],
+  "failedNetworkRequests": [
+    "POST http://localhost:3000/login => net::ERR_ABORTED"
+  ],
+  "brokenUiComponents": [
+    "2. Authenticate with existing QA user: unable to authenticate (http://localhost:3000/login)",
+    "3. Dashboard metrics/charts/activity render: not authenticated",
+    "4. Command palette navigation works: not authenticated",
+    "5. Drivers page renders seeded data and form: not authenticated",
+    "6. Vehicles page renders seeded data and form: not authenticated",
+    "7. Trips page dropdowns/tables/forms render with seeded data: not authenticated",
+    "8. Alerts table and badges render: not authenticated",
+    "9. Dark mode toggle works: not authenticated",
+    "10. Global search filters seeded records: not authenticated"
+  ],
+  "notes": [],
+  "artifacts": {
+    "report": "D:\\MahaKurukshetra\\output\\playwright\\qa-report-1773480066055.json",
+    "screenshot": "D:\\MahaKurukshetra\\output\\playwright\\qa-final-1773480066055.png"
+  },
+  "finishedAt": "2026-03-14T09:21:39.915Z",
+  "summary": {
+    "passed": 1,
+    "failed": 9,
+    "loginEmailUsed": null
+  }
+}

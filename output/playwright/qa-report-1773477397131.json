@@ -1,0 +1,87 @@
+{
+  "startedAt": "2026-03-14T08:36:37.131Z",
+  "baseUrl": "http://localhost:3000",
+  "steps": [
+    {
+      "name": "1. Register a new user",
+      "status": "failed",
+      "details": "registration failed at http://localhost:3000/register | email rate limit exceeded"
+    },
+    {
+      "name": "2. Complete company onboarding",
+      "status": "failed",
+      "details": "unable to authenticate, landed on http://localhost:3000/login"
+    },
+    {
+      "name": "3. Verify dashboard loads with metrics, charts, and activity feed",
+      "status": "failed",
+      "details": "not authenticated"
+    },
+    {
+      "name": "4. Test command palette (Cmd/Ctrl + K) navigation",
+      "status": "failed",
+      "details": "not authenticated"
+    },
+    {
+      "name": "5. Add a driver",
+      "status": "failed",
+      "details": "not authenticated"
+    },
+    {
+      "name": "6. Add a vehicle",
+      "status": "failed",
+      "details": "not authenticated"
+    },
+    {
+      "name": "7. Create a trip",
+      "status": "failed",
+      "details": "not authenticated"
+    },
+    {
+      "name": "8. Verify alerts page loads and status badges render",
+      "status": "failed",
+      "details": "not authenticated"
+    },
+    {
+      "name": "9. Test dark mode toggle",
+      "status": "failed",
+      "details": "not authenticated"
+    },
+    {
+      "name": "10. Test global search filtering on drivers, vehicles, and trips",
+      "status": "failed",
+      "details": "not authenticated"
+    }
+  ],
+  "consoleErrors": [],
+  "failedNetworkRequests": [
+    "GET http://localhost:3000/register?error=email%20rate%20limit%20exceeded&_rsc=82ger => net::ERR_ABORTED",
+    "GET http://localhost:3000/register?error=email%20rate%20limit%20exceeded&_rsc=82ger => net::ERR_ABORTED",
+    "GET http://localhost:3000/login?error=invalid_credentials&_rsc=970e3 => net::ERR_ABORTED"
+  ],
+  "brokenUiComponents": [
+    "1. Register a new user: registration failed at http://localhost:3000/register | email rate limit exceeded",
+    "2. Complete company onboarding: unable to authenticate, landed on http://localhost:3000/login",
+    "3. Verify dashboard loads with metrics, charts, and activity feed: not authenticated",
+    "4. Test command palette (Cmd/Ctrl + K) navigation: not authenticated",
+    "5. Add a driver: not authenticated",
+    "6. Add a vehicle: not authenticated",
+    "7. Create a trip: not authenticated",
+    "8. Verify alerts page loads and status badges render: not authenticated",
+    "9. Test dark mode toggle: not authenticated",
+    "10. Test global search filtering on drivers, vehicles, and trips: not authenticated"
+  ],
+  "notes": [
+    "Fallback QA user ready: qae2e1773477397131@example.com"
+  ],
+  "artifacts": {
+    "screenshot": "D:\\MahaKurukshetra\\output\\playwright\\qa-final-1773477397131.png",
+    "report": "D:\\MahaKurukshetra\\output\\playwright\\qa-report-1773477397131.json"
+  },
+  "finishedAt": "2026-03-14T08:36:42.446Z",
+  "summary": {
+    "passed": 0,
+    "failed": 10,
+    "loginEmailUsed": "qae2e1773477397131@example.com"
+  }
+}

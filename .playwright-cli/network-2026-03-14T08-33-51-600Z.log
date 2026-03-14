@@ -1,0 +1,18 @@
+[POST] http://localhost:3000/register => [303] See Other
+[GET] http://localhost:3000/register?error=Email%20address%20%22qa_143501%40example.com%22%20is%20invalid&_rsc=82ger => [200] OK
+[GET] http://localhost:3000/register?error=Email%20address%20%22qa_143501%40example.com%22%20is%20invalid&_rsc=82ger => [200] OK
+[GET] http://localhost:3000/register?error=Email%20address%20%22qa_143501%40example.com%22%20is%20invalid&_rsc=82ger => [200] OK
+[POST] http://localhost:3000/register => [303] See Other
+[POST] http://localhost:3000/register => [303] See Other
+[GET] http://localhost:3000/register?error=email%20rate%20limit%20exceeded&_rsc=82ger => [200] OK
+[GET] http://localhost:3000/register?error=email%20rate%20limit%20exceeded&_rsc=82ger => [200] OK
+[GET] http://localhost:3000/register?error=email%20rate%20limit%20exceeded&_rsc=82ger => [200] OK
+[GET] http://localhost:3000/register?error=email%20rate%20limit%20exceeded&_rsc=82ger => [200] OK
+[POST] http://localhost:3000/login => [303] See Other
+[POST] http://localhost:3000/__nextjs_original-stack-frames => [200] OK
+[POST] http://localhost:3000/__nextjs_original-stack-frames => [200] OK
+[POST] http://localhost:3000/__nextjs_original-stack-frames => [200] OK
+[POST] http://localhost:3000/__nextjs_original-stack-frames => [200] OK
+[POST] http://localhost:3000/__nextjs_original-stack-frames => [200] OK
+[POST] http://localhost:3000/__nextjs_original-stack-frames => [200] OK
+[POST] http://localhost:3000/__nextjs_original-stack-frames => [200] OK

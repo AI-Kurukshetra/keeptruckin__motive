@@ -29,10 +29,18 @@ export async function updateSession(request: NextRequest) {
 
   let user: { id: string } | null = null;
   try {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    user = session?.user ?? null;
+    const authClient = supabase.auth as unknown as {
+      getUser?: () => Promise<{ data?: { user?: { id: string } | null } }>;
+      getSession?: () => Promise<{ data?: { session?: { user?: { id: string } | null } | null } }>;
+    };
+
+    if (typeof authClient.getUser === "function") {
+      const result = await authClient.getUser();
+      user = result?.data?.user ?? null;
+    } else if (typeof authClient.getSession === "function") {
+      const result = await authClient.getSession();
+      user = result?.data?.session?.user ?? null;
+    }
   } catch {
     return NextResponse.next({ request });
   }
