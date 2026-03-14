@@ -7,7 +7,7 @@ import { ModulePageSkeleton } from "@/components/dashboard/page-skeleton";
 
 const InspectionsClient = dynamic(
   () => import("./_components/inspections-client").then((module) => module.InspectionsClient),
-  { ssr: false, loading: () => <ModulePageSkeleton /> }
+  { loading: () => <ModulePageSkeleton /> }
 );
 
 export const metadata: Metadata = {
@@ -25,3 +25,4 @@ export default async function InspectionsPage() {
     </div>
   );
 }
+

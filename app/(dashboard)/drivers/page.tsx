@@ -7,7 +7,7 @@ import { ModulePageSkeleton } from "@/components/dashboard/page-skeleton";
 
 const DriversClient = dynamic(
   () => import("./_components/drivers-client").then((module) => module.DriversClient),
-  { ssr: false, loading: () => <ModulePageSkeleton /> }
+  { loading: () => <ModulePageSkeleton /> }
 );
 
 export const metadata: Metadata = {
@@ -41,3 +41,4 @@ export default async function DriversPage({
     </div>
   );
 }
+

@@ -10,9 +10,7 @@ import { DashboardPageSkeleton } from "@/components/dashboard/page-skeleton";
 
 const DashboardOverviewClient = dynamic(
   () => import("./_components/overview-client").then((module) => module.DashboardOverviewClient),
-  {
-    ssr: false,
-    loading: () => <DashboardPageSkeleton />,
+  { loading: () => <DashboardPageSkeleton />,
   }
 );
 
@@ -170,3 +168,4 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     </div>
   );
 }
+

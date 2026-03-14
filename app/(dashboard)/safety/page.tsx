@@ -7,7 +7,7 @@ import { ModulePageSkeleton } from "@/components/dashboard/page-skeleton";
 
 const SafetyClient = dynamic(
   () => import("./_components/safety-client").then((module) => module.SafetyClient),
-  { ssr: false, loading: () => <ModulePageSkeleton /> }
+  { loading: () => <ModulePageSkeleton /> }
 );
 
 export const metadata: Metadata = {
@@ -25,3 +25,4 @@ export default async function SafetyPage() {
     </div>
   );
 }
+

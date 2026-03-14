@@ -73,3 +73,6 @@ Reason: Charting, command palette, and module-heavy clients were inflating initi
 
 ## [2026-03-14] React Query defaults standardized for dashboard workloads
 Reason: Fleet operations screens are read-heavy but tolerant of minute-level staleness; 60s stale time + limited retries reduce network churn and UI thrash while preserving responsiveness.
+
+## [2026-03-14] Membership role updates restricted to owners only
+Reason: Allowing admins to update `company_members` rows can permit ownership-related privilege escalation paths; owner-only update policy enforces stricter org-control boundaries.

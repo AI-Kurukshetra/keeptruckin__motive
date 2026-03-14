@@ -7,7 +7,7 @@ import { ModulePageSkeleton } from "@/components/dashboard/page-skeleton";
 
 const AlertsClient = dynamic(
   () => import("./_components/alerts-client").then((module) => module.AlertsClient),
-  { ssr: false, loading: () => <ModulePageSkeleton /> }
+  { loading: () => <ModulePageSkeleton /> }
 );
 
 export const metadata: Metadata = {
@@ -25,3 +25,4 @@ export default async function AlertsPage() {
     </div>
   );
 }
+

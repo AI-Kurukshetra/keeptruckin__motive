@@ -84,3 +84,5 @@
 - [x] Add dashboard/global loading skeletons and route-level loading fallback (2026-03-14 18:05)
 - [x] Improve drivers/vehicles/trips/alerts empty states with actionable CTA affordances (2026-03-14 18:05)
 - [x] UI consistency polish for page headers, badges, card hover states, and spacing hierarchy (2026-03-14 18:05)
+- [x] Remove `ssr: false` from dashboard Server Component `page.tsx` dynamic imports to avoid App Router build incompatibility (2026-03-14 18:35)
+- [x] Harden `company_members_update_owner_admin` RLS policy to owner-only updates via migration (2026-03-14 18:35)

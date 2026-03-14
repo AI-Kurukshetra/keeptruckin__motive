@@ -77,3 +77,6 @@
 - Added reusable actionable empty-state card (`components/dashboard/empty-state.tsx`) and integrated it in drivers/vehicles/trips/alerts modules.
 - Improved dashboard UI consistency with refined `PageHeader`, badge labeling, no-company CTA, table row hover states, and card transition polish.
 - Build verification note: `pnpm exec next build` currently fails in this environment with `spawn EPERM` (machine-level runtime/process restriction).
+- Fixed Next App Router build compatibility in dashboard page Server Components by removing `ssr: false` from `next/dynamic` options in `app/(dashboard)/**/page.tsx`.
+- Added migration `supabase/migrations/20260314183500_harden_company_members_update_owner_only.sql` to harden `company_members_update_owner_admin` policy so only company owners can update membership rows.
+- Verification run: `pnpm typecheck` and `pnpm lint` pass; `pnpm build` remains blocked by environment-level `spawn EPERM`.

@@ -7,7 +7,7 @@ import { ModulePageSkeleton } from "@/components/dashboard/page-skeleton";
 
 const MaintenanceClient = dynamic(
   () => import("./_components/maintenance-client").then((module) => module.MaintenanceClient),
-  { ssr: false, loading: () => <ModulePageSkeleton /> }
+  { loading: () => <ModulePageSkeleton /> }
 );
 
 export const metadata: Metadata = {
@@ -25,3 +25,4 @@ export default async function MaintenancePage() {
     </div>
   );
 }
+

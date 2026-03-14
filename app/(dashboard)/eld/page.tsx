@@ -7,7 +7,7 @@ import { ModulePageSkeleton } from "@/components/dashboard/page-skeleton";
 
 const EldClient = dynamic(
   () => import("./_components/eld-client").then((module) => module.EldClient),
-  { ssr: false, loading: () => <ModulePageSkeleton /> }
+  { loading: () => <ModulePageSkeleton /> }
 );
 
 export const metadata: Metadata = {
@@ -25,3 +25,4 @@ export default async function EldPage() {
     </div>
   );
 }
+

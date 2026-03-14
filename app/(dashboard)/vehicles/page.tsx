@@ -7,7 +7,7 @@ import { ModulePageSkeleton } from "@/components/dashboard/page-skeleton";
 
 const VehiclesClient = dynamic(
   () => import("./_components/vehicles-client").then((module) => module.VehiclesClient),
-  { ssr: false, loading: () => <ModulePageSkeleton /> }
+  { loading: () => <ModulePageSkeleton /> }
 );
 
 export const metadata: Metadata = {
@@ -41,3 +41,4 @@ export default async function VehiclesPage({
     </div>
   );
 }
+

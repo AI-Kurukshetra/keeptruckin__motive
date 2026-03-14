@@ -7,7 +7,7 @@ import { ModulePageSkeleton } from "@/components/dashboard/page-skeleton";
 
 const TripsClient = dynamic(
   () => import("./_components/trips-client").then((module) => module.TripsClient),
-  { ssr: false, loading: () => <ModulePageSkeleton /> }
+  { loading: () => <ModulePageSkeleton /> }
 );
 
 export const metadata: Metadata = {
@@ -41,3 +41,4 @@ export default async function TripsPage({
     </div>
   );
 }
+
