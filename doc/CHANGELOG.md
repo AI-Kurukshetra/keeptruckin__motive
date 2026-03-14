@@ -95,3 +95,4 @@
 - Corrected vehicle creation mapping across UI/API so `Vehicle Name -> vehicles.name`, `Unit -> vehicles.unit_number`, and `VIN -> vehicles.vin`.
 - Confirmed vehicles module table renders `Vehicle | Unit | VIN | Status` and uses `vehicle.name ?? vehicle.unit_number` fallback labeling.
 - Validation: `pnpm typecheck` and `pnpm lint` pass.
+- Fixed vehicle create API compatibility: app/api/vehicles/route.ts now retries insert without \'name\' when Postgres returns undefined-column (42703), preventing create failures on environments without vehicles.name.
