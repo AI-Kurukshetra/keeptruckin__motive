@@ -1,13 +1,24 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { getPublicEnv } from "@/lib/env";
+
+function redirectToLogin(request: NextRequest, reason: string) {
+  const url = request.nextUrl.clone();
+  url.pathname = "/login";
+  url.searchParams.set("error", reason);
+  return NextResponse.redirect(url);
+}
 
 export async function updateSession(request: NextRequest) {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabaseUrl = getPublicEnv("NEXT_PUBLIC_SUPABASE_URL");
+  const supabaseAnonKey = getPublicEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY");
+  const isAuthRoute =
+    request.nextUrl.pathname.startsWith("/login") ||
+    request.nextUrl.pathname.startsWith("/register");
+  const isDashboardRoute = request.nextUrl.pathname.startsWith("/dashboard");
 
-  // Never crash middleware in production due to missing env config.
   if (!supabaseUrl || !supabaseAnonKey) {
-    return NextResponse.next({ request });
+    return isDashboardRoute ? redirectToLogin(request, "auth_unavailable") : NextResponse.next({ request });
   }
 
   let supabaseResponse = NextResponse.next({ request });
@@ -42,18 +53,11 @@ export async function updateSession(request: NextRequest) {
       user = result?.data?.session?.user ?? null;
     }
   } catch {
-    return NextResponse.next({ request });
+    return isDashboardRoute ? redirectToLogin(request, "session_expired") : NextResponse.next({ request });
   }
 
-  const isAuthRoute =
-    request.nextUrl.pathname.startsWith("/login") ||
-    request.nextUrl.pathname.startsWith("/register");
-  const isDashboardRoute = request.nextUrl.pathname.startsWith("/dashboard");
-
   if (!user && isDashboardRoute) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    return NextResponse.redirect(url);
+    return redirectToLogin(request, "unauthorized");
   }
 
   if (user && isAuthRoute) {

@@ -1,11 +1,20 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createCompanyAction, inviteMemberAction } from "@/app/actions/onboarding";
-import { DashboardOverviewClient } from "./_components/overview-client";
+import { DashboardPageSkeleton } from "@/components/dashboard/page-skeleton";
+
+const DashboardOverviewClient = dynamic(
+  () => import("./_components/overview-client").then((module) => module.DashboardOverviewClient),
+  {
+    ssr: false,
+    loading: () => <DashboardPageSkeleton />,
+  }
+);
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -161,5 +170,3 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     </div>
   );
 }
-
-

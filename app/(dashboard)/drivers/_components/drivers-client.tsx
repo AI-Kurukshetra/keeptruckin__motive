@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { UserPlus } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api/fetcher";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { TableEmptyRow, TableLoadingRows } from "@/components/dashboard/table-states";
+import { EmptyState } from "@/components/dashboard/empty-state";
 
 type Driver = {
   id: string;
@@ -26,6 +28,7 @@ type Driver = {
 
 export function DriversClient({ companyId, initialSearch = "" }: { companyId: string; initialSearch?: string }) {
   const queryClient = useQueryClient();
+  const formRef = useRef<HTMLFormElement | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const driversQuery = useQuery({
@@ -64,11 +67,14 @@ export function DriversClient({ companyId, initialSearch = "" }: { companyId: st
     });
   }, [driversQuery.data, query]);
 
+  const showEmptyState = !driversQuery.isLoading && (driversQuery.data ?? []).length === 0;
+
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="transition-colors hover:border-primary/40">
         <CardContent className="pt-6">
           <form
+            ref={formRef}
             className="grid gap-3 md:grid-cols-4"
             onSubmit={(event) => {
               event.preventDefault();
@@ -91,37 +97,45 @@ export function DriversClient({ companyId, initialSearch = "" }: { companyId: st
 
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
-      <Card>
-        <CardContent className="pt-6">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>License</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {driversQuery.isLoading ? <TableLoadingRows columns={3} /> : null}
-              {!driversQuery.isLoading && drivers.length === 0 ? (
-                <TableEmptyRow
-                  columns={3}
-                  message={query ? "No drivers match your search." : "No drivers yet. Add your first driver above."}
-                />
-              ) : null}
-              {drivers.map((driver) => (
-                <TableRow key={driver.id}>
-                  <TableCell className="font-medium">{driver.first_name} {driver.last_name}</TableCell>
-                  <TableCell>{driver.license_number}</TableCell>
-                  <TableCell className="capitalize">{driver.status}</TableCell>
+      {showEmptyState ? (
+        <EmptyState
+          icon={UserPlus}
+          title="No drivers added"
+          description="Start by adding your first driver profile to begin assignment planning."
+          actionLabel="Add first driver"
+          onAction={() => formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}
+        />
+      ) : (
+        <Card className="transition-colors hover:border-primary/20">
+          <CardContent className="pt-6">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>License</TableHead>
+                  <TableHead>Status</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+              </TableHeader>
+              <TableBody>
+                {driversQuery.isLoading ? <TableLoadingRows columns={3} /> : null}
+                {!driversQuery.isLoading && drivers.length === 0 ? (
+                  <TableEmptyRow
+                    columns={3}
+                    message={query ? "No drivers match your search." : "No drivers available."}
+                  />
+                ) : null}
+                {drivers.map((driver) => (
+                  <TableRow key={driver.id} className="transition-colors hover:bg-muted/30">
+                    <TableCell className="font-medium">{driver.first_name} {driver.last_name}</TableCell>
+                    <TableCell>{driver.license_number}</TableCell>
+                    <TableCell className="capitalize">{driver.status}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
-
-

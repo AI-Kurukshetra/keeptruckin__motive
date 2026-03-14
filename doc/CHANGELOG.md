@@ -71,3 +71,9 @@
 - Added robust full-suite QA runner `output/playwright/full-qa-prod-demo.js` and generated required artifacts at `output/qa-report.json` and `output/qa-screenshots/`.
 - Deployed latest stability updates to Vercel production and refreshed full QA artifacts (`output/qa-report.json`, `output/qa-screenshots/`).
 - Added new premium marketing landing experience (`app/page.tsx`, `components/landing/landing-page.tsx`) with hero, product preview, features, AI intelligence cards, workflow diagram, stack section, demo credentials, and responsive footer.
+- Phase 3 performance polish: introduced route-safe dynamic imports for dashboard toolbar, overview analytics, and feature module clients to reduce initial JS on non-active modules.
+- Tuned React Query defaults in `components/providers.tsx` to `staleTime: 60s`, `gcTime: 5m`, `retry: 1`, and `refetchOnWindowFocus: false`; also devtools now loads only in development via dynamic import.
+- Added reusable skeleton system in `components/dashboard/page-skeleton.tsx` and wired route/global loaders via `app/(dashboard)/loading.tsx` and `app/loading.tsx`.
+- Added reusable actionable empty-state card (`components/dashboard/empty-state.tsx`) and integrated it in drivers/vehicles/trips/alerts modules.
+- Improved dashboard UI consistency with refined `PageHeader`, badge labeling, no-company CTA, table row hover states, and card transition polish.
+- Build verification note: `pnpm exec next build` currently fails in this environment with `spawn EPERM` (machine-level runtime/process restriction).

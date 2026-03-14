@@ -67,3 +67,9 @@ Reason: Re-running demo seeds must not create duplicate trips/safety events; fix
 
 ## [2026-03-14] Seed upserts must target primary keys only
 Reason: upsert conflict targets must map to unique/exclusion constraints; using stable UUID id values avoids runtime ON CONFLICT errors and keeps re-seeding deterministic.
+
+## [2026-03-14] Heavy dashboard client modules are route-split with `next/dynamic`
+Reason: Charting, command palette, and module-heavy clients were inflating initial route payloads; dynamic imports keep inactive module code off the critical path without API or behavior changes.
+
+## [2026-03-14] React Query defaults standardized for dashboard workloads
+Reason: Fleet operations screens are read-heavy but tolerant of minute-level staleness; 60s stale time + limited retries reduce network churn and UI thrash while preserving responsiveness.

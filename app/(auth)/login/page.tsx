@@ -48,6 +48,18 @@ function getErrorText(error: string | null): string | null {
     return "Email confirmation failed. Please try again.";
   }
 
+  if (error === "auth_unavailable") {
+    return "Authentication service is temporarily unavailable. Please try again.";
+  }
+
+  if (error === "session_unavailable") {
+    return "Your session could not be verified. Please sign in again.";
+  }
+
+  if (error === "session_terminate_failed") {
+    return "Sign-out did not complete cleanly. Please try again.";
+  }
+
   return null;
 }
 

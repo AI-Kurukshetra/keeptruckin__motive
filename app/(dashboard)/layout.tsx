@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 import { logoutAction } from "@/app/actions/auth";
 import { SidebarNav, type SidebarNavItem } from "@/components/dashboard/sidebar-nav";
-import { DashboardToolbar } from "@/components/dashboard/dashboard-toolbar";
+
+const DashboardToolbar = dynamic(
+  () => import("@/components/dashboard/dashboard-toolbar").then((module) => module.DashboardToolbar),
+  {
+    ssr: false,
+    loading: () => <div className="h-9 flex-1 rounded-md bg-muted/70" />,
+  }
+);
 
 export const metadata: Metadata = {
   title: "Dashboard",

@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { Route } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api/fetcher";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ import {
 } from "@/components/ui/table";
 import { TripStatusBadge } from "@/components/dashboard/status-badge";
 import { TableEmptyRow, TableLoadingRows } from "@/components/dashboard/table-states";
+import { EmptyState } from "@/components/dashboard/empty-state";
 
 type Trip = { id: string; origin: string | null; destination: string | null; status: "planned" | "in_progress" | "completed" | "cancelled" };
 type Driver = { id: string; first_name: string; last_name: string };
@@ -23,6 +25,7 @@ type Vehicle = { id: string; unit_number: string };
 
 export function TripsClient({ companyId, initialSearch = "" }: { companyId: string; initialSearch?: string }) {
   const queryClient = useQueryClient();
+  const formRef = useRef<HTMLFormElement | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const tripsQuery = useQuery({ queryKey: ["trips", companyId], queryFn: () => apiFetch<Trip[]>(`/api/trips?companyId=${companyId}`) });
@@ -54,13 +57,16 @@ export function TripsClient({ companyId, initialSearch = "" }: { companyId: stri
         trip.status.toLowerCase().includes(query)
       );
     });
-  }, [query, tripsQuery.data]);
+  }, [tripsQuery.data, query]);
+
+  const showEmptyState = !tripsQuery.isLoading && (tripsQuery.data ?? []).length === 0;
 
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="transition-colors hover:border-primary/40">
         <CardContent className="pt-6">
           <form
+            ref={formRef}
             className="grid gap-3 md:grid-cols-5"
             onSubmit={(event) => {
               event.preventDefault();
@@ -95,39 +101,47 @@ export function TripsClient({ companyId, initialSearch = "" }: { companyId: stri
 
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
-      <Card>
-        <CardContent className="pt-6">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Origin</TableHead>
-                <TableHead>Destination</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {tripsQuery.isLoading ? <TableLoadingRows columns={3} /> : null}
-              {!tripsQuery.isLoading && trips.length === 0 ? (
-                <TableEmptyRow
-                  columns={3}
-                  message={query ? "No trips match your search." : "No trips yet. Create a trip assignment above."}
-                />
-              ) : null}
-              {trips.map((trip) => (
-                <TableRow key={trip.id}>
-                  <TableCell className="font-medium">{trip.origin ?? "-"}</TableCell>
-                  <TableCell>{trip.destination ?? "-"}</TableCell>
-                  <TableCell>
-                    <TripStatusBadge status={trip.status} />
-                  </TableCell>
+      {showEmptyState ? (
+        <EmptyState
+          icon={Route}
+          title="No trips created"
+          description="Create a first route assignment to monitor trip progress and on-road activity."
+          actionLabel="Create first trip"
+          onAction={() => formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}
+        />
+      ) : (
+        <Card className="transition-colors hover:border-primary/20">
+          <CardContent className="pt-6">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Origin</TableHead>
+                  <TableHead>Destination</TableHead>
+                  <TableHead>Status</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+              </TableHeader>
+              <TableBody>
+                {tripsQuery.isLoading ? <TableLoadingRows columns={3} /> : null}
+                {!tripsQuery.isLoading && trips.length === 0 ? (
+                  <TableEmptyRow
+                    columns={3}
+                    message={query ? "No trips match your search." : "No trips available."}
+                  />
+                ) : null}
+                {trips.map((trip) => (
+                  <TableRow key={trip.id} className="transition-colors hover:bg-muted/30">
+                    <TableCell className="font-medium">{trip.origin ?? "-"}</TableCell>
+                    <TableCell>{trip.destination ?? "-"}</TableCell>
+                    <TableCell>
+                      <TripStatusBadge status={trip.status} />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
-
-

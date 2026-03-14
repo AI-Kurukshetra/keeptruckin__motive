@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { getPrimaryMembership } from "@/lib/supabase/company";
 import { NoCompanyNotice } from "@/components/dashboard/no-company-notice";
 import { PageHeader } from "@/components/dashboard/page-header";
-import { SafetyClient } from "./_components/safety-client";
+import { ModulePageSkeleton } from "@/components/dashboard/page-skeleton";
+
+const SafetyClient = dynamic(
+  () => import("./_components/safety-client").then((module) => module.SafetyClient),
+  { ssr: false, loading: () => <ModulePageSkeleton /> }
+);
 
 export const metadata: Metadata = {
   title: "Safety",
@@ -19,4 +25,3 @@ export default async function SafetyPage() {
     </div>
   );
 }
-

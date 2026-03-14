@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import type { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -54,7 +55,7 @@ function isActivePath(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function SidebarNav({
+export const SidebarNav = memo(function SidebarNav({
   items,
   compact = false,
 }: {
@@ -93,4 +94,4 @@ export function SidebarNav({
       })}
     </nav>
   );
-}
+});

@@ -1,7 +1,8 @@
+import { memo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TableCell, TableRow } from "@/components/ui/table";
 
-export function TableLoadingRows({ columns, rows = 4 }: { columns: number; rows?: number }) {
+export const TableLoadingRows = memo(function TableLoadingRows({ columns, rows = 4 }: { columns: number; rows?: number }) {
   return (
     <>
       {Array.from({ length: rows }).map((_, rowIndex) => (
@@ -15,9 +16,9 @@ export function TableLoadingRows({ columns, rows = 4 }: { columns: number; rows?
       ))}
     </>
   );
-}
+});
 
-export function TableEmptyRow({ columns, message }: { columns: number; message: string }) {
+export const TableEmptyRow = memo(function TableEmptyRow({ columns, message }: { columns: number; message: string }) {
   return (
     <TableRow>
       <TableCell colSpan={columns} className="h-24 text-center text-sm text-muted-foreground">
@@ -25,4 +26,4 @@ export function TableEmptyRow({ columns, message }: { columns: number; message: 
       </TableCell>
     </TableRow>
   );
-}
+});

@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { getPrimaryMembership } from "@/lib/supabase/company";
 import { NoCompanyNotice } from "@/components/dashboard/no-company-notice";
 import { PageHeader } from "@/components/dashboard/page-header";
-import { AlertsClient } from "./_components/alerts-client";
+import { ModulePageSkeleton } from "@/components/dashboard/page-skeleton";
+
+const AlertsClient = dynamic(
+  () => import("./_components/alerts-client").then((module) => module.AlertsClient),
+  { ssr: false, loading: () => <ModulePageSkeleton /> }
+);
 
 export const metadata: Metadata = {
   title: "Alerts",
@@ -19,4 +25,3 @@ export default async function AlertsPage() {
     </div>
   );
 }
-

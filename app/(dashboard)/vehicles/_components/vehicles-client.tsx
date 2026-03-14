@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { Truck } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api/fetcher";
 import { Button } from "@/components/ui/button";
@@ -16,11 +17,13 @@ import {
 } from "@/components/ui/table";
 import { VehicleStatusBadge } from "@/components/dashboard/status-badge";
 import { TableEmptyRow, TableLoadingRows } from "@/components/dashboard/table-states";
+import { EmptyState } from "@/components/dashboard/empty-state";
 
 type Vehicle = { id: string; vin: string; unit_number: string; status: string };
 
 export function VehiclesClient({ companyId, initialSearch = "" }: { companyId: string; initialSearch?: string }) {
   const queryClient = useQueryClient();
+  const formRef = useRef<HTMLFormElement | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const vehiclesQuery = useQuery({
@@ -56,13 +59,16 @@ export function VehiclesClient({ companyId, initialSearch = "" }: { companyId: s
         vehicle.status.toLowerCase().includes(query)
       );
     });
-  }, [query, vehiclesQuery.data]);
+  }, [vehiclesQuery.data, query]);
+
+  const showEmptyState = !vehiclesQuery.isLoading && (vehiclesQuery.data ?? []).length === 0;
 
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="transition-colors hover:border-primary/40">
         <CardContent className="pt-6">
           <form
+            ref={formRef}
             className="grid gap-3 md:grid-cols-3"
             onSubmit={(event) => {
               event.preventDefault();
@@ -83,39 +89,47 @@ export function VehiclesClient({ companyId, initialSearch = "" }: { companyId: s
 
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
-      <Card>
-        <CardContent className="pt-6">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Unit</TableHead>
-                <TableHead>VIN</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {vehiclesQuery.isLoading ? <TableLoadingRows columns={3} /> : null}
-              {!vehiclesQuery.isLoading && vehicles.length === 0 ? (
-                <TableEmptyRow
-                  columns={3}
-                  message={query ? "No vehicles match your search." : "No vehicles yet. Add a vehicle to build your fleet."}
-                />
-              ) : null}
-              {vehicles.map((vehicle) => (
-                <TableRow key={vehicle.id}>
-                  <TableCell className="font-medium">{vehicle.unit_number}</TableCell>
-                  <TableCell>{vehicle.vin}</TableCell>
-                  <TableCell>
-                    <VehicleStatusBadge status={vehicle.status} />
-                  </TableCell>
+      {showEmptyState ? (
+        <EmptyState
+          icon={Truck}
+          title="No vehicles in fleet"
+          description="Add your first vehicle to start route planning and maintenance scheduling."
+          actionLabel="Add first vehicle"
+          onAction={() => formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}
+        />
+      ) : (
+        <Card className="transition-colors hover:border-primary/20">
+          <CardContent className="pt-6">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Unit</TableHead>
+                  <TableHead>VIN</TableHead>
+                  <TableHead>Status</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+              </TableHeader>
+              <TableBody>
+                {vehiclesQuery.isLoading ? <TableLoadingRows columns={3} /> : null}
+                {!vehiclesQuery.isLoading && vehicles.length === 0 ? (
+                  <TableEmptyRow
+                    columns={3}
+                    message={query ? "No vehicles match your search." : "No vehicles available."}
+                  />
+                ) : null}
+                {vehicles.map((vehicle) => (
+                  <TableRow key={vehicle.id} className="transition-colors hover:bg-muted/30">
+                    <TableCell className="font-medium">{vehicle.unit_number}</TableCell>
+                    <TableCell>{vehicle.vin}</TableCell>
+                    <TableCell>
+                      <VehicleStatusBadge status={vehicle.status} />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
-
-

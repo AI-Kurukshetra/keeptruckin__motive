@@ -76,3 +76,11 @@
 
 
 
+
+## Phase 6 - Performance + UI Polish
+- [x] Bundle optimization for dashboard shell and feature modules with `next/dynamic` (2026-03-14 18:05)
+- [x] React Query default tuning (`staleTime`, `gcTime`, `retry`, `refetchOnWindowFocus`) (2026-03-14 18:05)
+- [x] Render optimization for repeated dashboard primitives (`React.memo` on table/side-nav components) (2026-03-14 18:05)
+- [x] Add dashboard/global loading skeletons and route-level loading fallback (2026-03-14 18:05)
+- [x] Improve drivers/vehicles/trips/alerts empty states with actionable CTA affordances (2026-03-14 18:05)
+- [x] UI consistency polish for page headers, badges, card hover states, and spacing hierarchy (2026-03-14 18:05)

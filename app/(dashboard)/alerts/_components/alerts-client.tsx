@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { Bell } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api/fetcher";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ import {
 } from "@/components/ui/table";
 import { AlertSeverityBadge, AlertStatusBadge } from "@/components/dashboard/status-badge";
 import { TableEmptyRow, TableLoadingRows } from "@/components/dashboard/table-states";
+import { EmptyState } from "@/components/dashboard/empty-state";
 
 type Alert = {
   id: string;
@@ -28,6 +30,7 @@ type Alert = {
 
 export function AlertsClient({ companyId }: { companyId: string }) {
   const queryClient = useQueryClient();
+  const titleInputRef = useRef<HTMLInputElement | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<"all" | Alert["status"]>("all");
   const [severityFilter, setSeverityFilter] = useState<"all" | Alert["severity"]>("all");
@@ -59,7 +62,9 @@ export function AlertsClient({ companyId }: { companyId: string }) {
   });
 
   const filteredAlerts = useMemo(() => {
-    return (alertsQuery.data ?? []).filter((alert) => {
+    const records = alertsQuery.data ?? [];
+
+    return records.filter((alert) => {
       if (statusFilter !== "all" && alert.status !== statusFilter) return false;
       if (severityFilter !== "all" && alert.severity !== severityFilter) return false;
       if (search.trim() && !alert.title.toLowerCase().includes(search.toLowerCase())) return false;
@@ -67,9 +72,11 @@ export function AlertsClient({ companyId }: { companyId: string }) {
     });
   }, [alertsQuery.data, search, severityFilter, statusFilter]);
 
+  const showEmptyState = !alertsQuery.isLoading && (alertsQuery.data ?? []).length === 0;
+
   return (
-    <div className="space-y-4">
-      <Card>
+    <div className="space-y-6">
+      <Card className="transition-colors hover:border-primary/40">
         <CardContent className="pt-6">
           <form
             className="grid gap-3 md:grid-cols-4"
@@ -84,7 +91,7 @@ export function AlertsClient({ companyId }: { companyId: string }) {
               event.currentTarget.reset();
             }}
           >
-            <Input name="title" placeholder="Alert title" required />
+            <Input ref={titleInputRef} name="title" placeholder="Alert title" required />
             <Input name="alertType" placeholder="Type (e.g. compliance)" required />
             <select
               name="severity"
@@ -101,7 +108,7 @@ export function AlertsClient({ companyId }: { companyId: string }) {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="transition-colors hover:border-primary/20">
         <CardContent className="grid gap-3 pt-6 md:grid-cols-3">
           <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search alert title" />
           <select
@@ -130,61 +137,69 @@ export function AlertsClient({ companyId }: { companyId: string }) {
 
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
-      <Card>
-        <CardContent className="pt-6">
-          <Table data-testid="alerts-table">
-            <TableHeader>
-              <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Severity</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Triggered</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {alertsQuery.isLoading ? <TableLoadingRows columns={6} /> : null}
-              {!alertsQuery.isLoading && filteredAlerts.length === 0 ? (
-                <TableEmptyRow columns={6} message="No alerts match the current filters." />
-              ) : null}
-              {filteredAlerts.map((alert) => (
-                <TableRow key={alert.id}>
-                  <TableCell className="max-w-[260px] truncate font-medium">{alert.title}</TableCell>
-                  <TableCell>{alert.alert_type}</TableCell>
-                  <TableCell><AlertSeverityBadge severity={alert.severity} /></TableCell>
-                  <TableCell><AlertStatusBadge status={alert.status} /></TableCell>
-                  <TableCell>{new Date(alert.triggered_at).toLocaleString()}</TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => statusMutation.mutate({ id: alert.id, status: "acknowledged" })}
-                        disabled={statusMutation.isPending || alert.status !== "open"}
-                      >
-                        Ack
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => statusMutation.mutate({ id: alert.id, status: "resolved" })}
-                        disabled={statusMutation.isPending || alert.status === "resolved"}
-                      >
-                        Resolve
-                      </Button>
-                    </div>
-                  </TableCell>
+      {showEmptyState ? (
+        <EmptyState
+          icon={Bell}
+          title="No alerts yet"
+          description="Create an alert to track compliance, safety, or maintenance exceptions."
+          actionLabel="Create first alert"
+          onAction={() => titleInputRef.current?.focus()}
+        />
+      ) : (
+        <Card className="transition-colors hover:border-primary/20">
+          <CardContent className="pt-6">
+            <Table data-testid="alerts-table">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Title</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Severity</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Triggered</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+              </TableHeader>
+              <TableBody>
+                {alertsQuery.isLoading ? <TableLoadingRows columns={6} /> : null}
+                {!alertsQuery.isLoading && filteredAlerts.length === 0 ? (
+                  <TableEmptyRow columns={6} message="No alerts match the current filters." />
+                ) : null}
+                {filteredAlerts.map((alert) => (
+                  <TableRow key={alert.id} className="transition-colors hover:bg-muted/30">
+                    <TableCell className="max-w-[260px] truncate font-medium">{alert.title}</TableCell>
+                    <TableCell>{alert.alert_type}</TableCell>
+                    <TableCell><AlertSeverityBadge severity={alert.severity} /></TableCell>
+                    <TableCell><AlertStatusBadge status={alert.status} /></TableCell>
+                    <TableCell>{new Date(alert.triggered_at).toLocaleString()}</TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => statusMutation.mutate({ id: alert.id, status: "acknowledged" })}
+                          disabled={statusMutation.isPending || alert.status !== "open"}
+                        >
+                          Ack
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => statusMutation.mutate({ id: alert.id, status: "resolved" })}
+                          disabled={statusMutation.isPending || alert.status === "resolved"}
+                        >
+                          Resolve
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
-
-

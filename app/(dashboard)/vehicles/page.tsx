@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { getPrimaryMembership } from "@/lib/supabase/company";
 import { NoCompanyNotice } from "@/components/dashboard/no-company-notice";
 import { PageHeader } from "@/components/dashboard/page-header";
-import { VehiclesClient } from "./_components/vehicles-client";
+import { ModulePageSkeleton } from "@/components/dashboard/page-skeleton";
+
+const VehiclesClient = dynamic(
+  () => import("./_components/vehicles-client").then((module) => module.VehiclesClient),
+  { ssr: false, loading: () => <ModulePageSkeleton /> }
+);
 
 export const metadata: Metadata = {
   title: "Vehicles",
