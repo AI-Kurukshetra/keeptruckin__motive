@@ -25,7 +25,7 @@ import { Separator } from "@/components/ui/separator";
 const navLinks = [
   { label: "Features", href: "#features" },
   { label: "Product", href: "#product" },
-  { label: "Tech Stack", href: "#stack" },
+  { label: "Platform", href: "#platform" },
 ] as const;
 
 const previewCards = [
@@ -120,7 +120,12 @@ const workflow = [
   { label: "Insights", icon: BrainCircuit },
 ] as const;
 
-const stack = ["Next.js", "Supabase", "Tailwind", "shadcn/ui", "React Query", "Playwright"] as const;
+const enterprisePlatform = [
+  "Multi-tenant fleet architecture",
+  "Role-based access control",
+  "Real-time fleet intelligence",
+  "Compliance and safety monitoring",
+] as const;
 
 function NavButton({ href, label }: { href: string; label: string }) {
   return (
@@ -143,7 +148,7 @@ function CtaLink({ href, label, variant = "default" }: { href: Route; label: str
 
 export function LandingPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-gradient-to-b from-white to-slate-50 text-foreground">
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[460px] bg-[radial-gradient(circle_at_top,#3b82f633,transparent_60%)]" />
 
       <header className="sticky top-0 z-20 border-b bg-background/80 backdrop-blur">
@@ -165,15 +170,15 @@ export function LandingPage() {
             <Link href="/login">
               <Button variant="ghost" size="sm">Login</Button>
             </Link>
-            <Link href="/dashboard">
-              <Button size="sm">Start Demo</Button>
+            <Link href="/register">
+              <Button size="sm">Get Started</Button>
             </Link>
           </div>
         </div>
       </header>
 
       <main className="mx-auto w-full max-w-7xl space-y-20 px-4 pb-20 pt-12 md:px-6 md:pt-16">
-        <section className="relative overflow-hidden rounded-3xl border bg-gradient-to-b from-primary/10 via-background to-background p-8 md:p-12">
+        <section className="relative overflow-hidden rounded-xl border bg-gradient-to-b from-white to-slate-50 p-8 shadow-sm transition-all duration-200 hover:shadow-lg md:p-12">
           <Badge variant="secondary" className="mb-4">Logistics AI Platform</Badge>
           <h1 className="max-w-4xl text-4xl font-semibold tracking-tight md:text-6xl">
             AI-Powered Fleet Intelligence for Modern Logistics
@@ -182,22 +187,34 @@ export function LandingPage() {
             Turn fleet operations into a measurable growth engine with real-time visibility, predictive maintenance,
             and compliance-first decision support across every trip.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <CtaLink href="/dashboard" label="Start Demo" />
-            <CtaLink href="/dashboard" label="View Dashboard" variant="outline" />
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <CtaLink href="/register" label="Get Started" />
+            <CtaLink href="/login" label="Login" variant="outline" />
           </div>
-          <div className="mt-10 grid gap-3 sm:grid-cols-3">
-            <Card className="transition hover:-translate-y-0.5 hover:shadow-md">
-              <CardHeader className="pb-2"><CardTitle className="text-sm">Live Fleet Ops</CardTitle></CardHeader>
-              <CardContent><p className="text-2xl font-semibold">24/7</p></CardContent>
+          <div className="mt-10 grid gap-3 md:grid-cols-3">
+            <Card className="rounded-xl shadow-sm transition-all duration-200 hover:shadow-lg">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">Fleet Visibility</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">Real-time operational awareness</p>
+              </CardContent>
             </Card>
-            <Card className="transition hover:-translate-y-0.5 hover:shadow-md">
-              <CardHeader className="pb-2"><CardTitle className="text-sm">Data Confidence</CardTitle></CardHeader>
-              <CardContent><p className="text-2xl font-semibold">107/100</p></CardContent>
+            <Card className="rounded-xl shadow-sm transition-all duration-200 hover:shadow-lg">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">Operational Intelligence</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">AI-assisted analytics</p>
+              </CardContent>
             </Card>
-            <Card className="transition hover:-translate-y-0.5 hover:shadow-md">
-              <CardHeader className="pb-2"><CardTitle className="text-sm">Demo Ready</CardTitle></CardHeader>
-              <CardContent><p className="text-2xl font-semibold">Instant</p></CardContent>
+            <Card className="rounded-xl shadow-sm transition-all duration-200 hover:shadow-lg">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">Compliance Ready</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">Safety-first platform architecture</p>
+              </CardContent>
             </Card>
           </div>
         </section>
@@ -211,7 +228,7 @@ export function LandingPage() {
             {previewCards.map((card) => {
               const Icon = card.icon;
               return (
-                <Card key={card.title} className="group transition hover:-translate-y-1 hover:shadow-lg">
+                <Card key={card.title} className="group rounded-xl shadow-sm transition-all duration-200 hover:shadow-lg">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-lg">
                       <Icon className="size-5 text-primary transition group-hover:scale-110" />
@@ -236,7 +253,7 @@ export function LandingPage() {
             {features.map((feature) => {
               const Icon = feature.icon;
               return (
-                <Card key={feature.title} className="transition hover:border-primary/40 hover:shadow-md">
+                <Card key={feature.title} className="rounded-xl shadow-sm transition-all duration-200 hover:shadow-lg">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-base">
                       <Icon className="size-5 text-primary" />
@@ -257,7 +274,7 @@ export function LandingPage() {
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             {intelligenceCards.map((card) => (
-              <Card key={card.title} className="relative overflow-hidden">
+              <Card key={card.title} className="relative overflow-hidden rounded-xl shadow-sm transition-all duration-200 hover:shadow-lg">
                 <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary/40 to-primary" />
                 <CardHeader>
                   <CardTitle className="text-lg">{card.title}</CardTitle>
@@ -281,7 +298,7 @@ export function LandingPage() {
               const Icon = node.icon;
               return (
                 <div key={node.label} className="flex items-center gap-2">
-                  <Card className="w-full">
+                  <Card className="w-full rounded-xl shadow-sm transition-all duration-200 hover:shadow-lg">
                     <CardContent className="flex items-center gap-2 p-4">
                       <Icon className="size-4 text-primary" />
                       <span className="text-sm font-medium">{node.label}</span>
@@ -294,29 +311,20 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section id="stack" className="space-y-6">
+        <section id="platform" className="space-y-6">
           <div>
-            <h2 className="text-3xl font-semibold tracking-tight">Technology Stack</h2>
-            <p className="mt-2 text-muted-foreground">Production-grade tooling powering the demo platform.</p>
+            <h2 className="text-3xl font-semibold tracking-tight">Enterprise Platform</h2>
+            <p className="mt-2 text-muted-foreground">Built for secure, scalable fleet operations.</p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {stack.map((item) => (
-              <Badge key={item} variant="outline" className="rounded-full px-3 py-1 text-sm">
-                {item}
-              </Badge>
-            ))}
-          </div>
-        </section>
-
-        <section className="rounded-2xl border bg-muted/30 p-6 md:p-8">
-          <h3 className="text-xl font-semibold">Demo Access</h3>
-          <p className="mt-2 text-sm text-muted-foreground">Use this account to experience the platform immediately.</p>
-          <div className="mt-4 grid gap-2 text-sm">
-            <div><span className="font-medium">Email:</span> demo@atlasfleet.com</div>
-            <div><span className="font-medium">Password:</span> Demo123!</div>
-          </div>
-          <div className="mt-6">
-            <CtaLink href="/login" label="Open Demo Login" />
+          <div className="rounded-xl border bg-gradient-to-b from-white to-slate-50 p-6 shadow-sm transition-all duration-200 hover:shadow-lg">
+            <ul className="space-y-3 text-sm text-muted-foreground">
+              {enterprisePlatform.map((item) => (
+                <li key={item} className="flex items-start gap-2">
+                  <span className="mt-1 size-2 rounded-full bg-primary" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
       </main>
@@ -327,7 +335,7 @@ export function LandingPage() {
           <div className="flex flex-wrap items-center gap-4">
             <a href="#product" className="hover:text-foreground">Product</a>
             <a href="#features" className="hover:text-foreground">Features</a>
-            <a href="#stack" className="hover:text-foreground">Tech stack</a>
+            <a href="#platform" className="hover:text-foreground">Platform</a>
             <a href="https://github.com/AI-Kurukshetra/keeptruckin__motive" target="_blank" rel="noreferrer" className="hover:text-foreground">
               GitHub
             </a>
@@ -338,4 +346,3 @@ export function LandingPage() {
     </div>
   );
 }
-

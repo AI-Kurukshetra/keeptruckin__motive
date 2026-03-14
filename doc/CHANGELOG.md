@@ -103,3 +103,5 @@
 - Updated safety collection route error responses to return concrete database error messages instead of generic text.
 - Applied vehicles.name display fallback (name ?? unit_number) in vehicle selectors/labels across operational UIs to support schema-variant environments without migration changes.
 - Validation: pnpm typecheck and pnpm lint pass.
+
+- Productionized marketing homepage in components/landing/landing-page.tsx: removed Demo Access section/credentials, replaced all Start Demo CTAs with Get Started, changed hero CTAs to Get Started + Login, removed Technology Stack section, added Enterprise Platform section with required bullets, updated hero metric cards, and applied consistent gradient/rounded/shadow/transition styling with mobile-first stacking.

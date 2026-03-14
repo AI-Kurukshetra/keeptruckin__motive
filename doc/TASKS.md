@@ -95,3 +95,6 @@
 
 
 - [x] Recovery patch: complete edit/delete CRUD UI for trips, maintenance, inspections, ELD, and safety with API support + DB error surfacing (2026-03-14 19:43)
+
+## Phase 8 - Marketing Homepage Production Readiness
+- [x] Remove demo artifacts, simplify CTAs, replace stack section with Enterprise Platform, refresh hero metrics, and apply responsive visual polish on landing page (2026-03-14 22:11)

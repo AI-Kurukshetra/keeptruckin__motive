@@ -86,3 +86,6 @@ Reason: Demo users need reliable edit flows on operational entities, while `driv
 Reason: Mixed environments may lack `vehicles.name`; API now safely falls back on undefined-column behavior and UI consistently renders `vehicle.name ?? vehicle.unit_number` to avoid breaking deployments while preserving data model stability.
 
 
+
+## [2026-03-14] Marketing homepage CTA strategy removes demo-entry framing
+Reason: Production positioning requires conversion-oriented navigation (/register + /login) and removal of exposed demo credentials while keeping backend/auth flows unchanged.
