@@ -66,3 +66,6 @@
 - Fixed Vercel deploy blocker: updated `middleware.ts` to use relative import for `updateSession` to satisfy Edge function bundling on Vercel.
 - Fixed production 500 (MIDDLEWARE_INVOCATION_FAILED): hardened `lib/supabase/middleware.ts` to fail-open when env/auth session access fails and configured required Vercel production environment variables for Supabase.
 - Added `vercel.json` to force Next.js framework/build commands for Vercel Git deployments, resolving production NOT_FOUND on app routes.
+- Enhanced `supabase/seed/seed.ts` to provision role-based QA users and `company_members` mappings for Atlas Freight Logistics, enabling immediate multi-role login testing.
+- Stabilized `middleware.ts` for Vercel Edge: added env-variable bypass, wrapped session update in try/catch fallback, and restored broad route matcher without crashing requests.
+- Added robust full-suite QA runner `output/playwright/full-qa-prod-demo.js` and generated required artifacts at `output/qa-report.json` and `output/qa-screenshots/`.

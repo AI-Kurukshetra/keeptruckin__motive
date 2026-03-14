@@ -1,26 +1,26 @@
-import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+import { updateSession } from "./lib/supabase/middleware";
 
-export async function middleware(req: NextRequest) {
+export async function middleware(request: NextRequest) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  // Bypass middleware safely when env is missing in Edge runtime.
+  if (!supabaseUrl || !supabaseAnon) {
+    return NextResponse.next({ request });
+  }
+
   try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-    // If env variables are missing in Vercel edge runtime,
-    // just continue instead of crashing
-    if (!supabaseUrl || !supabaseAnon) {
-      return NextResponse.next();
-    }
-
-    return NextResponse.next();
+    return await updateSession(request);
   } catch (err) {
     console.error("Middleware error:", err);
-
-    // Prevent edge crash
-    return NextResponse.next();
+    return NextResponse.next({ request });
   }
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+  ],
 };

@@ -210,6 +210,16 @@ const ALERT_TEMPLATES = [
   },
 ] as const;
 
+const ROLE_USERS = [
+  { role: "owner", email: "owner.atlas@example.com", password: "Password123!" },
+  { role: "admin", email: "admin.atlas@example.com", password: "Password123!" },
+  { role: "dispatcher", email: "dispatcher.atlas@example.com", password: "Password123!" },
+  { role: "driver", email: "driver.atlas@example.com", password: "Password123!" },
+  { role: "viewer", email: "viewer.atlas@example.com", password: "Password123!" },
+] as const;
+
+type RoleUser = (typeof ROLE_USERS)[number];
+
 function loadDotEnvFile(filePath: string) {
   if (!fs.existsSync(filePath)) {
     return;
@@ -307,6 +317,73 @@ async function seed() {
 
   const companyId = company.id;
 
+  const { data: usersPage, error: usersError } = await supabase.auth.admin.listUsers({
+    page: 1,
+    perPage: 1000,
+  });
+
+  if (usersError) {
+    throw new Error(`Auth users list failed: ${usersError.message}`);
+  }
+
+  const authUserIdByRole = new Map<RoleUser["role"], string>();
+
+  for (const roleUser of ROLE_USERS) {
+    const existing = usersPage.users.find(
+      (user) => (user.email ?? "").toLowerCase() === roleUser.email.toLowerCase()
+    );
+
+    if (existing) {
+      const { error: updateError } = await supabase.auth.admin.updateUserById(existing.id, {
+        password: roleUser.password,
+        email_confirm: true,
+      });
+      if (updateError) {
+        throw new Error(`Auth user update failed (${roleUser.email}): ${updateError.message}`);
+      }
+      authUserIdByRole.set(roleUser.role, existing.id);
+      continue;
+    }
+
+    const { data: created, error: createError } = await supabase.auth.admin.createUser({
+      email: roleUser.email,
+      password: roleUser.password,
+      email_confirm: true,
+    });
+
+    if (createError || !created.user) {
+      throw new Error(
+        `Auth user create failed (${roleUser.email}): ${createError?.message ?? "unknown"}`
+      );
+    }
+
+    authUserIdByRole.set(roleUser.role, created.user.id);
+  }
+
+  const { error: membersError } = await supabase.from("company_members").upsert(
+    ROLE_USERS.map((roleUser) => ({
+      company_id: companyId,
+      user_id: authUserIdByRole.get(roleUser.role)!,
+      role: roleUser.role,
+    })),
+    { onConflict: "company_id,user_id" }
+  );
+
+  if (membersError) {
+    throw new Error(`Company members upsert failed: ${membersError.message}`);
+  }
+
+  const ownerUserId = authUserIdByRole.get("owner");
+  if (ownerUserId) {
+    const { error: companyOwnerError } = await supabase
+      .from("companies")
+      .update({ created_by: ownerUserId })
+      .eq("id", companyId);
+    if (companyOwnerError) {
+      throw new Error(`Company owner update failed: ${companyOwnerError.message}`);
+    }
+  }
+
   const { error: driversError } = await supabase.from("drivers").upsert(
     DRIVERS.map((driver) => ({
       company_id: companyId,
@@ -337,6 +414,19 @@ async function seed() {
   const driverByLicense = new Map(
     drivers.map((driver) => [driver.license_number, driver.id])
   );
+
+  const driverAuthUserId = authUserIdByRole.get("driver");
+  const seededDriverId = driverByLicense.get("TX-AF-30111");
+  if (driverAuthUserId && seededDriverId) {
+    const { error: driverAuthError } = await supabase
+      .from("drivers")
+      .update({ auth_user_id: driverAuthUserId })
+      .eq("id", seededDriverId);
+
+    if (driverAuthError) {
+      throw new Error(`Driver auth link failed: ${driverAuthError.message}`);
+    }
+  }
 
   const { error: vehiclesError } = await supabase.from("vehicles").upsert(
     VEHICLES.map((vehicle) => ({

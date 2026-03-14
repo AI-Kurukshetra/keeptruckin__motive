@@ -20,7 +20,7 @@
 - [x] Add indexes and constraints for compliance/safety reporting performance (2026-03-14 09:48)
 - [x] Document schema and RLS policies in `/doc/SCHEMA.md` (2026-03-14 10:46)
 - [x] Generate/update Supabase TS types in `types/supabase.ts` (2026-03-14 10:46)
-- [x] Add idempotent Supabase seed script for realistic fleet demo data (2026-03-14 14:37)
+- [x] Add idempotent Supabase seed script for realistic fleet demo data (2026-03-14 14:37)`r`n- [x] Seed role-based QA users and memberships for RBAC testing (2026-03-14 16:11)
 - [x] Fix seed upsert conflict targets to primary-key ids for company/driver/vehicle records (2026-03-14 14:42)
 
 ## Phase 2 - Auth and Access Control
@@ -55,12 +55,16 @@
 - [x] Modern SaaS dashboard UI refactor (sidebar, metric cards, shadcn tables, status badges, layout/spacing polish) (2026-03-14 12:31)
 - [x] Premium SaaS dashboard admin panel upgrade (Recharts charts, quick actions, recent activity timeline, refined responsive grid) (2026-03-14 12:38)
 - [x] Premium UX shell upgrade (Cmd/Ctrl+K command palette, global search, theme toggle, G shortcuts) (2026-03-14 12:43)
+- [x] Harden middleware against Edge runtime crashes with safe fallbacks (2026-03-14 16:44)
+- [x] Run full seeded Playwright QA and publish artifacts to /output (2026-03-14 16:44)
 
 ## Phase 5 - Testing and Release Hardening
 - [x] Unit tests for schema validators, API handlers, and key utilities (2026-03-14 11:31: expanded to vehicles/trips/alerts/safety + item-routes + request helper)
 - [x] E2E tests for auth and core fleet workflows (2026-03-14 11:26: specs added)
 - [x] Pre-commit checks (`pnpm lint`, `pnpm typecheck`, `pnpm test`) (`pnpm lint` + `pnpm typecheck` pass on 2026-03-14 12:07; Vitest execution skipped per accepted runtime blocker `spawn EPERM`)
 - [x] Final review and conventional commit (2026-03-14 12:07)
+
+
 
 
 

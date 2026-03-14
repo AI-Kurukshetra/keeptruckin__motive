@@ -1,0 +1,91 @@
+{
+  "startedAt": "2026-03-14T11:12:00.064Z",
+  "baseUrl": "https://keeptruckin-motive.vercel.app",
+  "credentialsUsed": {
+    "email": "owner.atlas@example.com"
+  },
+  "summary": {
+    "passed": 9,
+    "failed": 3
+  },
+  "passedTests": [
+    {
+      "name": "Authentication: login page renders",
+      "details": "status 200"
+    },
+    {
+      "name": "Authentication: register page renders",
+      "details": "status 200"
+    },
+    {
+      "name": "Dashboard loading: metrics, charts, activity feed",
+      "details": "charts=3"
+    },
+    {
+      "name": "Drivers list page works",
+      "details": "seeded driver visible"
+    },
+    {
+      "name": "Vehicles list page works",
+      "details": "seeded vehicle visible"
+    },
+    {
+      "name": "Trips list page works",
+      "details": "dropdowns d=9 v=7"
+    },
+    {
+      "name": "Alerts page renders table and badges",
+      "details": "badges=8"
+    },
+    {
+      "name": "Dark mode toggle works",
+      "details": "0->1"
+    },
+    {
+      "name": "Global search filtering works",
+      "details": "search OK"
+    }
+  ],
+  "failedTests": [
+    {
+      "name": "Authentication: login with seeded owner",
+      "details": "expected redirect to /dashboard, got https://keeptruckin-motive.vercel.app/dashboard"
+    },
+    {
+      "name": "Navigation: command palette (Cmd/Ctrl+K)",
+      "details": "expected /vehicles, got https://keeptruckin-motive.vercel.app/dashboard"
+    },
+    {
+      "name": "Navigation links render and route",
+      "details": "drivers nav failed"
+    }
+  ],
+  "consoleErrors": [],
+  "networkErrors": [
+    "GET https://keeptruckin-motive.vercel.app/login?_rsc=h5wy4 => net::ERR_ABORTED",
+    "POST https://keeptruckin-motive.vercel.app/login => net::ERR_ABORTED",
+    "GET https://keeptruckin-motive.vercel.app/inspections?_rsc=1qjny => net::ERR_ABORTED",
+    "GET https://keeptruckin-motive.vercel.app/vehicles?_rsc=7o0un => net::ERR_ABORTED",
+    "GET https://keeptruckin-motive.vercel.app/inspections?_rsc=tnttq => net::ERR_ABORTED",
+    "GET https://keeptruckin-motive.vercel.app/safety?_rsc=1dzw1 => net::ERR_ABORTED",
+    "GET https://keeptruckin-motive.vercel.app/eld?_rsc=1qjny => net::ERR_ABORTED",
+    "GET https://keeptruckin-motive.vercel.app/inspections?_rsc=1qjny => net::ERR_ABORTED",
+    "GET https://keeptruckin-motive.vercel.app/trips?_rsc=1qjny => net::ERR_ABORTED",
+    "GET https://keeptruckin-motive.vercel.app/drivers?search=John&_rsc=vdq33 => net::ERR_ABORTED",
+    "GET https://keeptruckin-motive.vercel.app/eld?_rsc=13l2z => net::ERR_ABORTED",
+    "GET https://keeptruckin-motive.vercel.app/maintenance?_rsc=13l2z => net::ERR_ABORTED",
+    "GET https://keeptruckin-motive.vercel.app/vehicles?search=101&_rsc=yy5ee => net::ERR_ABORTED",
+    "GET https://keeptruckin-motive.vercel.app/trips?search=Dallas&_rsc=10g3t => net::ERR_ABORTED",
+    "GET https://keeptruckin-motive.vercel.app/alerts?_rsc=1qjny => net::ERR_ABORTED"
+  ],
+  "screenshots": [
+    "D:\\MahaKurukshetra\\output\\qa-screenshots\\1773486755011-authentication-login-with-seeded-owner.png",
+    "D:\\MahaKurukshetra\\output\\qa-screenshots\\1773486758358-navigation-command-palette-cmd-ctrl-k.png",
+    "D:\\MahaKurukshetra\\output\\qa-screenshots\\1773486782571-navigation-links-render-and-route.png",
+    "D:\\MahaKurukshetra\\output\\qa-screenshots\\1773486782747-final-state.png"
+  ],
+  "recommendedFixes": [
+    "Review failed steps and attached screenshots for targeted fixes."
+  ],
+  "finishedAt": "2026-03-14T11:13:02.965Z"
+}
