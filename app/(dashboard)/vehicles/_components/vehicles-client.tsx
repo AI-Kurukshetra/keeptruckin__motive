@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import { Pencil, Trash2, Truck } from "lucide-react";
+import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { canDeleteVehicles, canEditVehicles, type CompanyRole } from "@/lib/permissions";
 import { apiFetch } from "@/lib/api/fetcher";
@@ -30,12 +31,11 @@ import { EmptyState } from "@/components/dashboard/empty-state";
 
 type Vehicle = { id: string; name?: string | null; vin: string; unit_number: string; status: string };
 
-type VehicleForm = { vehicleName?: string; vin: string; unitNumber: string; status?: string };
+type VehicleForm = { vehicleName?: string; vin?: string; unitNumber?: string; status?: string };
 
 export function VehiclesClient({ companyId, role, initialSearch = "" }: { companyId: string; role: CompanyRole; initialSearch?: string }) {
   const queryClient = useQueryClient();
   const formRef = useRef<HTMLFormElement | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null);
   const [deletingVehicle, setDeletingVehicle] = useState<Vehicle | null>(null);
 
@@ -55,10 +55,10 @@ export function VehiclesClient({ companyId, role, initialSearch = "" }: { compan
         body: JSON.stringify({ companyId, ...payload }),
       }),
     onSuccess: () => {
-      setError(null);
       queryClient.invalidateQueries({ queryKey: ["vehicles", companyId] });
+      toast.success("Vehicle created.");
     },
-    onError: (mutationError: Error) => setError(mutationError.message),
+    onError: (mutationError: Error) => toast.error(mutationError.message),
   });
 
   const updateMutation = useMutation({
@@ -68,11 +68,11 @@ export function VehiclesClient({ companyId, role, initialSearch = "" }: { compan
         body: JSON.stringify(payload.data),
       }),
     onSuccess: () => {
-      setError(null);
       setEditingVehicle(null);
       queryClient.invalidateQueries({ queryKey: ["vehicles", companyId] });
+      toast.success("Vehicle updated.");
     },
-    onError: (mutationError: Error) => setError(mutationError.message),
+    onError: (mutationError: Error) => toast.error(mutationError.message),
   });
 
   const deleteMutation = useMutation({
@@ -81,11 +81,25 @@ export function VehiclesClient({ companyId, role, initialSearch = "" }: { compan
         method: "DELETE",
       }),
     onSuccess: () => {
-      setError(null);
       setDeletingVehicle(null);
       queryClient.invalidateQueries({ queryKey: ["vehicles", companyId] });
+      toast.success("Vehicle deleted.");
     },
-    onError: (mutationError: Error) => setError(mutationError.message),
+    onError: (mutationError: Error) => toast.error(mutationError.message),
+  });
+
+  const deactivateMutation = useMutation({
+    mutationFn: (vehicle: Vehicle) =>
+      apiFetch<Vehicle>(`/api/vehicles/${vehicle.id}?companyId=${companyId}`, {
+        method: "PATCH",
+        body: JSON.stringify({ status: "inactive" }),
+      }),
+    onSuccess: () => {
+      setDeletingVehicle(null);
+      queryClient.invalidateQueries({ queryKey: ["vehicles", companyId] });
+      toast.success("Vehicle deactivated.");
+    },
+    onError: (mutationError: Error) => toast.error(mutationError.message),
   });
 
   const query = initialSearch.trim().toLowerCase();
@@ -140,8 +154,6 @@ export function VehiclesClient({ companyId, role, initialSearch = "" }: { compan
         </Card>
       ) : null}
 
-      {error ? <p className="text-sm text-destructive">{error}</p> : null}
-
       {showEmptyState ? (
         <EmptyState
           icon={Truck}
@@ -188,7 +200,7 @@ export function VehiclesClient({ companyId, role, initialSearch = "" }: { compan
                             </Button>
                           ) : null}
                           {canDelete ? (
-                            <Button variant="destructive" size="sm" className="hover:bg-red-600 hover:text-white" onClick={() => setDeletingVehicle(vehicle)}>
+                            <Button variant="destructive" size="sm" data-testid={`delete-vehicle-${vehicle.id}`} className="hover:bg-red-600 hover:text-white" onClick={() => setDeletingVehicle(vehicle)}>
                               <Trash2 className="size-3.5" /> Delete
                             </Button>
                           ) : null}
@@ -250,12 +262,25 @@ export function VehiclesClient({ companyId, role, initialSearch = "" }: { compan
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Delete Vehicle</DialogTitle>
-              <DialogDescription>Are you sure you want to delete this record?</DialogDescription>
+              <DialogDescription>If this vehicle is linked to trips, deletion is blocked. Use deactivate instead.</DialogDescription>
             </DialogHeader>
             <DialogFooter>
               <Button variant="outline" onClick={() => setDeletingVehicle(null)}>Cancel</Button>
               <Button
+                variant="secondary"
+                data-testid="deactivate-vehicle-button"
+                disabled={deactivateMutation.isPending}
+                onClick={() => {
+                  if (deletingVehicle) {
+                    deactivateMutation.mutate(deletingVehicle);
+                  }
+                }}
+              >
+                Deactivate Instead
+              </Button>
+              <Button
                 variant="destructive"
+                data-testid="confirm-delete-vehicle-button"
                 disabled={deleteMutation.isPending}
                 onClick={() => {
                   if (deletingVehicle) {

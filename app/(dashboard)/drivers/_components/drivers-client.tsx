@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import { Pencil, Trash2, UserPlus } from "lucide-react";
+import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { canDeleteDrivers, canEditDrivers, type CompanyRole } from "@/lib/permissions";
 import { apiFetch } from "@/lib/api/fetcher";
@@ -38,7 +39,6 @@ type Driver = {
 export function DriversClient({ companyId, role, initialSearch = "" }: { companyId: string; role: CompanyRole; initialSearch?: string }) {
   const queryClient = useQueryClient();
   const formRef = useRef<HTMLFormElement | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [editingDriver, setEditingDriver] = useState<Driver | null>(null);
   const [deletingDriver, setDeletingDriver] = useState<Driver | null>(null);
 
@@ -58,24 +58,24 @@ export function DriversClient({ companyId, role, initialSearch = "" }: { company
         body: JSON.stringify({ companyId, ...payload }),
       }),
     onSuccess: () => {
-      setError(null);
       queryClient.invalidateQueries({ queryKey: ["drivers", companyId] });
+      toast.success("Driver created.");
     },
-    onError: (mutationError: Error) => setError(mutationError.message),
+    onError: (mutationError: Error) => toast.error(mutationError.message),
   });
 
   const updateMutation = useMutation({
-    mutationFn: (payload: { id: string; firstName: string; lastName: string; licenseNumber: string; status: string }) =>
+    mutationFn: (payload: { id: string; firstName?: string; lastName?: string; licenseNumber?: string; status?: string }) =>
       apiFetch<Driver>(`/api/drivers/${payload.id}?companyId=${companyId}`, {
         method: "PATCH",
         body: JSON.stringify(payload),
       }),
     onSuccess: () => {
-      setError(null);
       setEditingDriver(null);
       queryClient.invalidateQueries({ queryKey: ["drivers", companyId] });
+      toast.success("Driver updated.");
     },
-    onError: (mutationError: Error) => setError(mutationError.message),
+    onError: (mutationError: Error) => toast.error(mutationError.message),
   });
 
   const deleteMutation = useMutation({
@@ -84,11 +84,25 @@ export function DriversClient({ companyId, role, initialSearch = "" }: { company
         method: "DELETE",
       }),
     onSuccess: () => {
-      setError(null);
       setDeletingDriver(null);
       queryClient.invalidateQueries({ queryKey: ["drivers", companyId] });
+      toast.success("Driver deleted.");
     },
-    onError: (mutationError: Error) => setError(mutationError.message),
+    onError: (mutationError: Error) => toast.error(mutationError.message),
+  });
+
+  const deactivateMutation = useMutation({
+    mutationFn: (driver: Driver) =>
+      apiFetch<Driver>(`/api/drivers/${driver.id}?companyId=${companyId}`, {
+        method: "PATCH",
+        body: JSON.stringify({ status: "inactive" }),
+      }),
+    onSuccess: () => {
+      setDeletingDriver(null);
+      queryClient.invalidateQueries({ queryKey: ["drivers", companyId] });
+      toast.success("Driver deactivated.");
+    },
+    onError: (mutationError: Error) => toast.error(mutationError.message),
   });
 
   const query = initialSearch.trim().toLowerCase();
@@ -139,8 +153,6 @@ export function DriversClient({ companyId, role, initialSearch = "" }: { company
         </Card>
       ) : null}
 
-      {error ? <p className="text-sm text-destructive">{error}</p> : null}
-
       {showEmptyState ? (
         <EmptyState
           icon={UserPlus}
@@ -183,7 +195,7 @@ export function DriversClient({ companyId, role, initialSearch = "" }: { company
                             </Button>
                           ) : null}
                           {canDelete ? (
-                            <Button variant="destructive" size="sm" className="hover:bg-red-600 hover:text-white" onClick={() => setDeletingDriver(driver)}>
+                            <Button variant="destructive" size="sm" data-testid={`delete-driver-${driver.id}`} className="hover:bg-red-600 hover:text-white" onClick={() => setDeletingDriver(driver)}>
                               <Trash2 className="size-3.5" /> Delete
                             </Button>
                           ) : null}
@@ -243,12 +255,25 @@ export function DriversClient({ companyId, role, initialSearch = "" }: { company
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Delete Driver</DialogTitle>
-              <DialogDescription>Are you sure you want to delete this record?</DialogDescription>
+              <DialogDescription>If this driver is linked to trips, deletion is blocked. Use deactivate instead.</DialogDescription>
             </DialogHeader>
             <DialogFooter>
               <Button variant="outline" onClick={() => setDeletingDriver(null)}>Cancel</Button>
               <Button
+                variant="secondary"
+                data-testid="deactivate-driver-button"
+                disabled={deactivateMutation.isPending}
+                onClick={() => {
+                  if (deletingDriver) {
+                    deactivateMutation.mutate(deletingDriver);
+                  }
+                }}
+              >
+                Deactivate Instead
+              </Button>
+              <Button
                 variant="destructive"
+                data-testid="confirm-delete-driver-button"
                 disabled={deleteMutation.isPending}
                 onClick={() => {
                   if (deletingDriver) {

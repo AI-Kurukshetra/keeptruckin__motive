@@ -131,3 +131,6 @@
 - Validation: `pnpm typecheck` and `pnpm lint` pass.
 - Dashboard UX enhancement pass: rebuilt overview console in app/(dashboard)/dashboard/_components/overview-client.tsx with Fleet Activity Timeline card, AI Fleet Insights card (derived from drivers/vehicles/trips/alerts/maintenance/safety data), Fleet System Status indicator, and richer color-coded fleet health indicators; preserved existing APIs/schema.
 - Added role badge display in dashboard header (app/(dashboard)/layout.tsx) for clear operator context without auth-flow changes.
+- Added safe-delete API guards in app/api/drivers/[id]/route.ts and app/api/vehicles/[id]/route.ts: checks for existing trips before delete and returns user-friendly 409 message instead of raw FK errors; deletes proceed when no references exist.
+- Added Playwright E2E spec tests/e2e/safe-delete-rbac.spec.ts covering: create referenced driver/vehicle + trip, blocked delete with friendly message, deactivate path, and successful delete for unreferenced entities.
+- Updated drivers/vehicles dashboard clients to use toast feedback (sonner) and added "Deactivate Instead" action in delete dialog to soft-deactivate via PATCH status=inactive.

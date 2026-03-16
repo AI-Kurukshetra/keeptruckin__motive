@@ -107,12 +107,30 @@ export async function DELETE(
   const role = await getCompanyRole(supabase, user.id, queryParsed.data.companyId);
   if (!role || !canDeleteDrivers(role)) return fail("Forbidden", 403);
 
+  const { data: referencedTrip, error: tripRefError } = await supabase
+    .from("trips")
+    .select("id")
+    .eq("company_id", queryParsed.data.companyId)
+    .eq("driver_id", parsedParams.data.id)
+    .limit(1)
+    .maybeSingle();
+
+  if (tripRefError) return fail(tripRefError.message, 500, tripRefError);
+
+  if (referencedTrip) {
+    return fail(
+      "Driver cannot be deleted because it is assigned to existing trips. Deactivate the driver instead.",
+      409,
+      { code: "HAS_REFERENCED_TRIPS" }
+    );
+  }
+
   const { error } = await supabase
     .from("drivers")
     .delete()
     .eq("id", parsedParams.data.id)
     .eq("company_id", queryParsed.data.companyId);
 
-  if (error) return fail(error.message, 500, error);
+  if (error) return fail("Failed to delete driver", 500, error);
   return ok({ id: parsedParams.data.id, deleted: true });
 }

@@ -129,6 +129,24 @@ export async function DELETE(
   const role = await getCompanyRole(supabase, user.id, queryParsed.data.companyId);
   if (!role || !canDeleteVehicles(role)) return fail("Forbidden", 403);
 
+  const { data: referencedTrip, error: tripRefError } = await supabase
+    .from("trips")
+    .select("id")
+    .eq("company_id", queryParsed.data.companyId)
+    .eq("vehicle_id", parsedParams.data.id)
+    .limit(1)
+    .maybeSingle();
+
+  if (tripRefError) return fail(tripRefError.message, 500, tripRefError);
+
+  if (referencedTrip) {
+    return fail(
+      "Vehicle cannot be deleted because it is assigned to existing trips. Deactivate the vehicle instead.",
+      409,
+      { code: "HAS_REFERENCED_TRIPS" }
+    );
+  }
+
   const { error } = await supabase
     .from("vehicles")
     .delete()

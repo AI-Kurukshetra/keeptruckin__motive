@@ -114,3 +114,5 @@
 - [x] Scope driver dashboard/API reads to own inspections/safety events in addition to own trips/drivers data (2026-03-16 11:28)
 - [x] Restrict overview quick actions by role while preserving read action entry points (2026-03-16 11:28)
 - [x] Enhance dashboard into enterprise operations console (activity timeline, AI insights, system status, role badge, colored health indicators) (2026-03-16 11:37)
+- [x] Add Playwright safe-delete RBAC test for referenced and unreferenced delete paths (2026-03-16 12:11)
+- [x] Add safe delete guard for drivers/vehicles with trip-reference checks + friendly blocked message + deactivate option (no schema changes) (2026-03-16 12:11)

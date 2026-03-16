@@ -110,3 +110,5 @@ Reason: Sidebar hiding alone does not prevent deep-link access. Adding role-awar
 Reason: Driver dashboard and API responses should reflect personal operational context only; company-wide aggregates for driver role are over-permissive for RBAC.
 ## [2026-03-16] Enterprise console enhancements are derived-only from existing operational datasets
 Reason: Requested dashboard uplift was implemented without schema changes by deriving timeline events, AI insights, system status, and health indicators from existing module query data to avoid backend risk in production.
+## [2026-03-16] Safe deletion uses pre-check + guided deactivation instead of relying on FK exceptions
+Reason: Prevents exposing raw database constraint errors to users, preserves referential integrity, and gives an explicit operational fallback (status=inactive) without schema changes.
