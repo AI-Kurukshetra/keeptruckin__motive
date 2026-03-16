@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState } from "react";
 import { Bell } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { canEditAlerts, type CompanyRole } from "@/lib/permissions";
 import { apiFetch } from "@/lib/api/fetcher";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -28,13 +29,15 @@ type Alert = {
   alert_type: string;
 };
 
-export function AlertsClient({ companyId }: { companyId: string }) {
+export function AlertsClient({ companyId, role }: { companyId: string; role: CompanyRole }) {
   const queryClient = useQueryClient();
   const titleInputRef = useRef<HTMLInputElement | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<"all" | Alert["status"]>("all");
   const [severityFilter, setSeverityFilter] = useState<"all" | Alert["severity"]>("all");
   const [search, setSearch] = useState("");
+
+  const canEdit = canEditAlerts(role);
 
   const alertsQuery = useQuery({
     queryKey: ["alerts", companyId],
@@ -76,37 +79,39 @@ export function AlertsClient({ companyId }: { companyId: string }) {
 
   return (
     <div className="space-y-6">
-      <Card className="transition-colors hover:border-primary/40">
-        <CardContent className="pt-6">
-          <form
-            className="grid gap-3 md:grid-cols-4"
-            onSubmit={(event) => {
-              event.preventDefault();
-              const formData = new FormData(event.currentTarget);
-              createMutation.mutate({
-                title: String(formData.get("title") ?? ""),
-                alertType: String(formData.get("alertType") ?? "system"),
-                severity: String(formData.get("severity") ?? "medium"),
-              });
-              event.currentTarget.reset();
-            }}
-          >
-            <Input ref={titleInputRef} name="title" placeholder="Alert title" required />
-            <Input name="alertType" placeholder="Type (e.g. compliance)" required />
-            <select
-              name="severity"
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              defaultValue="medium"
+      {canEdit ? (
+        <Card className="transition-colors hover:border-primary/40">
+          <CardContent className="pt-6">
+            <form
+              className="grid gap-3 md:grid-cols-4"
+              onSubmit={(event) => {
+                event.preventDefault();
+                const formData = new FormData(event.currentTarget);
+                createMutation.mutate({
+                  title: String(formData.get("title") ?? ""),
+                  alertType: String(formData.get("alertType") ?? "system"),
+                  severity: String(formData.get("severity") ?? "medium"),
+                });
+                event.currentTarget.reset();
+              }}
             >
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-              <option value="critical">Critical</option>
-            </select>
-            <Button type="submit" disabled={createMutation.isPending}>Create Alert</Button>
-          </form>
-        </CardContent>
-      </Card>
+              <Input ref={titleInputRef} name="title" placeholder="Alert title" required />
+              <Input name="alertType" placeholder="Type (e.g. compliance)" required />
+              <select
+                name="severity"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                defaultValue="medium"
+              >
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+                <option value="critical">Critical</option>
+              </select>
+              <Button type="submit" disabled={createMutation.isPending}>Create Alert</Button>
+            </form>
+          </CardContent>
+        </Card>
+      ) : null}
 
       <Card className="transition-colors hover:border-primary/20">
         <CardContent className="grid gap-3 pt-6 md:grid-cols-3">
@@ -142,8 +147,8 @@ export function AlertsClient({ companyId }: { companyId: string }) {
           icon={Bell}
           title="No alerts yet"
           description="Create an alert to track compliance, safety, or maintenance exceptions."
-          actionLabel="Create first alert"
-          onAction={() => titleInputRef.current?.focus()}
+          actionLabel={canEdit ? "Create first alert" : undefined}
+          onAction={canEdit ? () => titleInputRef.current?.focus() : undefined}
         />
       ) : (
         <Card className="transition-colors hover:border-primary/20">
@@ -156,13 +161,13 @@ export function AlertsClient({ companyId }: { companyId: string }) {
                   <TableHead>Severity</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Triggered</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  {canEdit ? <TableHead className="text-right">Actions</TableHead> : null}
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {alertsQuery.isLoading ? <TableLoadingRows columns={6} /> : null}
+                {alertsQuery.isLoading ? <TableLoadingRows columns={canEdit ? 6 : 5} /> : null}
                 {!alertsQuery.isLoading && filteredAlerts.length === 0 ? (
-                  <TableEmptyRow columns={6} message="No alerts match the current filters." />
+                  <TableEmptyRow columns={canEdit ? 6 : 5} message="No alerts match the current filters." />
                 ) : null}
                 {filteredAlerts.map((alert) => (
                   <TableRow key={alert.id} className="transition-colors hover:bg-muted/50">
@@ -171,28 +176,30 @@ export function AlertsClient({ companyId }: { companyId: string }) {
                     <TableCell><AlertSeverityBadge severity={alert.severity} /></TableCell>
                     <TableCell><AlertStatusBadge status={alert.status} /></TableCell>
                     <TableCell>{new Date(alert.triggered_at).toLocaleString()}</TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          onClick={() => statusMutation.mutate({ id: alert.id, status: "acknowledged" })}
-                          disabled={statusMutation.isPending || alert.status !== "open"}
-                        >
-                          Ack
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          onClick={() => statusMutation.mutate({ id: alert.id, status: "resolved" })}
-                          disabled={statusMutation.isPending || alert.status === "resolved"}
-                        >
-                          Resolve
-                        </Button>
-                      </div>
-                    </TableCell>
+                    {canEdit ? (
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-2">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => statusMutation.mutate({ id: alert.id, status: "acknowledged" })}
+                            disabled={statusMutation.isPending || alert.status !== "open"}
+                          >
+                            Ack
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => statusMutation.mutate({ id: alert.id, status: "resolved" })}
+                            disabled={statusMutation.isPending || alert.status === "resolved"}
+                          >
+                            Resolve
+                          </Button>
+                        </div>
+                      </TableCell>
+                    ) : null}
                   </TableRow>
                 ))}
               </TableBody>
@@ -203,4 +210,3 @@ export function AlertsClient({ companyId }: { companyId: string }) {
     </div>
   );
 }
-

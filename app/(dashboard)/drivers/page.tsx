@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
+import { canViewDrivers } from "@/lib/permissions";
 import { getPrimaryMembership } from "@/lib/supabase/company";
+import { AccessDenied } from "@/components/dashboard/access-denied";
 import { NoCompanyNotice } from "@/components/dashboard/no-company-notice";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { ModulePageSkeleton } from "@/components/dashboard/page-skeleton";
@@ -37,8 +39,13 @@ export default async function DriversPage({
   return (
     <div className="space-y-6">
       <PageHeader title="Drivers" description="Create and review fleet driver records." />
-      {membership ? <DriversClient companyId={membership.companyId} initialSearch={initialSearch} /> : <NoCompanyNotice />}
+      {!membership ? <NoCompanyNotice /> : null}
+      {membership && !canViewDrivers(membership.role) ? (
+        <AccessDenied title="Drivers access denied" description="Your role cannot access the drivers module." />
+      ) : null}
+      {membership && canViewDrivers(membership.role) ? (
+        <DriversClient companyId={membership.companyId} initialSearch={initialSearch} role={membership.role} />
+      ) : null}
     </div>
   );
 }
-

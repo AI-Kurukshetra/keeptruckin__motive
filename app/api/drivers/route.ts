@@ -1,5 +1,6 @@
 import { fail, ok } from "@/lib/api/responses";
-import { requireAuth, hasCompanyAccess } from "@/lib/api/auth";
+import { getCompanyRole, requireAuth } from "@/lib/api/auth";
+import { canEditDrivers, canViewDrivers, isDriverScopedRole } from "@/lib/permissions";
 import { parseJsonBody, searchParamsToObject } from "@/lib/api/request";
 import { companyQuerySchema, driverCreateSchema } from "@/lib/validations/api";
 
@@ -12,15 +13,21 @@ export async function GET(request: Request) {
   );
   if (!queryParsed.success) return fail("Invalid query", 400, queryParsed.error.flatten());
 
-  const allowed = await hasCompanyAccess(supabase, user.id, queryParsed.data.companyId);
-  if (!allowed) return fail("Forbidden", 403);
+  const role = await getCompanyRole(supabase, user.id, queryParsed.data.companyId);
+  if (!role || !canViewDrivers(role)) return fail("Forbidden", 403);
 
-  const { data, error } = await supabase
+  let query = supabase
     .from("drivers")
     .select("*")
     .eq("company_id", queryParsed.data.companyId)
     .order("created_at", { ascending: false })
     .limit(queryParsed.data.limit ?? 50);
+
+  if (isDriverScopedRole(role)) {
+    query = query.eq("auth_user_id", user.id);
+  }
+
+  const { data, error } = await query;
 
   if (error) return fail(error.message, 500, error);
   return ok(data);
@@ -33,8 +40,8 @@ export async function POST(request: Request) {
   const parsed = await parseJsonBody(request, driverCreateSchema);
   if (!parsed.success) return fail("Invalid payload", 400, parsed.error.flatten());
 
-  const allowed = await hasCompanyAccess(supabase, user.id, parsed.data.companyId, { write: true });
-  if (!allowed) return fail("Forbidden", 403);
+  const role = await getCompanyRole(supabase, user.id, parsed.data.companyId);
+  if (!role || !canEditDrivers(role)) return fail("Forbidden", 403);
 
   const { data, error } = await supabase
     .from("drivers")
@@ -56,4 +63,3 @@ export async function POST(request: Request) {
   if (error) return fail(error.message, 500, error);
   return ok(data, 201);
 }
-

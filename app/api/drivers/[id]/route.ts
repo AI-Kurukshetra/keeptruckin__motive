@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { fail, ok } from "@/lib/api/responses";
-import { requireAuth, hasCompanyAccess } from "@/lib/api/auth";
+import { getCompanyRole, requireAuth } from "@/lib/api/auth";
+import { canDeleteDrivers, canEditDrivers, canViewDrivers, isDriverScopedRole } from "@/lib/permissions";
 import { parseJsonBody, searchParamsToObject } from "@/lib/api/request";
 import { companyQuerySchema, driverUpdateSchema } from "@/lib/validations/api";
 
@@ -22,15 +23,20 @@ export async function GET(
   );
   if (!queryParsed.success) return fail("Invalid query", 400, queryParsed.error.flatten());
 
-  const allowed = await hasCompanyAccess(supabase, user.id, queryParsed.data.companyId);
-  if (!allowed) return fail("Forbidden", 403);
+  const role = await getCompanyRole(supabase, user.id, queryParsed.data.companyId);
+  if (!role || !canViewDrivers(role)) return fail("Forbidden", 403);
 
-  const { data, error } = await supabase
+  let query = supabase
     .from("drivers")
     .select("*")
     .eq("id", parsedParams.data.id)
-    .eq("company_id", queryParsed.data.companyId)
-    .single();
+    .eq("company_id", queryParsed.data.companyId);
+
+  if (isDriverScopedRole(role)) {
+    query = query.eq("auth_user_id", user.id);
+  }
+
+  const { data, error } = await query.single();
 
   if (error) return fail("Driver not found", 404, error.message);
   return ok(data);
@@ -52,8 +58,8 @@ export async function PATCH(
   );
   if (!queryParsed.success) return fail("Invalid query", 400, queryParsed.error.flatten());
 
-  const allowed = await hasCompanyAccess(supabase, user.id, queryParsed.data.companyId, { write: true });
-  if (!allowed) return fail("Forbidden", 403);
+  const role = await getCompanyRole(supabase, user.id, queryParsed.data.companyId);
+  if (!role || !canEditDrivers(role)) return fail("Forbidden", 403);
 
   const parsed = await parseJsonBody(request, driverUpdateSchema);
   if (!parsed.success) return fail("Invalid payload", 400, parsed.error.flatten());
@@ -98,8 +104,8 @@ export async function DELETE(
   );
   if (!queryParsed.success) return fail("Invalid query", 400, queryParsed.error.flatten());
 
-  const allowed = await hasCompanyAccess(supabase, user.id, queryParsed.data.companyId, { write: true });
-  if (!allowed) return fail("Forbidden", 403);
+  const role = await getCompanyRole(supabase, user.id, queryParsed.data.companyId);
+  if (!role || !canDeleteDrivers(role)) return fail("Forbidden", 403);
 
   const { error } = await supabase
     .from("drivers")
@@ -110,4 +116,3 @@ export async function DELETE(
   if (error) return fail(error.message, 500, error);
   return ok({ id: parsedParams.data.id, deleted: true });
 }
-

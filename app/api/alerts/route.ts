@@ -1,5 +1,6 @@
 import { fail, ok } from "@/lib/api/responses";
-import { requireAuth, hasCompanyAccess } from "@/lib/api/auth";
+import { getCompanyRole, requireAuth } from "@/lib/api/auth";
+import { canEditAlerts, canViewAlerts } from "@/lib/permissions";
 import { parseJsonBody, searchParamsToObject } from "@/lib/api/request";
 import { alertCreateSchema, companyQuerySchema } from "@/lib/validations/api";
 
@@ -12,8 +13,8 @@ export async function GET(request: Request) {
   );
   if (!queryParsed.success) return fail("Invalid query", 400, queryParsed.error.flatten());
 
-  const allowed = await hasCompanyAccess(supabase, user.id, queryParsed.data.companyId);
-  if (!allowed) return fail("Forbidden", 403);
+  const role = await getCompanyRole(supabase, user.id, queryParsed.data.companyId);
+  if (!role || !canViewAlerts(role)) return fail("Forbidden", 403);
 
   const { data, error } = await supabase
     .from("alerts")
@@ -33,8 +34,8 @@ export async function POST(request: Request) {
   const parsed = await parseJsonBody(request, alertCreateSchema);
   if (!parsed.success) return fail("Invalid payload", 400, parsed.error.flatten());
 
-  const allowed = await hasCompanyAccess(supabase, user.id, parsed.data.companyId, { write: true });
-  if (!allowed) return fail("Forbidden", 403);
+  const role = await getCompanyRole(supabase, user.id, parsed.data.companyId);
+  if (!role || !canEditAlerts(role)) return fail("Forbidden", 403);
 
   const { data, error } = await supabase
     .from("alerts")

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { redirect } from "next/navigation";
+import { getPrimaryMembership } from "@/lib/supabase/company";
+import { canViewAlerts, canViewDrivers, canViewTrips, canViewVehicles, type CompanyRole } from "@/lib/permissions";
 import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 import { logoutAction } from "@/app/actions/auth";
@@ -30,6 +32,19 @@ const navItems: readonly SidebarNavItem[] = [
   { href: "/alerts", label: "Alerts", icon: "bell" },
 ] as const;
 
+function canViewNavItem(role: CompanyRole | null, href: SidebarNavItem["href"]): boolean {
+  if (!role) {
+    return true;
+  }
+
+  if (href === "/drivers") return canViewDrivers(role);
+  if (href === "/vehicles") return canViewVehicles(role);
+  if (href === "/trips") return canViewTrips(role);
+  if (href === "/alerts") return canViewAlerts(role);
+
+  return true;
+}
+
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
   const {
@@ -40,6 +55,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
     redirect("/login");
   }
 
+  const membership = await getPrimaryMembership();
+  const role = membership?.role ?? null;
+  const visibleNavItems = navItems.filter((item) => canViewNavItem(role, item.href));
+
   return (
     <div className="min-h-screen bg-muted/30">
       <div className="mx-auto flex min-h-screen max-w-[1600px]">
@@ -49,7 +68,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
             <p className="mt-1 truncate text-sm font-medium">{user.email}</p>
           </div>
 
-          <SidebarNav items={navItems} />
+          <SidebarNav items={visibleNavItems} />
 
           <div className="mt-auto border-t p-4">
             <form action={logoutAction}>
@@ -68,7 +87,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
                 <p className="truncate text-xs text-muted-foreground">{user.email}</p>
               </div>
 
-              <DashboardToolbar />
+              <DashboardToolbar role={role} />
 
               <form action={logoutAction}>
                 <Button type="submit" variant="outline" size="sm">
@@ -78,7 +97,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
             </div>
 
             <div className="border-t lg:hidden">
-              <SidebarNav items={navItems} compact />
+              <SidebarNav items={visibleNavItems} compact />
             </div>
           </header>
 
@@ -88,5 +107,3 @@ export default async function DashboardLayout({ children }: { children: React.Re
     </div>
   );
 }
-
-

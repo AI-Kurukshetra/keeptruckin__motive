@@ -98,3 +98,8 @@ Reason: SVG keeps sharp rendering on high-DPI modern browsers while ICO ensures 
 Reason: Requested enhancement improves perceived quality via depth/motion/styling tokens while preserving established marketing narrative, copy, CTA behavior, and all backend/auth surfaces.
 ## [2026-03-14] Chart easing fallback uses supported Recharts token
 Reason: Requested easeOutQuart is not accepted by current Recharts TS types; using ease-out preserves smooth animation while keeping type safety and avoiding custom animation wrappers.
+## [2026-03-16] RBAC enforcement moved to explicit module-level permission helpers
+Reason: Previous `read/write` company checks were too coarse for role nuances (dispatcher alerts view-only, driver own-scope reads). Centralizing matrix logic in `lib/permissions.ts` keeps API and UI behavior aligned and reduces accidental over-permissioning.
+
+## [2026-03-16] Driver role API reads are explicitly own-scoped for drivers/trips
+Reason: Existing table RLS allows company-wide member reads; enforcing own-scope at API boundary tightens effective access without schema or migration changes in this safety pass.

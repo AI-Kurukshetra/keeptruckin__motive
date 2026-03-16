@@ -103,3 +103,10 @@
 - [x] Create branded Atlas favicon assets (SVG + ICO) and wire root metadata icons for browser tab rendering (2026-03-14 22:36)
 - [x] Apply premium visual polish to marketing homepage (glow depth, card styling, subtle motion, section dividers) without content/structure changes (2026-03-14 22:40)
 - [x] Final safe dashboard polish + frontend logic fix pass (health clamp/status colors, sidebar icon mapping, hover polish, timeline styling, register gradient, chart animation, action buttons, table row hover, vehicle label fallback checks) (2026-03-14 23:04)
+
+## Phase 9 - RBAC Hardening Audit (Safe Tightening)
+- [x] Audit role storage/usage across RLS, API, and dashboard modules (2026-03-16 10:41)
+- [x] Add reusable permission matrix utilities in `lib/permissions.ts` and integrate into API/UI guards (2026-03-16 10:41)
+- [x] Enforce module-specific role checks for `drivers`, `vehicles`, `trips`, and `alerts` APIs (including own-scope reads for driver role) (2026-03-16 10:41)
+- [x] Hide restricted navigation/actions in dashboard UI based on role permissions (2026-03-16 10:41)
+- [x] Verify `SUPABASE_SERVICE_ROLE_KEY` is only used for admin/seed paths, not user request flows (2026-03-16 10:41)

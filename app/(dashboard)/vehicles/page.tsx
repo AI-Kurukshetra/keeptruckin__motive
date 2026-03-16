@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
+import { canViewVehicles } from "@/lib/permissions";
 import { getPrimaryMembership } from "@/lib/supabase/company";
+import { AccessDenied } from "@/components/dashboard/access-denied";
 import { NoCompanyNotice } from "@/components/dashboard/no-company-notice";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { ModulePageSkeleton } from "@/components/dashboard/page-skeleton";
@@ -37,8 +39,13 @@ export default async function VehiclesPage({
   return (
     <div className="space-y-6">
       <PageHeader title="Vehicles" description="Track your fleet vehicles and status." />
-      {membership ? <VehiclesClient companyId={membership.companyId} initialSearch={initialSearch} /> : <NoCompanyNotice />}
+      {!membership ? <NoCompanyNotice /> : null}
+      {membership && !canViewVehicles(membership.role) ? (
+        <AccessDenied title="Vehicles access denied" description="Your role cannot access the vehicles module." />
+      ) : null}
+      {membership && canViewVehicles(membership.role) ? (
+        <VehiclesClient companyId={membership.companyId} initialSearch={initialSearch} role={membership.role} />
+      ) : null}
     </div>
   );
 }
-

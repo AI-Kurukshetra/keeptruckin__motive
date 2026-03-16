@@ -110,3 +110,14 @@
 - Added branded favicon assets for marketing identity: public/favicon.svg (rounded-square blue gradient + white A monogram) and generated public/favicon.ico; updated pp/layout.tsx metadata.icons (icon, shortcut, pple) to use new files.
 - Visual enhancement pass on components/landing/landing-page.tsx: added layered radial glow backgrounds (hero/showcase/AI), upgraded card surfaces to premium gradient+depth tokens, applied 6s hero float animation, standardized framer-motion scroll reveals (opacity/y), refined feature icon chip styling, emphasized AI metric cards, and introduced soft border/gradient section dividers while preserving all existing content and section flow.
 - Applied final frontend-only dashboard polish and logic fix across app/(dashboard) + components/dashboard: fleet health score clamp and status color badges, metric/row/action/quick-action hover refinements, sidebar icon remap (LayoutDashboard/Users/Truck/Route/Activity/ClipboardCheck/Wrench/Shield/Bell), recent-activity timeline styling, register/auth gradient background, and Recharts animation tuning (1200ms, ease-out).
+- Safe RBAC hardening pass (no schema/migration/auth-flow changes): added `lib/permissions.ts` permission matrix for `owner/admin/dispatcher/driver/viewer` and reused it across API + dashboard UI.
+- Tightened API authorization for `drivers`, `vehicles`, `trips`, and `alerts` routes:
+  - `dispatcher` now view-only on alerts (cannot create/update alerts).
+  - Delete operations on drivers/vehicles/trips now restricted to `owner/admin`.
+  - `driver` role now receives own-scope reads only for drivers/trips in API responses.
+- Added dashboard UI permission guards:
+  - Restricted nav/command entries by role in dashboard layout + toolbar.
+  - Hid create/edit/delete controls when role lacks permission in drivers/vehicles/trips/alerts clients.
+  - Added access-denied module state (`components/dashboard/access-denied.tsx`) for restricted direct navigation.
+- Service-role verification: `SUPABASE_SERVICE_ROLE_KEY` usage remains limited to server admin helper + seed script; no normal request-flow API route uses service role bypass.
+- Validation: `pnpm typecheck` and `pnpm lint` pass.

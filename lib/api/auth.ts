@@ -1,9 +1,12 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
+import { COMPANY_ROLES, isCompanyRole, type CompanyRole } from "@/lib/permissions";
 import type { Database } from "@/types/supabase";
 
-const READ_ROLES = ["owner", "admin", "dispatcher", "driver", "viewer"] as const;
-const WRITE_ROLES = ["owner", "admin", "dispatcher"] as const;
+const READ_ROLES = [...COMPANY_ROLES] as const;
+const WRITE_ROLES: readonly CompanyRole[] = ["owner", "admin", "dispatcher"] as const;
+
+type CompanyRoleData = { role: string };
 
 export async function requireAuth() {
   const supabase = await createClient();
@@ -12,6 +15,25 @@ export async function requireAuth() {
   } = await supabase.auth.getUser();
 
   return { supabase, user };
+}
+
+export async function getCompanyRole(
+  supabase: SupabaseClient<Database>,
+  userId: string,
+  companyId: string
+): Promise<CompanyRole | null> {
+  const { data, error } = await supabase
+    .from("company_members")
+    .select("role")
+    .eq("user_id", userId)
+    .eq("company_id", companyId)
+    .maybeSingle<CompanyRoleData>();
+
+  if (error || !data || !isCompanyRole(data.role)) {
+    return null;
+  }
+
+  return data.role;
 }
 
 export async function hasCompanyAccess(

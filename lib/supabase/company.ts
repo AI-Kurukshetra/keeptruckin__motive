@@ -1,8 +1,9 @@
+import { isCompanyRole, type CompanyRole } from "@/lib/permissions";
 import { createClient } from "@/lib/supabase/server";
 
 type CompanyMembership = {
   companyId: string;
-  role: string;
+  role: CompanyRole;
   companyName: string;
 };
 
@@ -24,7 +25,7 @@ export async function getPrimaryMembership(): Promise<CompanyMembership | null> 
     .limit(1)
     .maybeSingle();
 
-  if (!data) {
+  if (!data || !isCompanyRole(data.role)) {
     return null;
   }
 

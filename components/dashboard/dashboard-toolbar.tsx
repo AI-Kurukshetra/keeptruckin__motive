@@ -15,6 +15,16 @@ import {
   Users,
 } from "lucide-react";
 import {
+  canCreateTrips,
+  canEditDrivers,
+  canEditVehicles,
+  canViewAlerts,
+  canViewDrivers,
+  canViewTrips,
+  canViewVehicles,
+  type CompanyRole,
+} from "@/lib/permissions";
+import {
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -69,7 +79,7 @@ function isTypingTarget(target: EventTarget | null): boolean {
   return tag === "input" || tag === "textarea" || tag === "select" || target.isContentEditable;
 }
 
-export function DashboardToolbar() {
+export function DashboardToolbar({ role }: { role: CompanyRole | null }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -79,9 +89,42 @@ export function DashboardToolbar() {
   const pendingG = useRef(false);
   const gTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const allowedScopes = useMemo<SearchScope[]>(() => {
+    const scopes: SearchScope[] = [];
+
+    if (!role || canViewDrivers(role)) scopes.push("drivers");
+    if (!role || canViewVehicles(role)) scopes.push("vehicles");
+    if (!role || canViewTrips(role)) scopes.push("trips");
+
+    return scopes.length > 0 ? scopes : ["drivers"];
+  }, [role]);
+
+  const allowedPages = useMemo(() => {
+    return pageEntries.filter((entry) => {
+      if (!role) return true;
+      if (entry.href === "/drivers") return canViewDrivers(role);
+      if (entry.href === "/vehicles") return canViewVehicles(role);
+      if (entry.href === "/trips") return canViewTrips(role);
+      if (entry.href === "/alerts") return canViewAlerts(role);
+      return true;
+    });
+  }, [role]);
+
+  const allowedActions = useMemo(() => {
+    return actionEntries.filter((entry) => {
+      if (!role) return true;
+      if (entry.href === "/drivers") return canEditDrivers(role);
+      if (entry.href === "/vehicles") return canEditVehicles(role);
+      if (entry.href === "/trips") return canCreateTrips(role);
+      return false;
+    });
+  }, [role]);
+
   useEffect(() => {
-    setScope(inferScope(pathname));
-  }, [pathname]);
+    const nextScope = inferScope(pathname);
+    const resolvedScope: SearchScope = allowedScopes.includes(nextScope) ? nextScope : allowedScopes[0];
+    setScope(resolvedScope);
+  }, [allowedScopes, pathname]);
 
   useEffect(() => {
     setQuery(searchParams.get("search") ?? "");
@@ -118,9 +161,9 @@ export function DashboardToolbar() {
       pendingG.current = false;
 
       if (key === "d") router.push("/dashboard");
-      if (key === "v") router.push("/vehicles");
-      if (key === "t") router.push("/trips");
-      if (key === "a") router.push("/alerts");
+      if (key === "v" && (!role || canViewVehicles(role))) router.push("/vehicles");
+      if (key === "t" && (!role || canViewTrips(role))) router.push("/trips");
+      if (key === "a" && (!role || canViewAlerts(role))) router.push("/alerts");
     };
 
     window.addEventListener("keydown", onKeyDown);
@@ -129,7 +172,7 @@ export function DashboardToolbar() {
       if (gTimer.current) clearTimeout(gTimer.current);
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [router]);
+  }, [role, router]);
 
   const searchPlaceholder = useMemo(() => {
     if (scope === "drivers") return "Search drivers by name/license";
@@ -161,7 +204,9 @@ export function DashboardToolbar() {
         <form onSubmit={submitSearch} className="flex w-full items-center gap-2 md:max-w-xl">
           <div className="relative flex-1">
             <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-            <Input data-testid="global-search-input" value={query}
+            <Input
+              data-testid="global-search-input"
+              value={query}
               onChange={(event) => setQuery(event.target.value)}
               className="pl-8"
               placeholder={searchPlaceholder}
@@ -171,11 +216,14 @@ export function DashboardToolbar() {
             value={scope}
             onChange={(event) => setScope(event.target.value as SearchScope)}
             className="hidden h-9 rounded-md border border-input bg-background px-2 text-sm md:block"
-            aria-label="Search scope" data-testid="global-search-scope"
+            aria-label="Search scope"
+            data-testid="global-search-scope"
           >
-            <option value="drivers">Drivers</option>
-            <option value="vehicles">Vehicles</option>
-            <option value="trips">Trips</option>
+            {allowedScopes.map((searchScope) => (
+              <option key={searchScope} value={searchScope}>
+                {searchScope.charAt(0).toUpperCase() + searchScope.slice(1)}
+              </option>
+            ))}
           </select>
         </form>
 
@@ -193,11 +241,15 @@ export function DashboardToolbar() {
         <CommandList>
           <CommandEmpty>No result found.</CommandEmpty>
           <CommandGroup heading="Pages">
-            {pageEntries.map((entry) => {
+            {allowedPages.map((entry) => {
               const Icon = entry.icon;
 
               return (
-                <CommandItem key={entry.label} onSelect={() => runNavigation(entry.href)} data-testid={`command-page-${entry.label.toLowerCase().replaceAll(" ", "-")}`}>
+                <CommandItem
+                  key={entry.label}
+                  onSelect={() => runNavigation(entry.href)}
+                  data-testid={`command-page-${entry.label.toLowerCase().replaceAll(" ", "-")}`}
+                >
                   <Icon className="size-4" />
                   <span>{entry.label}</span>
                   {entry.shortcut ? <CommandShortcut>{entry.shortcut}</CommandShortcut> : null}
@@ -207,11 +259,15 @@ export function DashboardToolbar() {
           </CommandGroup>
           <CommandSeparator />
           <CommandGroup heading="Actions">
-            {actionEntries.map((entry) => {
+            {allowedActions.map((entry) => {
               const Icon = entry.icon;
 
               return (
-                <CommandItem key={entry.label} onSelect={() => runNavigation(entry.href)} data-testid={`command-action-${entry.label.toLowerCase().replaceAll(" ", "-")}`}>
+                <CommandItem
+                  key={entry.label}
+                  onSelect={() => runNavigation(entry.href)}
+                  data-testid={`command-action-${entry.label.toLowerCase().replaceAll(" ", "-")}`}
+                >
                   <Icon className="size-4" />
                   <span>{entry.label}</span>
                 </CommandItem>
@@ -223,9 +279,3 @@ export function DashboardToolbar() {
     </>
   );
 }
-
-
-
-
-
-

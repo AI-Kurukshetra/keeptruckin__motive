@@ -95,3 +95,14 @@ Indexes were added for common query dimensions:
 - Ownership-sensitive tables remain owner-restricted for update control:
   - `companies` update: owner-only
   - `company_members` update: owner-only
+
+## RBAC Audit Update (2026-03-16)
+- Audited role source: `company_members.role` with roles `owner`, `admin`, `dispatcher`, `driver`, `viewer`.
+- Audited RLS behavior for `drivers`, `vehicles`, `trips`, `alerts`:
+  - RLS remains enabled on all tables.
+  - Current table policies still allow company-member SELECT for all five roles and write paths for `owner/admin/dispatcher`.
+- Safety constraint for this pass: no schema/migration edits were applied.
+- Effective tightening was applied at API/UI layer:
+  - `driver` is own-scoped on `drivers` and `trips` API reads.
+  - `dispatcher` is now alerts-view only at API/UI.
+  - Delete operations on drivers/vehicles/trips are owner/admin only at API/UI.
