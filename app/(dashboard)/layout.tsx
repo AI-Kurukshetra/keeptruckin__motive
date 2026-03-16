@@ -1,9 +1,20 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { redirect } from "next/navigation";
+import {
+  canViewAlerts,
+  canViewDrivers,
+  canViewEld,
+  canViewInspections,
+  canViewMaintenance,
+  canViewSafety,
+  canViewTrips,
+  canViewVehicles,
+  type CompanyRole,
+} from "@/lib/permissions";
 import { getPrimaryMembership } from "@/lib/supabase/company";
-import { canViewAlerts, canViewDrivers, canViewTrips, canViewVehicles, type CompanyRole } from "@/lib/permissions";
 import { createClient } from "@/lib/supabase/server";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { logoutAction } from "@/app/actions/auth";
 import { SidebarNav, type SidebarNavItem } from "@/components/dashboard/sidebar-nav";
@@ -40,9 +51,18 @@ function canViewNavItem(role: CompanyRole | null, href: SidebarNavItem["href"]):
   if (href === "/drivers") return canViewDrivers(role);
   if (href === "/vehicles") return canViewVehicles(role);
   if (href === "/trips") return canViewTrips(role);
+  if (href === "/eld") return canViewEld(role);
+  if (href === "/inspections") return canViewInspections(role);
+  if (href === "/maintenance") return canViewMaintenance(role);
+  if (href === "/safety") return canViewSafety(role);
   if (href === "/alerts") return canViewAlerts(role);
 
   return true;
+}
+
+function roleLabel(role: CompanyRole | null): string {
+  if (!role) return "Member";
+  return role.charAt(0).toUpperCase() + role.slice(1);
 }
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -57,7 +77,14 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   const membership = await getPrimaryMembership();
   const role = membership?.role ?? null;
-  const visibleNavItems = navItems.filter((item) => canViewNavItem(role, item.href));
+  const visibleNavItems = navItems
+    .filter((item) => canViewNavItem(role, item.href))
+    .map((item) => {
+      if (role === "driver" && item.href === "/trips") {
+        return { ...item, label: "My Trips" };
+      }
+      return item;
+    });
 
   return (
     <div className="min-h-screen bg-muted/30">
@@ -84,12 +111,20 @@ export default async function DashboardLayout({ children }: { children: React.Re
             <div className="flex items-center gap-3 px-4 py-3 md:px-6">
               <div className="hidden min-w-0 lg:block">
                 <p className="text-sm font-semibold">Fleet Operations</p>
-                <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+                <div className="mt-1 flex items-center gap-2">
+                  <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+                  <Badge variant="secondary" className="text-[10px] uppercase tracking-wide">
+                    {roleLabel(role)}
+                  </Badge>
+                </div>
               </div>
 
               <DashboardToolbar role={role} />
 
-              <form action={logoutAction}>
+              <form action={logoutAction} className="flex items-center gap-2">
+                <Badge variant="outline" className="hidden sm:inline-flex text-[10px] uppercase tracking-wide">
+                  {roleLabel(role)}
+                </Badge>
                 <Button type="submit" variant="outline" size="sm">
                   Logout
                 </Button>

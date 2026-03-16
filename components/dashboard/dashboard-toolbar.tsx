@@ -15,8 +15,8 @@ import {
   Users,
 } from "lucide-react";
 import {
+  canCreateDrivers,
   canCreateTrips,
-  canEditDrivers,
   canEditVehicles,
   canViewAlerts,
   canViewDrivers,
@@ -59,6 +59,7 @@ const actionEntries: readonly CommandEntry[] = [
   { label: "Add Driver", href: "/drivers", icon: UserPlus },
   { label: "Add Vehicle", href: "/vehicles", icon: Car },
   { label: "Create Trip", href: "/trips", icon: RouteIcon },
+  { label: "View Alerts", href: "/alerts", icon: Siren },
 ] as const;
 
 function scopeToPath(scope: SearchScope): Route {
@@ -112,8 +113,9 @@ export function DashboardToolbar({ role }: { role: CompanyRole | null }) {
 
   const allowedActions = useMemo(() => {
     return actionEntries.filter((entry) => {
+      if (entry.label === "View Alerts") return true;
       if (!role) return true;
-      if (entry.href === "/drivers") return canEditDrivers(role);
+      if (entry.href === "/drivers") return canCreateDrivers(role);
       if (entry.href === "/vehicles") return canEditVehicles(role);
       if (entry.href === "/trips") return canCreateTrips(role);
       return false;

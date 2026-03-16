@@ -9,9 +9,12 @@ import {
   Bell,
   Car,
   ClipboardCheck,
+  Cpu,
   Plus,
+  Radio,
   Route,
   Shield,
+  Sparkles,
   Truck,
   UserPlus,
   Users,
@@ -35,11 +38,24 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { apiFetch } from "@/lib/api/fetcher";
+import {
+  canCreateDrivers,
+  canCreateTrips,
+  canEditVehicles,
+  canViewAlerts,
+  canViewDrivers,
+  canViewInspections,
+  canViewMaintenance,
+  canViewSafety,
+  canViewTrips,
+  canViewVehicles,
+  type CompanyRole,
+} from "@/lib/permissions";
 
 type Driver = { id: string; created_at: string };
 type Vehicle = { id: string; status: string; created_at: string };
 type Trip = { id: string; status: string; started_at: string | null; created_at: string };
-type Alert = { id: string; severity: string; status: string; triggered_at: string; alert_type: string };
+type Alert = { id: string; severity: "low" | "medium" | "high" | "critical"; status: string; triggered_at: string; alert_type: string };
 type Maintenance = { id: string; status: string };
 type Inspection = { id: string; status: string };
 type SafetyEvent = { id: string; event_type: string };
@@ -183,15 +199,67 @@ function ActivityIcon({ type }: { type: ActivityItem["type"] }) {
   return <Bell className="size-4 text-red-500" />;
 }
 
-export function DashboardOverviewClient({ companyId }: { companyId: string }) {
-  const driversQuery = useQuery({ queryKey: ["drivers", companyId], queryFn: () => apiFetch<Driver[]>(`/api/drivers?companyId=${companyId}`) });
-  const vehiclesQuery = useQuery({ queryKey: ["vehicles", companyId], queryFn: () => apiFetch<Vehicle[]>(`/api/vehicles?companyId=${companyId}`) });
-  const tripsQuery = useQuery({ queryKey: ["trips", companyId], queryFn: () => apiFetch<Trip[]>(`/api/trips?companyId=${companyId}`) });
-  const alertsQuery = useQuery({ queryKey: ["alerts", companyId], queryFn: () => apiFetch<Alert[]>(`/api/alerts?companyId=${companyId}&limit=200`) });
-  const maintenanceQuery = useQuery({ queryKey: ["maintenance", companyId], queryFn: () => apiFetch<Maintenance[]>(`/api/maintenance?companyId=${companyId}&limit=200`) });
-  const inspectionsQuery = useQuery({ queryKey: ["inspections", companyId], queryFn: () => apiFetch<Inspection[]>(`/api/inspections?companyId=${companyId}&limit=200`) });
-  const safetyEventsQuery = useQuery({ queryKey: ["safety-events", companyId], queryFn: () => apiFetch<SafetyEvent[]>(`/api/safety?companyId=${companyId}&limit=200`) });
-  const safetyScoreQuery = useQuery({ queryKey: ["safety-score", companyId], queryFn: () => apiFetch<SafetyScore>(`/api/safety/score?companyId=${companyId}`) });
+function indicatorTone(score: number): "good" | "warn" | "risk" {
+  if (score >= 85) return "good";
+  if (score >= 65) return "warn";
+  return "risk";
+}
+
+function indicatorClasses(tone: "good" | "warn" | "risk") {
+  if (tone === "good") return { bar: "bg-emerald-500", text: "text-emerald-600", chip: "border-emerald-500/20 bg-emerald-500/10 text-emerald-700" };
+  if (tone === "warn") return { bar: "bg-amber-500", text: "text-amber-600", chip: "border-amber-500/20 bg-amber-500/10 text-amber-700" };
+  return { bar: "bg-red-500", text: "text-red-600", chip: "border-red-500/20 bg-red-500/10 text-red-700" };
+}
+
+export function DashboardOverviewClient({ companyId, role }: { companyId: string; role: CompanyRole }) {
+  const canReadDrivers = canViewDrivers(role);
+  const canReadVehicles = canViewVehicles(role);
+  const canReadTrips = canViewTrips(role);
+  const canReadAlerts = canViewAlerts(role);
+  const canReadMaintenance = canViewMaintenance(role);
+  const canReadInspections = canViewInspections(role);
+  const canReadSafety = canViewSafety(role);
+
+  const driversQuery = useQuery({
+    queryKey: ["drivers", companyId],
+    queryFn: () => apiFetch<Driver[]>(`/api/drivers?companyId=${companyId}`),
+    enabled: canReadDrivers,
+  });
+  const vehiclesQuery = useQuery({
+    queryKey: ["vehicles", companyId],
+    queryFn: () => apiFetch<Vehicle[]>(`/api/vehicles?companyId=${companyId}`),
+    enabled: canReadVehicles,
+  });
+  const tripsQuery = useQuery({
+    queryKey: ["trips", companyId],
+    queryFn: () => apiFetch<Trip[]>(`/api/trips?companyId=${companyId}`),
+    enabled: canReadTrips,
+  });
+  const alertsQuery = useQuery({
+    queryKey: ["alerts", companyId],
+    queryFn: () => apiFetch<Alert[]>(`/api/alerts?companyId=${companyId}&limit=200`),
+    enabled: canReadAlerts,
+  });
+  const maintenanceQuery = useQuery({
+    queryKey: ["maintenance", companyId],
+    queryFn: () => apiFetch<Maintenance[]>(`/api/maintenance?companyId=${companyId}&limit=200`),
+    enabled: canReadMaintenance,
+  });
+  const inspectionsQuery = useQuery({
+    queryKey: ["inspections", companyId],
+    queryFn: () => apiFetch<Inspection[]>(`/api/inspections?companyId=${companyId}&limit=200`),
+    enabled: canReadInspections,
+  });
+  const safetyEventsQuery = useQuery({
+    queryKey: ["safety-events", companyId],
+    queryFn: () => apiFetch<SafetyEvent[]>(`/api/safety?companyId=${companyId}&limit=200`),
+    enabled: canReadSafety,
+  });
+  const safetyScoreQuery = useQuery({
+    queryKey: ["safety-score", companyId],
+    queryFn: () => apiFetch<SafetyScore>(`/api/safety/score?companyId=${companyId}`),
+    enabled: canReadSafety,
+  });
 
   const loading = [
     driversQuery,
@@ -209,26 +277,38 @@ export function DashboardOverviewClient({ companyId }: { companyId: string }) {
     [alertsQuery.data]
   );
 
+  const criticalAlerts = useMemo(
+    () => (alertsQuery.data ?? []).filter((alert) => alert.status !== "resolved" && (alert.severity === "critical" || alert.severity === "high")).length,
+    [alertsQuery.data]
+  );
+
   const activeTrips = useMemo(
     () => (tripsQuery.data ?? []).filter((trip) => trip.status === "in_progress").length,
     [tripsQuery.data]
   );
 
-  const fleetHealthScore = useMemo(() => {
-    const safetyScore = safetyScoreQuery.data?.safetyScore ?? 100;
-    const unresolvedAlertPenalty = Math.min(openAlerts * 3, 30);
-    const maintenancePenalty = Math.min(
-      (maintenanceQuery.data ?? []).filter((record) => record.status === "overdue").length * 4,
-      20
-    );
+  const overdueMaintenance = useMemo(
+    () => (maintenanceQuery.data ?? []).filter((record) => record.status === "overdue").length,
+    [maintenanceQuery.data]
+  );
 
-    const calculatedScore = Math.round(safetyScore - unresolvedAlertPenalty - maintenancePenalty);
-    return Math.min(100, Math.max(0, calculatedScore));
-  }, [maintenanceQuery.data, openAlerts, safetyScoreQuery.data?.safetyScore]);
+  const inactiveVehicles = useMemo(
+    () => (vehiclesQuery.data ?? []).filter((vehicle) => vehicle.status !== "active").length,
+    [vehiclesQuery.data]
+  );
 
-  const healthStatus = fleetHealthScore >= 90 ? "Healthy" : fleetHealthScore >= 70 ? "Warning" : "Critical";
-  const healthColorClass = fleetHealthScore >= 90 ? "text-green-500" : fleetHealthScore >= 70 ? "text-yellow-500" : "text-red-500";
-  const healthBadgeClass = fleetHealthScore >= 90 ? "border-green-500/30 bg-green-500/10 text-green-500" : fleetHealthScore >= 70 ? "border-yellow-500/30 bg-yellow-500/10 text-yellow-500" : "border-red-500/30 bg-red-500/10 text-red-500";
+  const safetyBase = safetyScoreQuery.data?.safetyScore ?? 100;
+
+  const maintenanceIndicator = Math.max(0, 100 - overdueMaintenance * 12);
+  const alertsIndicator = Math.max(0, 100 - openAlerts * 8);
+  const fleetHealthScore = Math.max(0, Math.min(100, Math.round((safetyBase * 0.45) + (maintenanceIndicator * 0.3) + (alertsIndicator * 0.25))));
+
+  const healthTone = indicatorTone(fleetHealthScore);
+  const healthClasses = indicatorClasses(healthTone);
+
+  const safetyTone = indicatorTone(safetyBase);
+  const maintenanceTone = indicatorTone(maintenanceIndicator);
+  const alertsTone = indicatorTone(alertsIndicator);
 
   const safetyEventDistribution = useMemo(
     () => getCountDistribution((safetyEventsQuery.data ?? []).map((event) => event.event_type)),
@@ -252,8 +332,8 @@ export function DashboardOverviewClient({ companyId }: { companyId: string }) {
       items.push({
         type: "driver",
         timestamp: driver.created_at,
-        title: "New driver created",
-        description: `Driver record added (${driver.id.slice(0, 8)}...)`,
+        title: "Driver onboarded",
+        description: `New profile created (${driver.id.slice(0, 8)}...)`,
       });
     }
 
@@ -261,35 +341,95 @@ export function DashboardOverviewClient({ companyId }: { companyId: string }) {
       items.push({
         type: "vehicle",
         timestamp: vehicle.created_at,
-        title: "New vehicle added",
-        description: `Vehicle onboarded (${vehicle.id.slice(0, 8)}...)`,
+        title: "Vehicle registered",
+        description: `Fleet asset added (${vehicle.id.slice(0, 8)}...)`,
       });
     }
 
     for (const trip of tripsQuery.data ?? []) {
-      if (trip.started_at || trip.status === "in_progress") {
-        items.push({
-          type: "trip",
-          timestamp: trip.started_at ?? trip.created_at,
-          title: "Trip started",
-          description: `Trip is now ${trip.status.replaceAll("_", " ")}`,
-        });
-      }
+      items.push({
+        type: "trip",
+        timestamp: trip.started_at ?? trip.created_at,
+        title: trip.status === "in_progress" ? "Trip in progress" : "Trip updated",
+        description: `Trip status: ${trip.status.replaceAll("_", " ")}`,
+      });
     }
 
     for (const alert of alertsQuery.data ?? []) {
       items.push({
         type: "alert",
         timestamp: alert.triggered_at,
-        title: "Alert triggered",
-        description: `${alert.alert_type} (${alert.severity})`,
+        title: `${alert.severity.toUpperCase()} ${alert.alert_type.replaceAll("_", " ")}`,
+        description: `Alert is ${alert.status}`,
       });
     }
 
     return items
       .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-      .slice(0, 8);
+      .slice(0, 10);
   }, [alertsQuery.data, driversQuery.data, tripsQuery.data, vehiclesQuery.data]);
+
+  const systemStatus = useMemo<{
+    telemetry: "healthy" | "degraded";
+    dispatch: "healthy" | "monitor";
+    compliance: "healthy" | "risk";
+    overall: "stable" | "attention";
+  }>(() => {
+    const telemetry = inactiveVehicles > 0 ? "degraded" : "healthy";
+    const dispatch = activeTrips > 0 ? "healthy" : "monitor";
+    const compliance = criticalAlerts > 0 || overdueMaintenance > 0 ? "risk" : "healthy";
+    const overall = compliance === "risk" || telemetry === "degraded" ? "attention" : "stable";
+
+    return { telemetry, dispatch, compliance, overall };
+  }, [activeTrips, criticalAlerts, inactiveVehicles, overdueMaintenance]);
+
+  const aiInsights = useMemo(() => {
+    const insights: Array<{ title: string; detail: string; tone: "good" | "warn" | "risk" }> = [];
+
+    if (criticalAlerts > 0) {
+      insights.push({
+        title: "Escalate critical alerts",
+        detail: `${criticalAlerts} high/critical alerts are unresolved and may impact compliance windows.`,
+        tone: "risk",
+      });
+    } else {
+      insights.push({
+        title: "Alert risk is controlled",
+        detail: "No unresolved high-severity alerts detected in current operations.",
+        tone: "good",
+      });
+    }
+
+    if (overdueMaintenance > 0) {
+      insights.push({
+        title: "Maintenance backlog detected",
+        detail: `${overdueMaintenance} records are overdue. Prioritize service scheduling for uptime stability.`,
+        tone: "warn",
+      });
+    } else {
+      insights.push({
+        title: "Maintenance schedule healthy",
+        detail: "No overdue maintenance records currently affecting fleet readiness.",
+        tone: "good",
+      });
+    }
+
+    if (safetyBase < 80) {
+      insights.push({
+        title: "Safety coaching recommended",
+        detail: `Current safety score is ${safetyBase}. Target 85+ to reduce operational risk exposure.`,
+        tone: "warn",
+      });
+    } else {
+      insights.push({
+        title: "Safety posture strong",
+        detail: `Safety score at ${safetyBase}. Maintain current driving standards and monitoring cadence.`,
+        tone: "good",
+      });
+    }
+
+    return insights.slice(0, 3);
+  }, [criticalAlerts, overdueMaintenance, safetyBase]);
 
   if (loading) {
     return (
@@ -299,14 +439,9 @@ export function DashboardOverviewClient({ companyId }: { companyId: string }) {
             <Skeleton key={index} className="h-32" />
           ))}
         </div>
-        <div className="grid gap-4 xl:grid-cols-3">
-          {Array.from({ length: 3 }).map((_, index) => (
-            <Skeleton key={index} className="h-80" />
-          ))}
-        </div>
-        <div className="grid gap-4 xl:grid-cols-3">
-          <Skeleton className="h-72 xl:col-span-2" />
-          <Skeleton className="h-72" />
+        <div className="grid gap-4 xl:grid-cols-12">
+          <Skeleton className="h-[460px] xl:col-span-8" />
+          <Skeleton className="h-[460px] xl:col-span-4" />
         </div>
       </div>
     );
@@ -322,50 +457,149 @@ export function DashboardOverviewClient({ companyId }: { companyId: string }) {
       </div>
 
       <div className="grid gap-4 xl:grid-cols-12">
-        <div className="space-y-4 xl:col-span-9">
+        <div className="space-y-4 xl:col-span-8">
           <Card className="transition-all duration-200 hover:shadow-lg hover:scale-[1.01]">
             <CardHeader className="flex flex-row items-start justify-between space-y-0">
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <Shield className="size-4 text-primary" />
-                  Fleet Health Score
+                  Fleet Health Indicators
                 </CardTitle>
-                <CardDescription>Composite of safety score, alerts, and maintenance risk.</CardDescription>
+                <CardDescription>Color-coded health across safety, maintenance, and alert pressure.</CardDescription>
               </div>
-              <Badge variant="outline" className={cn("border", healthBadgeClass)}>
-                {healthStatus}
+              <Badge variant="outline" className={cn("border", healthClasses.chip)}>
+                {healthTone === "good" ? "Healthy" : healthTone === "warn" ? "Warning" : "Critical"}
               </Badge>
             </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-baseline gap-2">
-                <p className={cn("text-4xl font-semibold", healthColorClass)}>{fleetHealthScore} / 100</p>
+            <CardContent className="space-y-4">
+              <div className="flex items-end justify-between gap-4">
+                <p className={cn("text-4xl font-semibold", healthClasses.text)}>{fleetHealthScore} / 100</p>
+                <p className="text-xs text-muted-foreground">Composite Enterprise Health Score</p>
               </div>
-              <div className="h-2 rounded-full bg-muted">
-                <div className="h-2 rounded-full bg-primary" style={{ width: `${Math.max(6, fleetHealthScore)}%` }} />
+
+              <div className="space-y-3">
+                {[{
+                  label: "Safety",
+                  score: safetyBase,
+                  tone: safetyTone,
+                }, {
+                  label: "Maintenance",
+                  score: maintenanceIndicator,
+                  tone: maintenanceTone,
+                }, {
+                  label: "Alerts",
+                  score: alertsIndicator,
+                  tone: alertsTone,
+                }].map((item) => {
+                  const classes = indicatorClasses(item.tone);
+                  return (
+                    <div key={item.label} className="space-y-1">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-medium">{item.label}</span>
+                        <span className={classes.text}>{Math.round(item.score)}</span>
+                      </div>
+                      <div className="h-2 rounded-full bg-muted">
+                        <div className={cn("h-2 rounded-full", classes.bar)} style={{ width: `${Math.max(4, Math.min(100, item.score))}%` }} />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
 
           <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
-            <PieChartCard
-              title="Safety Events"
-              description="Distribution by event type"
-              data={safetyEventDistribution}
-            />
-            <BarChartCard
-              title="Maintenance Status"
-              description="Current maintenance workload"
-              data={maintenanceDistribution}
-            />
-            <PieChartCard
-              title="Inspections"
-              description="Inspection outcome distribution"
-              data={inspectionsDistribution}
-            />
+            <PieChartCard title="Safety Events" description="Distribution by event type" data={safetyEventDistribution} />
+            <BarChartCard title="Maintenance Status" description="Current maintenance workload" data={maintenanceDistribution} />
+            <PieChartCard title="Inspections" description="Inspection outcome distribution" data={inspectionsDistribution} />
           </div>
+
+          <Card className="transition-all duration-200 hover:shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <ClipboardCheck className="size-4 text-primary" />
+                Fleet Activity Timeline
+              </CardTitle>
+              <CardDescription>Chronological operational events across drivers, assets, trips, and alerts.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4 border-l-2 border-border pl-4">
+                {recentActivity.length > 0 ? (
+                  recentActivity.map((item) => (
+                    <div key={`${item.type}-${item.timestamp}-${item.title}`} className="relative">
+                      <span className="absolute -left-[22px] top-1.5 size-2 rounded-full bg-primary" />
+                      <div className="flex items-start gap-3 rounded-md border bg-background p-3">
+                        <div className="mt-0.5 rounded-md bg-muted p-1.5">
+                          <ActivityIcon type={item.type} />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center justify-between gap-2">
+                            <p className="text-sm font-medium">{item.title}</p>
+                            <Badge variant="secondary" className="capitalize">{item.type}</Badge>
+                          </div>
+                          <p className="mt-1 text-xs text-muted-foreground">{item.description}</p>
+                          <p className="mt-1 text-[11px] text-muted-foreground">{formatActivityTime(item.timestamp)}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-muted-foreground">No recent fleet activity yet.</p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
-        <div className="space-y-4 xl:col-span-3">
+        <div className="space-y-4 xl:col-span-4">
+          <Card className="transition-all duration-200 hover:shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Cpu className="size-4 text-primary" />
+                Fleet System Status
+              </CardTitle>
+              <CardDescription>Live operational health of core console subsystems.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <StatusRow label="Telemetry" status={systemStatus.telemetry} />
+              <StatusRow label="Dispatch Engine" status={systemStatus.dispatch} />
+              <StatusRow label="Compliance Monitor" status={systemStatus.compliance} />
+              <Separator />
+              <div className="flex items-center justify-between rounded-md border bg-muted/40 px-3 py-2">
+                <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Overall</span>
+                <Badge variant={systemStatus.overall === "stable" ? "secondary" : "destructive"}>
+                  {systemStatus.overall === "stable" ? "Stable" : "Needs Attention"}
+                </Badge>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="transition-all duration-200 hover:shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Sparkles className="size-4 text-primary" />
+                AI Fleet Insights
+              </CardTitle>
+              <CardDescription>Derived recommendations from current operational data.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {aiInsights.map((insight) => {
+                const classes = indicatorClasses(insight.tone);
+                return (
+                  <div key={insight.title} className="rounded-md border bg-background p-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-sm font-medium">{insight.title}</p>
+                      <Badge variant="outline" className={cn("text-[11px]", classes.chip)}>
+                        {insight.tone === "good" ? "Positive" : insight.tone === "warn" ? "Watch" : "Risk"}
+                      </Badge>
+                    </div>
+                    <p className="mt-1 text-xs text-muted-foreground">{insight.detail}</p>
+                  </div>
+                );
+              })}
+            </CardContent>
+          </Card>
+
           <Card className="transition-all duration-200 hover:shadow-lg hover:scale-[1.01]">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -375,55 +609,28 @@ export function DashboardOverviewClient({ companyId }: { companyId: string }) {
               <CardDescription>Jump to common tasks.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              <Link href="/drivers" className={cn(buttonVariants({ variant: "secondary" }), "w-full justify-start transition duration-200 hover:bg-blue-600 hover:text-white")}>
-                <UserPlus className="mr-2 size-4" />
-                Add Driver
-              </Link>
-              <Link href="/vehicles" className={cn(buttonVariants({ variant: "secondary" }), "w-full justify-start transition duration-200 hover:bg-blue-600 hover:text-white")}>
-                <Car className="mr-2 size-4" />
-                Add Vehicle
-              </Link>
-              <Link href="/trips" className={cn(buttonVariants({ variant: "secondary" }), "w-full justify-start transition duration-200 hover:bg-blue-600 hover:text-white")}>
-                <Route className="mr-2 size-4" />
-                Create Trip
-              </Link>
+              {canCreateDrivers(role) ? (
+                <Link href="/drivers" className={cn(buttonVariants({ variant: "secondary" }), "w-full justify-start transition duration-200 hover:bg-blue-600 hover:text-white")}>
+                  <UserPlus className="mr-2 size-4" />
+                  Add Driver
+                </Link>
+              ) : null}
+              {canEditVehicles(role) ? (
+                <Link href="/vehicles" className={cn(buttonVariants({ variant: "secondary" }), "w-full justify-start transition duration-200 hover:bg-blue-600 hover:text-white")}>
+                  <Car className="mr-2 size-4" />
+                  Add Vehicle
+                </Link>
+              ) : null}
+              {canCreateTrips(role) ? (
+                <Link href="/trips" className={cn(buttonVariants({ variant: "secondary" }), "w-full justify-start transition duration-200 hover:bg-blue-600 hover:text-white")}>
+                  <Route className="mr-2 size-4" />
+                  Create Trip
+                </Link>
+              ) : null}
               <Link href="/alerts" className={cn(buttonVariants({ variant: "outline" }), "w-full justify-start transition duration-200 hover:bg-blue-600 hover:text-white")}>
                 <Bell className="mr-2 size-4" />
                 View Alerts
               </Link>
-            </CardContent>
-          </Card>
-
-          <Card className="transition-all duration-200 hover:shadow-lg hover:scale-[1.01]">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <ClipboardCheck className="size-4 text-primary" />
-                Recent Activity
-              </CardTitle>
-              <CardDescription>Latest fleet system events.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="border-l-2 border-blue-500 pl-3 space-y-4">
-                {recentActivity.length > 0 ? (
-                  recentActivity.map((item, index) => (
-                    <div key={`${item.type}-${item.timestamp}-${index}`} className="space-y-2">
-                      <div className="flex items-start gap-3">
-                        <div className="mt-0.5 rounded-md bg-muted p-1.5">
-                          <ActivityIcon type={item.type} />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium">{item.title}</p>
-                          <p className="truncate text-xs text-muted-foreground">{item.description}</p>
-                          <p className="text-xs text-muted-foreground">{formatActivityTime(item.timestamp)}</p>
-                        </div>
-                      </div>
-                      {index < recentActivity.length - 1 ? <Separator className="bg-border/60" /> : null}
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-sm text-muted-foreground">No recent activity yet.</p>
-                )}
-              </div>
             </CardContent>
           </Card>
         </div>
@@ -432,12 +639,20 @@ export function DashboardOverviewClient({ companyId }: { companyId: string }) {
   );
 }
 
+function StatusRow({ label, status }: { label: string; status: "healthy" | "degraded" | "monitor" | "risk" }) {
+  const tone = status === "healthy" ? "good" : status === "monitor" ? "warn" : "risk";
+  const classes = indicatorClasses(tone);
+  const statusLabel = status === "healthy" ? "Healthy" : status === "degraded" ? "Degraded" : status === "monitor" ? "Monitor" : "Risk";
 
-
-
-
-
-
-
+  return (
+    <div className="flex items-center justify-between rounded-md border bg-background px-3 py-2">
+      <div className="flex items-center gap-2">
+        <Radio className={cn("size-3.5", classes.text)} />
+        <span className="text-sm">{label}</span>
+      </div>
+      <Badge variant="outline" className={cn("text-[11px]", classes.chip)}>{statusLabel}</Badge>
+    </div>
+  );
+}
 
 

@@ -110,3 +110,7 @@
 - [x] Enforce module-specific role checks for `drivers`, `vehicles`, `trips`, and `alerts` APIs (including own-scope reads for driver role) (2026-03-16 10:41)
 - [x] Hide restricted navigation/actions in dashboard UI based on role permissions (2026-03-16 10:41)
 - [x] Verify `SUPABASE_SERVICE_ROLE_KEY` is only used for admin/seed paths, not user request flows (2026-03-16 10:41)
+- [x] Apply role-aware visibility for ELD/inspections/maintenance/safety modules and driver-specific "My Trips" nav labeling (2026-03-16 11:28)
+- [x] Scope driver dashboard/API reads to own inspections/safety events in addition to own trips/drivers data (2026-03-16 11:28)
+- [x] Restrict overview quick actions by role while preserving read action entry points (2026-03-16 11:28)
+- [x] Enhance dashboard into enterprise operations console (activity timeline, AI insights, system status, role badge, colored health indicators) (2026-03-16 11:37)

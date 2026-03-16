@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
+import { isCompanyRole } from "@/lib/permissions";
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -86,11 +87,10 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     .eq("user_id", user?.id ?? "");
 
   const primaryMembership = memberships?.[0];
-  const canInvite = primaryMembership
-    ? primaryMembership.role === "owner" || primaryMembership.role === "admin"
-    : false;
+  const membershipRole = primaryMembership && isCompanyRole(primaryMembership.role) ? primaryMembership.role : null;
+  const canInvite = membershipRole ? membershipRole === "owner" || membershipRole === "admin" : false;
 
-  const inviteRoleOptions = primaryMembership?.role === "owner"
+  const inviteRoleOptions = membershipRole === "owner"
     ? ["admin", "dispatcher", "driver", "viewer"]
     : ["dispatcher", "driver", "viewer"];
 
@@ -104,7 +104,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       {message ? <p className="text-sm text-emerald-600">{message}</p> : null}
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
-      {primaryMembership ? <DashboardOverviewClient companyId={primaryMembership.company_id} /> : null}
+      {primaryMembership ? <DashboardOverviewClient companyId={primaryMembership.company_id} role={membershipRole ?? "viewer"} /> : null}
 
       {!primaryMembership ? (
         <Card>
@@ -135,7 +135,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           <CardHeader>
             <CardTitle>Company Access</CardTitle>
             <CardDescription>
-              Signed in as {primaryMembership.role} at {primaryMembership.companies?.name ?? "Company"}.
+              Signed in as {membershipRole ?? "member"} at {primaryMembership.companies?.name ?? "Company"}.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">

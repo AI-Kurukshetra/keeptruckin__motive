@@ -1,5 +1,6 @@
 import { fail, ok } from "@/lib/api/responses";
-import { requireAuth, hasCompanyAccess } from "@/lib/api/auth";
+import { getCompanyRole, getUserDriverIds, requireAuth } from "@/lib/api/auth";
+import { canAccessOperationalModules, canViewInspections, isDriverScopedRole } from "@/lib/permissions";
 import { parseJsonBody, searchParamsToObject } from "@/lib/api/request";
 import { companyQuerySchema, inspectionCreateSchema } from "@/lib/validations/api";
 import type { Json } from "@/types/supabase";
@@ -13,15 +14,23 @@ export async function GET(request: Request) {
   );
   if (!queryParsed.success) return fail("Invalid query", 400, queryParsed.error.flatten());
 
-  const allowed = await hasCompanyAccess(supabase, user.id, queryParsed.data.companyId);
-  if (!allowed) return fail("Forbidden", 403);
+  const role = await getCompanyRole(supabase, user.id, queryParsed.data.companyId);
+  if (!role || !canViewInspections(role)) return fail("Forbidden", 403);
 
-  const { data, error } = await supabase
+  let query = supabase
     .from("inspections")
     .select("*")
     .eq("company_id", queryParsed.data.companyId)
     .order("inspected_at", { ascending: false })
     .limit(queryParsed.data.limit ?? 100);
+
+  if (isDriverScopedRole(role)) {
+    const driverIds = await getUserDriverIds(supabase, queryParsed.data.companyId, user.id);
+    if (driverIds.length === 0) return ok([]);
+    query = query.in("driver_id", driverIds);
+  }
+
+  const { data, error } = await query;
 
   if (error) return fail(error.message, 500, error);
   return ok(data);
@@ -34,8 +43,8 @@ export async function POST(request: Request) {
   const parsed = await parseJsonBody(request, inspectionCreateSchema);
   if (!parsed.success) return fail("Invalid payload", 400, parsed.error.flatten());
 
-  const allowed = await hasCompanyAccess(supabase, user.id, parsed.data.companyId, { write: true });
-  if (!allowed) return fail("Forbidden", 403);
+  const role = await getCompanyRole(supabase, user.id, parsed.data.companyId);
+  if (!role || !canAccessOperationalModules(role)) return fail("Forbidden", 403);
 
   const defects = (parsed.data.defects ?? []) as Json;
 
@@ -58,4 +67,3 @@ export async function POST(request: Request) {
   if (error) return fail(error.message, 500, error);
   return ok(data, 201);
 }
-

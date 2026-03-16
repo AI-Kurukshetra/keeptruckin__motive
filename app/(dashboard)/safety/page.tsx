@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
+import { canViewSafety } from "@/lib/permissions";
 import { getPrimaryMembership } from "@/lib/supabase/company";
+import { AccessDenied } from "@/components/dashboard/access-denied";
 import { NoCompanyNotice } from "@/components/dashboard/no-company-notice";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { ModulePageSkeleton } from "@/components/dashboard/page-skeleton";
@@ -21,8 +23,11 @@ export default async function SafetyPage() {
   return (
     <div className="space-y-6">
       <PageHeader title="Safety" description="Track safety events and monitor fleet safety score." />
-      {membership ? <SafetyClient companyId={membership.companyId} /> : <NoCompanyNotice />}
+      {!membership ? <NoCompanyNotice /> : null}
+      {membership && !canViewSafety(membership.role) ? (
+        <AccessDenied title="Safety access denied" description="Your role cannot access safety." />
+      ) : null}
+      {membership && canViewSafety(membership.role) ? <SafetyClient companyId={membership.companyId} /> : null}
     </div>
   );
 }
-

@@ -106,3 +106,5 @@ Indexes were added for common query dimensions:
   - `driver` is own-scoped on `drivers` and `trips` API reads.
   - `dispatcher` is now alerts-view only at API/UI.
   - Delete operations on drivers/vehicles/trips are owner/admin only at API/UI.
+- API-level RBAC tightening now enforces driver-own scoping for `inspections` and `safety_events` reads (and safety score aggregation) via linked `drivers.auth_user_id -> drivers.id` mapping.
+- RLS migration files were not modified in this safe pass; table RLS remains enabled. Effective restrictions were tightened in API/UI layers to avoid schema/migration risk.

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { fail, ok } from "@/lib/api/responses";
-import { requireAuth, hasCompanyAccess } from "@/lib/api/auth";
+import { getCompanyRole, requireAuth } from "@/lib/api/auth";
+import { canAccessOperationalModules } from "@/lib/permissions";
 import { parseJsonBody, searchParamsToObject } from "@/lib/api/request";
 import { companyQuerySchema, inspectionUpdateSchema } from "@/lib/validations/api";
 import type { Json } from "@/types/supabase";
@@ -23,8 +24,8 @@ export async function PATCH(
   );
   if (!queryParsed.success) return fail("Invalid query", 400, queryParsed.error.flatten());
 
-  const allowed = await hasCompanyAccess(supabase, user.id, queryParsed.data.companyId, { write: true });
-  if (!allowed) return fail("Forbidden", 403);
+  const role = await getCompanyRole(supabase, user.id, queryParsed.data.companyId);
+  if (!role || !canAccessOperationalModules(role)) return fail("Forbidden", 403);
 
   const parsed = await parseJsonBody(request, inspectionUpdateSchema);
   if (!parsed.success) return fail("Invalid payload", 400, parsed.error.flatten());
@@ -65,8 +66,8 @@ export async function DELETE(
   );
   if (!queryParsed.success) return fail("Invalid query", 400, queryParsed.error.flatten());
 
-  const allowed = await hasCompanyAccess(supabase, user.id, queryParsed.data.companyId, { write: true });
-  if (!allowed) return fail("Forbidden", 403);
+  const role = await getCompanyRole(supabase, user.id, queryParsed.data.companyId);
+  if (!role || !canAccessOperationalModules(role)) return fail("Forbidden", 403);
 
   const { error } = await supabase
     .from("inspections")

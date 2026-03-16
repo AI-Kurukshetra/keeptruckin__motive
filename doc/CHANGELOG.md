@@ -121,3 +121,13 @@
   - Added access-denied module state (`components/dashboard/access-denied.tsx`) for restricted direct navigation.
 - Service-role verification: `SUPABASE_SERVICE_ROLE_KEY` usage remains limited to server admin helper + seed script; no normal request-flow API route uses service role bypass.
 - Validation: `pnpm typecheck` and `pnpm lint` pass.
+- Extended role-aware UI gating across additional operational modules: ELD/inspections/maintenance/safety pages now render access-denied states when role lacks module access, and driver trip nav label is now "My Trips".
+- Updated dashboard overview (`app/(dashboard)/dashboard/_components/overview-client.tsx`) to be role-aware: query enablement by permission and quick-actions visibility restricted by role (create actions hidden for driver/viewer).
+- Tightened API read scoping for driver role on inspections/safety data:
+  - `app/api/inspections/route.ts` returns only rows for the logged-in driver's linked `drivers.id`.
+  - `app/api/safety/route.ts` and `app/api/safety/score/route.ts` are driver-scoped to own safety events.
+- Replaced coarse write checks in inspections/safety item routes with explicit role checks using centralized permissions (`canAccessOperationalModules`) before mutation.
+- Added centralized permission utilities in `lib/permissions.ts` for module visibility and action checks including `canCreateDrivers`, `canAccessOperationalModules`, and `getUserRole(...)` helper.
+- Validation: `pnpm typecheck` and `pnpm lint` pass.
+- Dashboard UX enhancement pass: rebuilt overview console in app/(dashboard)/dashboard/_components/overview-client.tsx with Fleet Activity Timeline card, AI Fleet Insights card (derived from drivers/vehicles/trips/alerts/maintenance/safety data), Fleet System Status indicator, and richer color-coded fleet health indicators; preserved existing APIs/schema.
+- Added role badge display in dashboard header (app/(dashboard)/layout.tsx) for clear operator context without auth-flow changes.

@@ -103,3 +103,10 @@ Reason: Previous `read/write` company checks were too coarse for role nuances (d
 
 ## [2026-03-16] Driver role API reads are explicitly own-scoped for drivers/trips
 Reason: Existing table RLS allows company-wide member reads; enforcing own-scope at API boundary tightens effective access without schema or migration changes in this safety pass.
+## [2026-03-16] Additional module access gates applied at dashboard page level
+Reason: Sidebar hiding alone does not prevent deep-link access. Adding role-aware page guards for ELD/inspections/maintenance/safety prevents unauthorized module exposure while preserving route structure and existing feature code.
+
+## [2026-03-16] Driver analytics scope includes own inspections/safety in addition to own trips
+Reason: Driver dashboard and API responses should reflect personal operational context only; company-wide aggregates for driver role are over-permissive for RBAC.
+## [2026-03-16] Enterprise console enhancements are derived-only from existing operational datasets
+Reason: Requested dashboard uplift was implemented without schema changes by deriving timeline events, AI insights, system status, and health indicators from existing module query data to avoid backend risk in production.

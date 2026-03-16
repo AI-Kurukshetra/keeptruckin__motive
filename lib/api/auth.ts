@@ -36,6 +36,24 @@ export async function getCompanyRole(
   return data.role;
 }
 
+export async function getUserDriverIds(
+  supabase: SupabaseClient<Database>,
+  companyId: string,
+  userId: string
+): Promise<string[]> {
+  const { data, error } = await supabase
+    .from("drivers")
+    .select("id")
+    .eq("company_id", companyId)
+    .eq("auth_user_id", userId);
+
+  if (error || !data) {
+    return [];
+  }
+
+  return data.map((driver) => driver.id);
+}
+
 export async function hasCompanyAccess(
   supabase: SupabaseClient<Database>,
   userId: string,
